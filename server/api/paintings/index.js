@@ -11,50 +11,73 @@ export default defineEventHandler(async (event) => {
   });
 
   try {
-    // Zoek alle afbeeldingen met een titel tag (om alleen schilderijen te krijgen)
-    const result = await cloudinary.api.resources({
-      type: "upload",
-      max_results: 100,
-      tags: true,
-      context: true,
-    });
+    // Eerst alle categorieën (folders) ophalen
+    const foldersResult = await cloudinary.api.sub_folders("Tom van As Kunst");
+    const folders = foldersResult.folders;
 
-    // Filteren: alleen afbeeldingen met een titel
-    const paintings = result.resources
-      // .filter((resource) => {
-      //   // if (resource.tags && resource.tags.length) {
-      //   //   console.log(resource.display_name, resource.tags.join(", "));
-      //   //   console.log(resource);
-      //   // }
-      //   return (
-      //     // resource.tags && resource.tags.some((tag) => tag.startsWith("title:"))
-      //     resource.context &&
-      //     resource.context.custom &&
-      //     resource.context.custom.caption
-      //   );
-      // })
-      .map((resource) => {
-        // Tags verwerken
-        const tags = resource.tags || [];
-        const categoryTags = tags.filter((tag) => tag.startsWith("category:"));
-        const regularTags = tags.filter(
-          (tag) => !tag.startsWith("title:") && !tag.startsWith("category:")
-        );
+    let allPaintings = [];
 
-        return {
-          id: resource.public_id,
-          title: resource.context?.custom?.caption || "Ongetiteld",
-          imageUrl: resource.secure_url,
-          categories: categoryTags.map((tag) => tag.replace("category:", "")),
-          tags: regularTags,
-          width: resource.width,
-          height: resource.height,
-          format: resource.format,
-          created: resource.created_at,
-        };
+    // Voor elke folder, haal de schilderijen op
+    for (const folder of folders) {
+      console.log(folder.path);
+      const folderPath = folder.path;
+
+      // Haal alle schilderijen op uit deze folder
+      const result = await cloudinary.api.resources({
+        type: "upload",
+        max_results: 1000,
+        prefix: folderPath,
+        context: true,
+        tags: true,
       });
 
-    return paintings;
+      console.log("resources length", result.resources.length);
+
+      // Verwerk de schilderijen
+      const paintings = result.resources
+        .filter((resource) => {
+          console.log(resource);
+          const hasCaption = resource.context?.custom?.caption;
+          const hasTitleTag =
+            resource.tags &&
+            resource.tags.some((tag) => tag.startsWith("title:"));
+          return hasCaption || hasTitleTag;
+        })
+        .map((resource) => {
+          // Tags verwerken
+          const tags = resource.tags || [];
+          const titleTag = tags.find((tag) => tag.startsWith("title:"));
+          const regularTags = tags.filter((tag) => !tag.startsWith("title:"));
+
+          // Titel ophalen uit caption of uit tag
+          const title =
+            resource.context?.custom?.caption ||
+            (titleTag ? titleTag.replace("title:", "") : "Ongetiteld");
+
+          // Haal categorienaam uit folder pad
+          const pathParts = folderPath.split("/");
+          const category = pathParts[pathParts.length - 1];
+
+          return {
+            id: resource.public_id,
+            title,
+            imageUrl: resource.secure_url,
+            category,
+            tags: regularTags,
+            width: resource.width,
+            height: resource.height,
+            format: resource.format,
+            created: resource.created_at,
+            folder: resource.folder,
+          };
+        });
+
+      allPaintings = [...allPaintings, ...paintings];
+    }
+
+    console.log("aantal schilderijen:", allPaintings.length);
+
+    return allPaintings;
   } catch (error) {
     console.error("Fout bij het ophalen van schilderijen:", error);
     throw createError({

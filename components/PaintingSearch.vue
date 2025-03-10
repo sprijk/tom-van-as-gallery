@@ -53,11 +53,8 @@
           </div>
           <div>
             <div class="font-medium">{{ suggestion.title }}</div>
-            <div
-              v-if="suggestion.categories && suggestion.categories.length"
-              class="text-xs text-gray-500"
-            >
-              {{ suggestion.categories.join(", ") }}
+            <div v-if="suggestion.category" class="text-xs text-gray-500">
+              {{ suggestion.category }}
             </div>
           </div>
         </li>
@@ -89,11 +86,8 @@ const suggestions = computed(() => {
       // Zoek in titel
       if (painting.title.toLowerCase().includes(term)) return true;
 
-      // Zoek in categorieën
-      if (
-        painting.categories &&
-        painting.categories.some((cat) => cat.toLowerCase().includes(term))
-      )
+      // Zoek in categorie
+      if (painting.category && painting.category.toLowerCase().includes(term))
         return true;
 
       // Zoek in tags

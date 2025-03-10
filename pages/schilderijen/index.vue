@@ -100,10 +100,8 @@ const filteredPaintings = computed(() => {
     result = result.filter((painting) => {
       return (
         painting.title.toLowerCase().includes(searchTerm) ||
-        (painting.categories &&
-          painting.categories.some((cat) =>
-            cat.toLowerCase().includes(searchTerm)
-          )) ||
+        (painting.category &&
+          painting.category.toLowerCase().includes(searchTerm)) ||
         (painting.tags &&
           painting.tags.some((tag) => tag.toLowerCase().includes(searchTerm)))
       );
@@ -114,10 +112,8 @@ const filteredPaintings = computed(() => {
   if (filters.value.categories.length > 0) {
     result = result.filter((painting) => {
       return (
-        painting.categories &&
-        painting.categories.some((cat) =>
-          filters.value.categories.includes(cat)
-        )
+        painting.category &&
+        filters.value.categories.includes(painting.category)
       );
     });
   }

@@ -75,7 +75,7 @@
               Over Tom van As
             </h2>
             <p class="text-gray-700 mb-4">
-              Als Nederlandse kunstenaar werk ik vanuit mijn passie voor kleu r
+              Als Nederlandse kunstenaar werk ik vanuit mijn passie voor kleur
               en compositie. Mijn schilderijen weerspiegelen een unieke visie op
               de wereld om ons heen, met een focus op emotie en expressie.
             </p>
@@ -106,12 +106,12 @@
     <section class="py-16 bg-gray-50">
       <div class="container-custom">
         <h2 class="text-3xl font-serif font-semibold mb-8 text-center">
-          Mijn Collecties
+          Collecties
         </h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <NuxtLink
-            v-for="category in topCategories"
+            v-for="category in categoryList"
             :key="category.name"
             :to="`/schilderijen?category=${category.name}`"
             class="group block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
@@ -178,12 +178,15 @@ const { getAllPaintings, getAllCategories } = useCloudinary();
 const paintings = ref([]);
 const featuredPainting = ref(null);
 const featuredPaintings = ref([]);
-const topCategories = ref([]);
+const categoryList = ref([]);
 
 // Data ophalen
 async function fetchData() {
   // Alle schilderijen ophalen
   paintings.value = await getAllPaintings();
+
+  // Alle categorieën ophalen
+  const categories = await getAllCategories();
 
   if (paintings.value.length > 0) {
     // Willekeurig uitgelicht schilderij kiezen
@@ -194,32 +197,27 @@ async function fetchData() {
     const shuffled = [...paintings.value].sort(() => 0.5 - Math.random());
     featuredPaintings.value = shuffled.slice(0, 6);
 
-    // Top categorieën bepalen
-    const categories = {};
-    paintings.value.forEach((painting) => {
-      if (painting.categories) {
-        painting.categories.forEach((cat) => {
-          if (!categories[cat]) {
-            categories[cat] = {
-              name: cat,
-              count: 0,
-              image: null,
-            };
-          }
-          categories[cat].count++;
+    // Categorieën verwerken en aantal schilderijen per categorie bepalen
+    const categoryCounts = {};
+    const categoryImages = {};
 
-          // Eerste schilderij in deze categorie gebruiken als voorbeeld afbeelding
-          if (!categories[cat].image) {
-            categories[cat].image = painting.id;
-          }
-        });
+    paintings.value.forEach((painting) => {
+      const category = painting.category;
+      if (category) {
+        if (!categoryCounts[category]) {
+          categoryCounts[category] = 0;
+          categoryImages[category] = painting.id; // Eerste schilderij als voorbeeld afbeelding
+        }
+        categoryCounts[category]++;
       }
     });
 
-    // Sorteer op aantal schilderijen en pak de top 3
-    topCategories.value = Object.values(categories)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 3);
+    // Categorieën voorbereiden voor weergave
+    categoryList.value = Object.keys(categoryCounts).map((name) => ({
+      name,
+      count: categoryCounts[name],
+      image: categoryImages[name],
+    }));
   }
 }
 

@@ -13,26 +13,49 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Details van een specifieke resource ophalen
-    const result = await cloudinary.api.resource(id, { tags: true });
+    const result = await cloudinary.api.resource(id, {
+      tags: true,
+      context: true,
+    });
+
+    // Bepaal categorie op basis van folder path
+    let category = "";
+    const folderPath = result.folder;
+
+    if (folderPath) {
+      // Check of het pad begint met "Tom van As Kunst"
+      if (folderPath.startsWith("Tom van As Kunst/")) {
+        // Haal de eerste subfolder na "Tom van As Kunst/" eruit
+        const pathWithoutRoot = folderPath.replace("Tom van As Kunst/", "");
+        // Als er nog een '/' in zit, neem alleen het eerste deel
+        category = pathWithoutRoot.split("/")[0];
+      } else {
+        // Anders neem de volledige foldernaam
+        category = folderPath.split("/").pop();
+      }
+    }
 
     // Tags verwerken
     const tags = result.tags || [];
     const titleTag = tags.find((tag) => tag.startsWith("title:"));
-    const categoryTags = tags.filter((tag) => tag.startsWith("category:"));
-    const regularTags = tags.filter(
-      (tag) => !tag.startsWith("title:") && !tag.startsWith("category:")
-    );
+    const regularTags = tags.filter((tag) => !tag.startsWith("title:"));
+
+    // Titel ophalen uit caption of uit tag
+    const title =
+      result.context?.custom?.caption ||
+      (titleTag ? titleTag.replace("title:", "") : "Ongetiteld");
 
     return {
       id: result.public_id,
-      title: titleTag ? titleTag.replace("title:", "") : "Ongetiteld",
+      title: title,
       imageUrl: result.secure_url,
-      categories: categoryTags.map((tag) => tag.replace("category:", "")),
+      category: category,
       tags: regularTags,
       width: result.width,
       height: result.height,
       format: result.format,
       created: result.created_at,
+      folder: result.folder,
     };
   } catch (error) {
     console.error(`Fout bij het ophalen van schilderij met ID ${id}:`, error);

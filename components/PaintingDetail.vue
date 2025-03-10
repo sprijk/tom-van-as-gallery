@@ -3,7 +3,6 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Schilderij afbeelding -->
       <div class="relative">
-        <!-- <div class="aspect-square"> -->
         <div>
           <NuxtImg
             provider="cloudinary"
@@ -40,19 +39,14 @@
       <div class="p-6">
         <h1 class="text-3xl font-semibold mb-4">{{ painting.title }}</h1>
 
-        <div
-          v-if="painting.categories && painting.categories.length"
-          class="mb-6"
-        >
-          <h2 class="text-lg font-medium mb-2">Categorieën</h2>
+        <div v-if="painting.category" class="mb-6">
+          <h2 class="text-lg font-medium mb-2">Categorie</h2>
           <div class="flex flex-wrap">
             <NuxtLink
-              v-for="category in painting.categories"
-              :key="category"
-              :to="`/schilderijen?category=${category}`"
+              :to="`/schilderijen?category=${painting.category}`"
               class="mr-2 mb-2 bg-secondary-light px-3 py-1 rounded-full text-gray-800 hover:bg-secondary transition-colors"
             >
-              {{ category }}
+              {{ painting.category }}
             </NuxtLink>
           </div>
         </div>
@@ -93,7 +87,7 @@
           </p>
           <div class="flex space-x-4">
             <a
-              href="mailto:info@tomvanas-art.nl?subject=Interesse in schilderij: {{ painting.title }}"
+              :href="`mailto:info@tomvanas-art.nl?subject=Interesse in schilderij: ${painting.title}`"
               class="btn btn-primary"
             >
               E-mail mij

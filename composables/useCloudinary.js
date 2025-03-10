@@ -1,5 +1,5 @@
 // Cloudinary composable voor gebruik in Nuxt 3
-// We maken hier gebruik van server API endpoints in plaats van directe client-side aanroepen
+// Werkt met de bijgewerkte API endpoints die gebruik maken van de folderstructuur
 
 export const useCloudinary = () => {
   const config = useRuntimeConfig();
@@ -39,7 +39,7 @@ export const useCloudinary = () => {
     }
   };
 
-  // Ophalen van alle beschikbare categorieën
+  // Ophalen van alle beschikbare categorieën (gebaseerd op folders)
   const getAllCategories = async () => {
     try {
       const response = await fetch("/api/categories");
@@ -67,6 +67,25 @@ export const useCloudinary = () => {
       return data;
     } catch (error) {
       console.error("Fout bij het ophalen van tags:", error);
+      return [];
+    }
+  };
+
+  // Ophalen van schilderijen per categorie (folder)
+  const getPaintingsByCategory = async (category) => {
+    try {
+      if (!category) return [];
+
+      const allPaintings = await getAllPaintings();
+      return allPaintings.filter(
+        (painting) =>
+          painting.categories && painting.categories.includes(category)
+      );
+    } catch (error) {
+      console.error(
+        `Fout bij het ophalen van schilderijen voor categorie ${category}:`,
+        error
+      );
       return [];
     }
   };
@@ -99,6 +118,7 @@ export const useCloudinary = () => {
     getPaintingById,
     getAllCategories,
     getAllTags,
+    getPaintingsByCategory,
     getImageUrl,
   };
 };

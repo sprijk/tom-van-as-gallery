@@ -21,16 +21,11 @@
         <h3 class="text-lg font-semibold mb-1 text-gray-900">
           {{ painting.title }}
         </h3>
-        <div
-          v-if="painting.categories && painting.categories.length"
-          class="mb-2"
-        >
+        <div v-if="painting.category" class="mb-2">
           <span
-            v-for="category in painting.categories"
-            :key="category"
             class="inline-block bg-secondary-light text-gray-800 text-xs px-2 py-1 rounded mr-1 mb-1"
           >
-            {{ category }}
+            {{ painting.category }}
           </span>
         </div>
       </div>
@@ -45,7 +40,4 @@ const props = defineProps({
     required: true,
   },
 });
-
-// Geen cloudinary aanpassing nodig aangezien we NuxtImg gebruiken
-// met de provider="cloudinary" optie, die automatisch het juiste pad genereert
 </script>
