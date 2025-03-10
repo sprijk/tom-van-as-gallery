@@ -58,7 +58,7 @@
         class="mt-8 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm"
       >
         <p>
-          © {{ new Date().getFullYear() }} Tom van As. Alle rechten
+          © {{ new Date().getFullYear() }} Tom van As Kunst. Alle rechten
           voorbehouden.
         </p>
       </div>

@@ -85,3 +85,21 @@ De productie build komt in de `.output` directory.
 ## Licentie
 
 Dit project is bedoeld voor Tom van As en wordt niet publiek gedeeld.
+
+## Mappen
+
+```
+Tom van As Kunst
+ |
+ |-- VROEG WERK (1950 - 1965)       - VROEG WERK (1950 - 1965)
+ |-- LANDSCHAPPEN - NEDERLAND       - LANDSCHAPPEN - NEDERLAND
+ |-- LANDSCHAPPEN - BUITENLAND      - LANDSCHAPPEN - BUITENLAND
+ |-- ATELIER WERK                   - ATELIER WERK
+ |-- ANDERE (bevriende) KUNSTENAARS - ANDERE (bevriende) KUNSTENAARS
+```
+
+## Todos
+
+1. Geen uitsnedes
+2. Call to action knop -> Contactformulier
+3. Geen squeze waneer vergroten van foto

@@ -3,15 +3,14 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Schilderij afbeelding -->
       <div class="relative">
-        <div class="aspect-square">
+        <!-- <div class="aspect-square"> -->
+        <div>
           <NuxtImg
             provider="cloudinary"
             :src="painting.id"
             format="webp"
-            width="800"
-            height="800"
             fit="cover"
-            class="w-full h-full object-contain"
+            class="w-full object-contain"
             :alt="painting.title"
           />
         </div>
@@ -136,8 +135,6 @@
           provider="cloudinary"
           :src="painting.id"
           format="webp"
-          width="1600"
-          height="1600"
           fit="contain"
           class="max-w-full max-h-screen object-contain"
           :alt="painting.title"

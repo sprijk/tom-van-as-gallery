@@ -75,7 +75,7 @@
               Over Tom van As
             </h2>
             <p class="text-gray-700 mb-4">
-              Als Nederlandse kunstenaar werk ik vanuit mijn passie voor kleur
+              Als Nederlandse kunstenaar werk ik vanuit mijn passie voor kleu r
               en compositie. Mijn schilderijen weerspiegelen een unieke visie op
               de wereld om ons heen, met een focus op emotie en expressie.
             </p>
@@ -84,8 +84,8 @@
               ontwikkeld die zowel toegankelijk als uitdagend is. Elk schilderij
               vertelt een eigen verhaal en nodigt uit tot interpretatie.
             </p>
-            <NuxtLink to="/over-mij" class="btn btn-primary">
-              Meer over mij
+            <NuxtLink to="/over-tom" class="btn btn-primary">
+              Meer over Tom
             </NuxtLink>
           </div>
           <div class="bg-gray-200 h-96 rounded-lg overflow-hidden">

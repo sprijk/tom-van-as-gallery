@@ -8,37 +8,35 @@
       <!-- Biografie en info -->
       <div class="md:col-span-2">
         <div class="prose prose-lg max-w-none">
+          <p>(1932 Den Haag – 2024 Haastrecht/Gouda)</p>
+
           <p>
-            Als schilder ben ik altijd gefascineerd geweest door de interactie
-            tussen licht, kleur en emotie. Mijn werk ontstaat vanuit een diepe
-            behoefte om verhalen te vertellen en gevoelens over te brengen via
-            het doek.
+            Tom studeerde aan de Koninklijke Academie van Beeldende Kunsten in
+            Den Haag (1948 -1953). Zijn vroege werk lijkt onder andere
+            geïnspireerd door het kubisme van begin vorige eeuw.
+          </p>
+
+          <p>Zijn latere werk bestaat uit atelierwerk en landschappen.</p>
+
+          <p>
+            De landschappen maakte hij ter plekke tijdens reizen naar
+            bijvoorbeeld Frankrijk, Spanje, Ierland en de Waddeneilanden maar
+            ook vaak in de omgeving van zijn woonplaats Haastrecht.
           </p>
 
           <p>
-            Mijn artistieke reis begon al vroeg in mijn jeugd, waar ik omringd
-            werd door de rijke Nederlandse kunsttraditie. Na mijn opleiding aan
-            de Koninklijke Academie voor Beeldende Kunsten in Den Haag, heb ik
-            mijn eigen stijl ontwikkeld die balanceert tussen het traditionele
-            en het hedendaagse.
+            Hij schilderde met olieverf op doek en met aquarel en acryl. De
+            stijl van de landschappen zou je kunnen zien als een vervolg op de
+            schilders van ‘de Haagse School’
           </p>
 
-          <p>
-            In mijn atelier in Amsterdam creëer ik werken die vaak geïnspireerd
-            zijn door de natuur, stedelijke landschappen en dagelijkse
-            taferelen. Ik zie kunst als een dialoog - niet alleen tussen mij en
-            het doek, maar ook tussen het werk en de kijker.
-          </p>
+          <NuxtImg
+            src="/images/over-tom-examples.jpg"
+            class="w-full"
+            alt="Portretfoto van Tom van As"
+          />
 
-          <h2>Mijn Techniek</h2>
-          <p>
-            Ik werk voornamelijk met acryl- en olieverf, waarbij ik
-            verschillende lagen opbouw om diepte en textuur te creëren. Mijn
-            proces is intuïtief maar doordacht, waarbij elke penseelstreek een
-            bewuste keuze is in het grotere verhaal van het schilderij.
-          </p>
-
-          <h2>Tentoonstellingen</h2>
+          <!-- <h2>Tentoonstellingen</h2>
           <p>
             Mijn werk is tentoongesteld in verschillende galeries in Nederland
             en daarbuiten, waaronder:
@@ -69,7 +67,7 @@
             Ik nodig u ook graag uit om mijn atelier te bezoeken op afspraak,
             waar u mijn nieuwste werken kunt bekijken en meer kunt leren over
             mijn creatieve proces.
-          </p>
+          </p> -->
         </div>
       </div>
 
@@ -77,17 +75,12 @@
       <div class="md:col-span-1">
         <div class="bg-gray-100 rounded-lg overflow-hidden shadow-md p-6">
           <!-- Portretfoto -->
-          <div
-            class="aspect-square bg-gray-200 mb-6 rounded-lg overflow-hidden"
-          >
-            <!-- Placeholder voor een portretfoto -->
-            <div
-              class="w-full h-full flex items-center justify-center bg-primary/10"
-            >
-              <span class="text-primary text-center p-4"
-                >Portretfoto van Tom van As</span
-              >
-            </div>
+          <div class="bg-gray-200 mb-6 rounded-lg overflow-hidden">
+            <NuxtImg
+              src="/images/tom-van-as.jpg"
+              class="w-full object-cover"
+              alt="Portretfoto van Tom van As"
+            />
           </div>
 
           <h3 class="text-xl font-semibold mb-4">Snel Overzicht</h3>
@@ -95,13 +88,14 @@
           <div class="space-y-3">
             <div>
               <h4 class="font-medium text-gray-900">Geboren</h4>
-              <p class="text-gray-700">1975, Utrecht, Nederland</p>
+              <p class="text-gray-700">1932, Den Haag, Nederland</p>
             </div>
 
             <div>
               <h4 class="font-medium text-gray-900">Opleiding</h4>
               <p class="text-gray-700">
-                Koninklijke Academie voor Beeldende Kunsten, Den Haag
+                Koninklijke Academie voor Beeldende Kunsten, Den Haag (1948
+                -1953)
               </p>
             </div>
 
@@ -118,7 +112,7 @@
             </div>
           </div>
 
-          <div class="mt-6 pt-6 border-t border-gray-200">
+          <!-- <div class="mt-6 pt-6 border-t border-gray-200">
             <h3 class="text-xl font-semibold mb-4">Volg Mij</h3>
 
             <div class="flex space-x-4">
@@ -171,7 +165,7 @@
                 </svg>
               </a>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
