@@ -1,93 +1,38 @@
-import { v2 as cloudinary } from "cloudinary";
+// Cloudinary composable voor gebruik in Nuxt 3
+// We maken hier gebruik van server API endpoints in plaats van directe client-side aanroepen
 
 export const useCloudinary = () => {
   const config = useRuntimeConfig();
+  const cloudName = config.public.cloudinaryCloudName;
 
-  // Cloudinary configuratie
-  const setupCloudinary = () => {
-    cloudinary.config({
-      cloud_name: config.public.cloudinaryCloudName,
-      api_key: config.public.cloudinaryApiKey,
-      api_secret: config.public.cloudinaryApiSecret,
-    });
-  };
-
-  // Alle schilderijen ophalen van Cloudinary
+  // Alle schilderijen ophalen via een server API route
   const getAllPaintings = async () => {
-    setupCloudinary();
-
     try {
-      // Zoek alle afbeeldingen met een titel tag (om alleen schilderijen te krijgen)
-      const result = await cloudinary.api.resources({
-        type: "upload",
-        max_results: 100,
-        tags: true,
-      });
+      const response = await fetch("/api/paintings");
+      if (!response.ok) {
+        throw new Error("Kon schilderijen niet ophalen");
+      }
 
-      // Filteren: alleen afbeeldingen met een titel
-      const paintings = result.resources
-        .filter(
-          (resource) =>
-            resource.tags &&
-            resource.tags.some((tag) => tag.startsWith("title:"))
-        )
-        .map((resource) => {
-          // Tags verwerken
-          const tags = resource.tags || [];
-          const titleTag = tags.find((tag) => tag.startsWith("title:"));
-          const categoryTags = tags.filter((tag) =>
-            tag.startsWith("category:")
-          );
-          const regularTags = tags.filter(
-            (tag) => !tag.startsWith("title:") && !tag.startsWith("category:")
-          );
-
-          return {
-            id: resource.public_id,
-            title: titleTag ? titleTag.replace("title:", "") : "Ongetiteld",
-            imageUrl: resource.secure_url,
-            categories: categoryTags.map((tag) => tag.replace("category:", "")),
-            tags: regularTags,
-            width: resource.width,
-            height: resource.height,
-            format: resource.format,
-            created: resource.created_at,
-          };
-        });
-
-      return paintings;
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error("Fout bij het ophalen van schilderijen:", error);
       return [];
     }
   };
 
-  // Eén specifiek schilderij ophalen op basis van ID
+  // Eén specifiek schilderij ophalen op basis van ID via een server API route
   const getPaintingById = async (id) => {
-    setupCloudinary();
-
     try {
-      const result = await cloudinary.api.resource(id, { tags: true });
+      if (!id) return null;
 
-      // Tags verwerken
-      const tags = result.tags || [];
-      const titleTag = tags.find((tag) => tag.startsWith("title:"));
-      const categoryTags = tags.filter((tag) => tag.startsWith("category:"));
-      const regularTags = tags.filter(
-        (tag) => !tag.startsWith("title:") && !tag.startsWith("category:")
-      );
+      const response = await fetch(`/api/paintings/${id}`);
+      if (!response.ok) {
+        throw new Error(`Kon schilderij met ID ${id} niet ophalen`);
+      }
 
-      return {
-        id: result.public_id,
-        title: titleTag ? titleTag.replace("title:", "") : "Ongetiteld",
-        imageUrl: result.secure_url,
-        categories: categoryTags.map((tag) => tag.replace("category:", "")),
-        tags: regularTags,
-        width: result.width,
-        height: result.height,
-        format: result.format,
-        created: result.created_at,
-      };
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error(`Fout bij het ophalen van schilderij met ID ${id}:`, error);
       return null;
@@ -96,16 +41,57 @@ export const useCloudinary = () => {
 
   // Ophalen van alle beschikbare categorieën
   const getAllCategories = async () => {
-    const paintings = await getAllPaintings();
-    const allCategories = paintings.flatMap((painting) => painting.categories);
-    return [...new Set(allCategories)];
+    try {
+      const response = await fetch("/api/categories");
+      if (!response.ok) {
+        throw new Error("Kon categorieën niet ophalen");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Fout bij het ophalen van categorieën:", error);
+      return [];
+    }
   };
 
   // Ophalen van alle beschikbare tags
   const getAllTags = async () => {
-    const paintings = await getAllPaintings();
-    const allTags = paintings.flatMap((painting) => painting.tags);
-    return [...new Set(allTags)];
+    try {
+      const response = await fetch("/api/tags");
+      if (!response.ok) {
+        throw new Error("Kon tags niet ophalen");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Fout bij het ophalen van tags:", error);
+      return [];
+    }
+  };
+
+  // Helper functie om Cloudinary URL te genereren
+  const getImageUrl = (publicId, options = {}) => {
+    const { width, height, crop = "fill", format = "webp" } = options;
+
+    let url = `https://res.cloudinary.com/${cloudName}/image/upload/`;
+
+    // Transformaties toevoegen
+    const transformations = [];
+
+    if (width) transformations.push(`w_${width}`);
+    if (height) transformations.push(`h_${height}`);
+    if (crop) transformations.push(`c_${crop}`);
+    if (format) transformations.push(`f_${format}`);
+
+    if (transformations.length > 0) {
+      url += transformations.join(",") + "/";
+    }
+
+    url += publicId;
+
+    return url;
   };
 
   return {
@@ -113,5 +99,6 @@ export const useCloudinary = () => {
     getPaintingById,
     getAllCategories,
     getAllTags,
+    getImageUrl,
   };
 };

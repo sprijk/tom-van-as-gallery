@@ -45,4 +45,7 @@ const props = defineProps({
     required: true,
   },
 });
+
+// Geen cloudinary aanpassing nodig aangezien we NuxtImg gebruiken
+// met de provider="cloudinary" optie, die automatisch het juiste pad genereert
 </script>
