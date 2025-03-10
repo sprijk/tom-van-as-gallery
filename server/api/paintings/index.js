@@ -16,22 +16,26 @@ export default defineEventHandler(async (event) => {
       type: "upload",
       max_results: 100,
       tags: true,
+      context: true,
     });
 
     // Filteren: alleen afbeeldingen met een titel
     const paintings = result.resources
-      .filter((resource) => {
-        if (resource.tags && resource.tags.length) {
-          console.log(resource.display_name, resource.tags.join(", "));
-        }
-        return (
-          resource.tags && resource.tags.some((tag) => tag.startsWith("title:"))
-        );
-      })
+      // .filter((resource) => {
+      //   // if (resource.tags && resource.tags.length) {
+      //   //   console.log(resource.display_name, resource.tags.join(", "));
+      //   //   console.log(resource);
+      //   // }
+      //   return (
+      //     // resource.tags && resource.tags.some((tag) => tag.startsWith("title:"))
+      //     resource.context &&
+      //     resource.context.custom &&
+      //     resource.context.custom.caption
+      //   );
+      // })
       .map((resource) => {
         // Tags verwerken
         const tags = resource.tags || [];
-        const titleTag = tags.find((tag) => tag.startsWith("title:"));
         const categoryTags = tags.filter((tag) => tag.startsWith("category:"));
         const regularTags = tags.filter(
           (tag) => !tag.startsWith("title:") && !tag.startsWith("category:")
@@ -39,7 +43,7 @@ export default defineEventHandler(async (event) => {
 
         return {
           id: resource.public_id,
-          title: titleTag ? titleTag.replace("title:", "") : "Ongetiteld",
+          title: resource.context?.custom?.caption || "Ongetiteld",
           imageUrl: resource.secure_url,
           categories: categoryTags.map((tag) => tag.replace("category:", "")),
           tags: regularTags,

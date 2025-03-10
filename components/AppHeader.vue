@@ -24,10 +24,10 @@
             Schilderijen
           </NuxtLink>
           <NuxtLink
-            to="/over-mij"
+            to="/over-tom"
             class="font-medium text-gray-700 hover:text-primary transition-colors"
           >
-            Over Mij
+            Over Tom
           </NuxtLink>
         </nav>
 
@@ -74,10 +74,10 @@
             Schilderijen
           </NuxtLink>
           <NuxtLink
-            to="/over-mij"
+            to="/over-tom"
             class="font-medium text-gray-700 hover:text-primary transition-colors"
           >
-            Over Mij
+            Over Tom
           </NuxtLink>
         </div>
       </div>
