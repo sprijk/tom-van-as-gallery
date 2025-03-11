@@ -1,4 +1,3 @@
-// components/PaintingDetail.vue
 <template>
   <div v-if="painting" class="bg-white rounded-lg overflow-hidden shadow-lg">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -34,6 +33,55 @@
             />
           </svg>
         </button>
+
+        <!-- Navigatieknoppen (links/rechts) -->
+        <div class="absolute inset-y-0 left-0 flex items-center">
+          <button
+            v-if="previousPainting"
+            @click="navigateToPainting(previousPainting.id)"
+            class="bg-white bg-opacity-70 p-2 rounded-r-lg shadow hover:bg-opacity-100 transition-all"
+            aria-label="Vorig schilderij"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="absolute inset-y-0 right-0 flex items-center">
+          <button
+            v-if="nextPainting"
+            @click="navigateToPainting(nextPainting.id)"
+            class="bg-white bg-opacity-70 p-2 rounded-l-lg shadow hover:bg-opacity-100 transition-all"
+            aria-label="Volgend schilderij"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Schilderij informatie -->
@@ -274,6 +322,7 @@
             />
           </svg>
         </button>
+
         <div class="max-w-screen-xl max-h-screen" @click.stop>
           <NuxtImg
             provider="cloudinary"
@@ -320,11 +369,31 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  previousPainting: {
+    type: Object,
+    default: null,
+  },
+  nextPainting: {
+    type: Object,
+    default: null,
+  },
 });
 
+const router = useRouter();
 const showFullImage = ref(false);
 const showShareOptions = ref(false);
 const linkCopied = ref(false);
+
+// Navigatie naar ander schilderij
+function navigateToPainting(id) {
+  if (!id) return;
+
+  // Sluit de lightbox als deze open is
+  showFullImage.value = false;
+
+  // Navigeer naar het nieuwe schilderij
+  router.push(`/schilderijen/${id}`);
+}
 
 // Datum formatteren
 function formatDate(dateString) {

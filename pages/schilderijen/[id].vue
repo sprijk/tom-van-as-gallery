@@ -98,7 +98,11 @@
       </div>
 
       <!-- Schilderij Detail Component -->
-      <PaintingDetail :painting="painting" />
+      <PaintingDetail
+        :painting="painting"
+        :previousPainting="previousPainting"
+        :nextPainting="nextPainting"
+      />
 
       <!-- Gerelateerde schilderijen -->
       <section v-if="relatedPaintings.length > 0" class="mt-16">
@@ -116,9 +120,9 @@
         </div>
       </section>
 
-      <!-- Navigatie tussen schilderijen -->
+      <!-- Navigatie tussen schilderijen (als alternatief voor de ingesloten knoppen) -->
       <div
-        v-if="hasPreviousOrNext"
+        v-if="previousPainting || nextPainting"
         class="mt-16 flex justify-between border-t border-gray-200 pt-8"
       >
         <div>
@@ -168,6 +172,30 @@
           </NuxtLink>
         </div>
       </div>
+
+      <!-- Terug naar overzicht knop -->
+      <div class="mt-8 text-center">
+        <NuxtLink
+          to="/schilderijen"
+          class="inline-flex items-center text-primary hover:text-primary-dark transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16l-4-4m0 0l4-4m-4 4h18"
+            />
+          </svg>
+          Terug naar alle schilderijen
+        </NuxtLink>
+      </div>
     </template>
   </div>
 </template>
@@ -206,11 +234,6 @@ const relatedPaintings = computed(() => {
       return hasSameCategory || hasMatchingTag;
     })
     .slice(0, 4); // Limiteer tot 4 gerelateerde schilderijen
-});
-
-// Check of er vorige of volgende schilderijen zijn
-const hasPreviousOrNext = computed(() => {
-  return previousPainting.value !== null || nextPainting.value !== null;
 });
 
 // SEO meta tags
@@ -252,10 +275,14 @@ async function fetchData() {
 
       if (currentIndex > 0) {
         previousPainting.value = allPaintings.value[currentIndex - 1];
+      } else {
+        previousPainting.value = null;
       }
 
       if (currentIndex < allPaintings.value.length - 1) {
         nextPainting.value = allPaintings.value[currentIndex + 1];
+      } else {
+        nextPainting.value = null;
       }
     }
   } catch (error) {
@@ -281,4 +308,3 @@ watch(
   { immediate: true }
 );
 </script>
-// pages/schilderijen/index.vue
