@@ -55,6 +55,16 @@ Een online galerij voor de kunstwerken van Tom van As, gebouwd met Nuxt 3, Tailw
 
 5. Open in je browser: `http://localhost:3000`
 
+### Categorien
+
+De collectie van schilderijen en kunstwerken is onderverdeeld in 5 vaste categorien:
+
+1. VROEG WERK (1950 - 1965)
+2. LANDSCHAPPEN - NEDERLAND
+3. LANDSCHAPPEN - BUITENLAND
+4. ATELIER WERK
+5. ANDERE (bevriende) KUNSTENAARS
+
 ### Afbeeldingen voorbereiden in Cloudinary
 
 Om de galerij correct te laten werken, moet je afbeeldingen in Cloudinary als volgt taggen:
