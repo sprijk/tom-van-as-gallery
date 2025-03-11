@@ -1,0 +1,339 @@
+2025-03-11 11:31:57,986 - cloudinary_ocr - INFO - Start OCR script voor handgeschreven nummers in schilderijen
+2025-03-11 11:31:57,989 - cloudinary_ocr - INFO - Cloudinary geconfigureerd voor cloud: dgvqkqvv1
+2025-03-11 11:31:58,013 - cloudinary_ocr - ERROR - Fout bij ophalen van mappen of resources: module 'cloudinary.api' has no attribute 'sub_folders'
+2025-03-11 11:31:58,013 - cloudinary_ocr - ERROR - Geen schilderijen gevonden om te verwerken.
+2025-03-11 11:31:58,013 - cloudinary_ocr - INFO - Script voltooid
+2025-03-11 11:37:07,637 - cloudinary_ocr - INFO - Start OCR script voor handgeschreven nummers in schilderijen
+2025-03-11 11:37:07,640 - cloudinary_ocr - INFO - Cloudinary geconfigureerd voor cloud: dgvqkqvv1
+2025-03-11 11:37:08,239 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS
+2025-03-11 11:37:08,607 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS: 45
+2025-03-11 11:37:08,608 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ATELIER WERK
+2025-03-11 11:37:09,086 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ATELIER WERK: 154
+2025-03-11 11:37:09,086 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - BUITENLAND
+2025-03-11 11:37:09,494 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - BUITENLAND: 94
+2025-03-11 11:37:09,495 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - NEDERLAND
+2025-03-11 11:37:09,803 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - NEDERLAND: 150
+2025-03-11 11:37:09,803 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/VROEG WERK (1950 - 1965)
+2025-03-11 11:37:10,040 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/VROEG WERK (1950 - 1965): 81
+2025-03-11 11:37:10,041 - cloudinary_ocr - INFO - Totaal aantal schilderijen opgehaald: 524
+2025-03-11 11:37:10,041 - cloudinary_ocr - INFO - Start verwerking van 524 schilderijen...
+2025-03-11 11:37:10,041 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6839_y5xzqa
+2025-03-11 11:37:10,780 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe4e0c0>
+2025-03-11 11:37:10,781 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6839_y5xzqa
+2025-03-11 11:37:11,282 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6838_xuv8y2
+2025-03-11 11:37:11,903 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe85b70>
+2025-03-11 11:37:11,903 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6838_xuv8y2
+2025-03-11 11:37:12,405 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6837_sqdhjl
+2025-03-11 11:37:13,049 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86de0>
+2025-03-11 11:37:13,051 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6837_sqdhjl
+2025-03-11 11:37:13,553 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6836_awhmxc
+2025-03-11 11:37:14,403 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86fc0>
+2025-03-11 11:37:14,404 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6836_awhmxc
+2025-03-11 11:37:14,905 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6835_xtizri
+2025-03-11 11:37:15,657 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86bb0>
+2025-03-11 11:37:15,657 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6835_xtizri
+2025-03-11 11:37:16,158 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6834_lito30
+2025-03-11 11:37:16,882 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86cf0>
+2025-03-11 11:37:16,883 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6834_lito30
+2025-03-11 11:37:17,384 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6833_gddldy
+2025-03-11 11:37:17,987 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86c50>
+2025-03-11 11:37:17,988 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6833_gddldy
+2025-03-11 11:37:18,489 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6831_wnisrh
+2025-03-11 11:37:19,230 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86ca0>
+2025-03-11 11:37:19,231 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6831_wnisrh
+2025-03-11 11:37:19,731 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6832_gbgrjx
+2025-03-11 11:37:20,391 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86fc0>
+2025-03-11 11:37:20,393 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6832_gbgrjx
+2025-03-11 11:37:20,895 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6830_izkp7x
+2025-03-11 11:37:21,449 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86ac0>
+2025-03-11 11:37:21,450 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6830_izkp7x
+2025-03-11 11:37:21,950 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6829_jpskfy
+2025-03-11 11:37:22,496 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86d40>
+2025-03-11 11:37:22,496 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6829_jpskfy
+2025-03-11 11:37:22,997 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_5851_mexuvs
+2025-03-11 11:37:23,632 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86ac0>
+2025-03-11 11:37:23,633 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_5851_mexuvs
+2025-03-11 11:37:24,134 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6828_oyvyyd
+2025-03-11 11:37:24,735 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86d40>
+2025-03-11 11:37:24,735 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6828_oyvyyd
+2025-03-11 11:37:25,236 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_5850_lmi60h
+2025-03-11 11:37:25,931 - cloudinary_ocr - ERROR - Fout bij downloaden van afbeelding: cannot identify image file <_io.BytesIO object at 0x7f27afe86fc0>
+2025-03-11 11:37:25,932 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_5850_lmi60h
+2025-03-11 11:37:26,433 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_5848_zci9su
+2025-03-11 11:41:45,495 - cloudinary_ocr - DEBUG - Debug logging ingeschakeld
+2025-03-11 11:41:45,495 - cloudinary_ocr - INFO - Start OCR script voor handgeschreven nummers in schilderijen
+2025-03-11 11:41:45,498 - cloudinary_ocr - INFO - Cloudinary geconfigureerd voor cloud: dgvqkqvv1
+2025-03-11 11:41:46,252 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS
+2025-03-11 11:41:46,682 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS: 45
+2025-03-11 11:41:46,682 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ATELIER WERK
+2025-03-11 11:41:47,094 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ATELIER WERK: 154
+2025-03-11 11:41:47,095 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - BUITENLAND
+2025-03-11 11:41:47,382 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - BUITENLAND: 94
+2025-03-11 11:41:47,382 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - NEDERLAND
+2025-03-11 11:41:47,726 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - NEDERLAND: 150
+2025-03-11 11:41:47,727 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/VROEG WERK (1950 - 1965)
+2025-03-11 11:41:48,012 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/VROEG WERK (1950 - 1965): 81
+2025-03-11 11:41:48,013 - cloudinary_ocr - INFO - Totaal aantal schilderijen opgehaald: 524
+2025-03-11 11:41:48,013 - cloudinary_ocr - INFO - Start verwerking van 524 schilderijen...
+2025-03-11 11:41:48,013 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6839_y5xzqa
+2025-03-11 11:41:48,013 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632935/IMG_6839_y5xzqa.heic
+2025-03-11 11:41:48,541 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:41:48,541 - cloudinary_ocr - DEBUG - Content lengte: 2615775 bytes
+2025-03-11 11:41:48,569 - cloudinary_ocr - ERROR - Kan bestandsformaat niet identificeren: cannot identify image file <_io.BytesIO object at 0x7f684b5df1f0>
+2025-03-11 11:41:48,571 - cloudinary_ocr - ERROR - OpenCV kon de afbeelding niet laden
+2025-03-11 11:41:48,571 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6839_y5xzqa
+2025-03-11 11:41:49,072 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6838_xuv8y2
+2025-03-11 11:41:49,073 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632935/IMG_6838_xuv8y2.heic
+2025-03-11 11:41:49,517 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:41:49,518 - cloudinary_ocr - DEBUG - Content lengte: 2699670 bytes
+2025-03-11 11:41:49,518 - cloudinary_ocr - ERROR - Kan bestandsformaat niet identificeren: cannot identify image file <_io.BytesIO object at 0x7f684b486020>
+2025-03-11 11:41:49,522 - cloudinary_ocr - ERROR - OpenCV kon de afbeelding niet laden
+2025-03-11 11:41:49,523 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6838_xuv8y2
+2025-03-11 11:41:50,025 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6837_sqdhjl
+2025-03-11 11:41:50,025 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632928/IMG_6837_sqdhjl.heic
+2025-03-11 11:41:50,653 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:41:50,653 - cloudinary_ocr - DEBUG - Content lengte: 1869130 bytes
+2025-03-11 11:41:50,653 - cloudinary_ocr - ERROR - Kan bestandsformaat niet identificeren: cannot identify image file <_io.BytesIO object at 0x7f684b4873d0>
+2025-03-11 11:41:50,655 - cloudinary_ocr - ERROR - OpenCV kon de afbeelding niet laden
+2025-03-11 11:41:50,655 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6837_sqdhjl
+2025-03-11 11:41:51,156 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6836_awhmxc
+2025-03-11 11:41:51,156 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632927/IMG_6836_awhmxc.heic
+2025-03-11 11:41:51,454 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:41:51,455 - cloudinary_ocr - DEBUG - Content lengte: 1948610 bytes
+2025-03-11 11:41:51,455 - cloudinary_ocr - ERROR - Kan bestandsformaat niet identificeren: cannot identify image file <_io.BytesIO object at 0x7f684b487560>
+2025-03-11 11:41:51,457 - cloudinary_ocr - ERROR - OpenCV kon de afbeelding niet laden
+2025-03-11 11:41:51,458 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6836_awhmxc
+2025-03-11 11:41:51,959 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6835_xtizri
+2025-03-11 11:41:51,959 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632927/IMG_6835_xtizri.heic
+2025-03-11 11:41:52,284 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:41:52,285 - cloudinary_ocr - DEBUG - Content lengte: 1422168 bytes
+2025-03-11 11:41:52,285 - cloudinary_ocr - ERROR - Kan bestandsformaat niet identificeren: cannot identify image file <_io.BytesIO object at 0x7f684b4871a0>
+2025-03-11 11:41:52,287 - cloudinary_ocr - ERROR - OpenCV kon de afbeelding niet laden
+2025-03-11 11:41:52,287 - cloudinary_ocr - ERROR - Kon afbeelding niet downloaden voor IMG_6835_xtizri
+2025-03-11 11:57:24,307 - cloudinary_ocr - INFO - pyheif bibliotheek succesvol geladen voor HEIC ondersteuning
+2025-03-11 11:57:24,326 - cloudinary_ocr - INFO - pillow_heif bibliotheek succesvol geladen voor HEIC ondersteuning
+2025-03-11 11:57:24,328 - cloudinary_ocr - DEBUG - Debug logging ingeschakeld
+2025-03-11 11:57:24,328 - cloudinary_ocr - INFO - Start OCR script voor handgeschreven nummers in schilderijen
+2025-03-11 11:57:24,336 - cloudinary_ocr - INFO - Cloudinary geconfigureerd voor cloud: dgvqkqvv1
+2025-03-11 11:57:25,056 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS
+2025-03-11 11:57:25,714 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS: 45
+2025-03-11 11:57:25,715 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ATELIER WERK
+2025-03-11 11:57:26,561 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ATELIER WERK: 154
+2025-03-11 11:57:26,562 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - BUITENLAND
+2025-03-11 11:57:27,087 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - BUITENLAND: 94
+2025-03-11 11:57:27,087 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - NEDERLAND
+2025-03-11 11:57:27,392 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - NEDERLAND: 150
+2025-03-11 11:57:27,392 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/VROEG WERK (1950 - 1965)
+2025-03-11 11:57:27,678 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/VROEG WERK (1950 - 1965): 81
+2025-03-11 11:57:27,678 - cloudinary_ocr - INFO - Totaal aantal schilderijen opgehaald: 524
+2025-03-11 11:57:27,679 - cloudinary_ocr - INFO - Start verwerking van 524 schilderijen...
+2025-03-11 11:57:27,679 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6839_y5xzqa
+2025-03-11 11:57:27,679 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632935/IMG_6839_y5xzqa.heic
+2025-03-11 11:57:28,309 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:57:28,310 - cloudinary_ocr - DEBUG - Content lengte: 2615775 bytes
+2025-03-11 11:57:28,310 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 11:57:28,310 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 11:57:32,854 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6839_y5xzqa: 22
+2025-03-11 11:57:32,854 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6839_y5xzqa naar: 22
+2025-03-11 11:57:33,355 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6838_xuv8y2
+2025-03-11 11:57:33,355 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632935/IMG_6838_xuv8y2.heic
+2025-03-11 11:57:33,976 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:57:33,976 - cloudinary_ocr - DEBUG - Content lengte: 2699670 bytes
+2025-03-11 11:57:33,976 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 11:57:33,976 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 11:57:36,873 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6838_xuv8y2: 20
+2025-03-11 11:57:36,873 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6838_xuv8y2 naar: 20
+2025-03-11 11:57:37,374 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6837_sqdhjl
+2025-03-11 11:57:37,374 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632928/IMG_6837_sqdhjl.heic
+2025-03-11 11:57:38,004 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:57:38,005 - cloudinary_ocr - DEBUG - Content lengte: 1869130 bytes
+2025-03-11 11:57:38,005 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 11:57:38,005 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 11:57:39,257 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6837_sqdhjl: 1
+2025-03-11 11:57:39,257 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6837_sqdhjl naar: 1
+2025-03-11 11:57:39,757 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6836_awhmxc
+2025-03-11 11:57:39,758 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632927/IMG_6836_awhmxc.heic
+2025-03-11 11:57:40,470 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:57:40,471 - cloudinary_ocr - DEBUG - Content lengte: 1948610 bytes
+2025-03-11 11:57:40,471 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 11:57:40,471 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 11:57:41,650 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6836_awhmxc: 6
+2025-03-11 11:57:41,650 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6836_awhmxc naar: 6
+2025-03-11 11:57:42,151 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6835_xtizri
+2025-03-11 11:57:42,151 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632927/IMG_6835_xtizri.heic
+2025-03-11 11:57:42,424 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:57:42,424 - cloudinary_ocr - DEBUG - Content lengte: 1422168 bytes
+2025-03-11 11:57:42,425 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 11:57:42,425 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 11:57:43,298 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6835_xtizri: 7
+2025-03-11 11:57:43,298 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6835_xtizri naar: 7
+2025-03-11 11:57:43,799 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6834_lito30
+2025-03-11 11:57:43,799 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632927/IMG_6834_lito30.heic
+2025-03-11 11:57:44,673 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:57:44,674 - cloudinary_ocr - DEBUG - Content lengte: 2928180 bytes
+2025-03-11 11:57:44,674 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 11:57:44,674 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 11:57:48,677 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6834_lito30: 19
+2025-03-11 11:57:48,677 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6834_lito30 naar: 19
+2025-03-11 11:57:49,178 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6833_gddldy
+2025-03-11 11:57:49,178 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632926/IMG_6833_gddldy.heic
+2025-03-11 11:57:49,480 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:57:49,480 - cloudinary_ocr - DEBUG - Content lengte: 1383081 bytes
+2025-03-11 11:57:49,480 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 11:57:49,481 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 11:57:50,355 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6833_gddldy: 4
+2025-03-11 11:57:50,355 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6833_gddldy naar: 4
+2025-03-11 11:57:50,856 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6831_wnisrh
+2025-03-11 11:57:50,856 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632921/IMG_6831_wnisrh.heic
+2025-03-11 11:57:51,163 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 11:57:51,163 - cloudinary_ocr - DEBUG - Content lengte: 1720032 bytes
+2025-03-11 11:57:51,163 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 11:57:51,163 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:07:38,633 - cloudinary_ocr - INFO - pyheif bibliotheek succesvol geladen voor HEIC ondersteuning
+2025-03-11 12:07:38,643 - cloudinary_ocr - INFO - pillow_heif bibliotheek succesvol geladen voor HEIC ondersteuning
+2025-03-11 12:07:38,644 - cloudinary_ocr - DEBUG - Debug logging ingeschakeld
+2025-03-11 12:07:38,644 - cloudinary_ocr - INFO - Start OCR script voor handgeschreven nummers in schilderijen
+2025-03-11 12:07:38,647 - cloudinary_ocr - INFO - Cloudinary geconfigureerd voor cloud: dgvqkqvv1
+2025-03-11 12:07:39,207 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS
+2025-03-11 12:07:39,607 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS: 45
+2025-03-11 12:07:39,607 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ATELIER WERK
+2025-03-11 12:07:40,041 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ATELIER WERK: 154
+2025-03-11 12:07:40,041 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - BUITENLAND
+2025-03-11 12:07:40,347 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - BUITENLAND: 94
+2025-03-11 12:07:40,347 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - NEDERLAND
+2025-03-11 12:07:40,696 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - NEDERLAND: 150
+2025-03-11 12:07:40,696 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/VROEG WERK (1950 - 1965)
+2025-03-11 12:07:40,952 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/VROEG WERK (1950 - 1965): 81
+2025-03-11 12:07:40,952 - cloudinary_ocr - INFO - Totaal aantal schilderijen opgehaald: 524
+2025-03-11 12:07:40,952 - cloudinary_ocr - INFO - Start verwerking van 524 schilderijen...
+2025-03-11 12:07:40,952 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6839_y5xzqa
+2025-03-11 12:07:40,953 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632935/IMG_6839_y5xzqa.heic
+2025-03-11 12:07:41,271 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:07:41,272 - cloudinary_ocr - DEBUG - Content lengte: 2615775 bytes
+2025-03-11 12:07:41,272 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:07:41,272 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:07:43,234 - cloudinary_ocr - ERROR - OCR fout: [Errno 2] No such file or directory: '/tmp/tess_qgtitf36.txt'
+2025-03-11 12:07:43,234 - cloudinary_ocr - WARNING - Geen nummer gevonden voor IMG_6839_y5xzqa
+2025-03-11 12:07:43,735 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6838_xuv8y2
+2025-03-11 12:07:43,735 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632935/IMG_6838_xuv8y2.heic
+2025-03-11 12:07:44,074 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:07:44,075 - cloudinary_ocr - DEBUG - Content lengte: 2699670 bytes
+2025-03-11 12:07:44,075 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:07:44,075 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:07:45,668 - cloudinary_ocr - ERROR - OCR fout: [Errno 2] No such file or directory: '/tmp/tess_w7ysd2bl.txt'
+2025-03-11 12:07:45,668 - cloudinary_ocr - WARNING - Geen nummer gevonden voor IMG_6838_xuv8y2
+2025-03-11 12:07:46,169 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6837_sqdhjl
+2025-03-11 12:07:46,169 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632928/IMG_6837_sqdhjl.heic
+2025-03-11 12:07:46,505 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:07:46,506 - cloudinary_ocr - DEBUG - Content lengte: 1869130 bytes
+2025-03-11 12:07:46,506 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:07:46,506 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:07:47,403 - cloudinary_ocr - ERROR - OCR fout: [Errno 2] No such file or directory: '/tmp/tess_50vn6km0.txt'
+2025-03-11 12:07:47,403 - cloudinary_ocr - WARNING - Geen nummer gevonden voor IMG_6837_sqdhjl
+2025-03-11 12:09:22,069 - cloudinary_ocr - INFO - pyheif bibliotheek succesvol geladen voor HEIC ondersteuning
+2025-03-11 12:09:22,078 - cloudinary_ocr - INFO - pillow_heif bibliotheek succesvol geladen voor HEIC ondersteuning
+2025-03-11 12:09:22,079 - cloudinary_ocr - DEBUG - Debug logging ingeschakeld
+2025-03-11 12:09:22,079 - cloudinary_ocr - INFO - Start OCR script voor handgeschreven nummers in schilderijen
+2025-03-11 12:09:22,082 - cloudinary_ocr - INFO - Cloudinary geconfigureerd voor cloud: dgvqkqvv1
+2025-03-11 12:09:22,724 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS
+2025-03-11 12:09:23,085 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ANDERE (bevriende) KUNSTENAARS: 45
+2025-03-11 12:09:23,085 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/ATELIER WERK
+2025-03-11 12:09:23,795 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/ATELIER WERK: 154
+2025-03-11 12:09:23,796 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - BUITENLAND
+2025-03-11 12:09:24,250 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - BUITENLAND: 94
+2025-03-11 12:09:24,250 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/LANDSCHAPPEN - NEDERLAND
+2025-03-11 12:09:24,667 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/LANDSCHAPPEN - NEDERLAND: 150
+2025-03-11 12:09:24,667 - cloudinary_ocr - INFO - Resources ophalen uit map: Tom van As Kunst/VROEG WERK (1950 - 1965)
+2025-03-11 12:09:24,922 - cloudinary_ocr - INFO - Aantal resources gevonden in Tom van As Kunst/VROEG WERK (1950 - 1965): 81
+2025-03-11 12:09:24,922 - cloudinary_ocr - INFO - Totaal aantal schilderijen opgehaald: 524
+2025-03-11 12:09:24,922 - cloudinary_ocr - INFO - Start verwerking van 524 schilderijen...
+2025-03-11 12:09:24,922 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6839_y5xzqa
+2025-03-11 12:09:24,923 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632935/IMG_6839_y5xzqa.heic
+2025-03-11 12:09:25,278 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:25,279 - cloudinary_ocr - DEBUG - Content lengte: 2615775 bytes
+2025-03-11 12:09:25,279 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:25,279 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:27,052 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6839_y5xzqa: 9
+2025-03-11 12:09:27,053 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6839_y5xzqa naar: 9
+2025-03-11 12:09:27,553 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6838_xuv8y2
+2025-03-11 12:09:27,554 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632935/IMG_6838_xuv8y2.heic
+2025-03-11 12:09:27,868 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:27,869 - cloudinary_ocr - DEBUG - Content lengte: 2699670 bytes
+2025-03-11 12:09:27,869 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:27,869 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:29,375 - cloudinary_ocr - WARNING - Geen nummer gevonden in de OCR-tekst
+2025-03-11 12:09:29,375 - cloudinary_ocr - WARNING - Geen nummer gevonden voor IMG_6838_xuv8y2
+2025-03-11 12:09:29,876 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6837_sqdhjl
+2025-03-11 12:09:29,876 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632928/IMG_6837_sqdhjl.heic
+2025-03-11 12:09:30,210 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:30,211 - cloudinary_ocr - DEBUG - Content lengte: 1869130 bytes
+2025-03-11 12:09:30,212 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:30,212 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:31,882 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6837_sqdhjl: 5
+2025-03-11 12:09:31,882 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6837_sqdhjl naar: 5
+2025-03-11 12:09:32,381 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6836_awhmxc
+2025-03-11 12:09:32,382 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632927/IMG_6836_awhmxc.heic
+2025-03-11 12:09:32,720 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:32,720 - cloudinary_ocr - DEBUG - Content lengte: 1948610 bytes
+2025-03-11 12:09:32,721 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:32,721 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:33,763 - cloudinary_ocr - WARNING - Geen nummer gevonden in de OCR-tekst
+2025-03-11 12:09:33,763 - cloudinary_ocr - WARNING - Geen nummer gevonden voor IMG_6836_awhmxc
+2025-03-11 12:09:34,264 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6835_xtizri
+2025-03-11 12:09:34,264 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632927/IMG_6835_xtizri.heic
+2025-03-11 12:09:34,719 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:34,720 - cloudinary_ocr - DEBUG - Content lengte: 1422168 bytes
+2025-03-11 12:09:34,720 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:34,720 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:35,422 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6835_xtizri: 3
+2025-03-11 12:09:35,423 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6835_xtizri naar: 3
+2025-03-11 12:09:35,923 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6834_lito30
+2025-03-11 12:09:35,924 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632927/IMG_6834_lito30.heic
+2025-03-11 12:09:36,231 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:36,232 - cloudinary_ocr - DEBUG - Content lengte: 2928180 bytes
+2025-03-11 12:09:36,232 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:36,232 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:37,084 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6834_lito30: 7
+2025-03-11 12:09:37,084 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6834_lito30 naar: 7
+2025-03-11 12:09:37,585 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6833_gddldy
+2025-03-11 12:09:37,586 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632926/IMG_6833_gddldy.heic
+2025-03-11 12:09:38,320 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:38,320 - cloudinary_ocr - DEBUG - Content lengte: 1383081 bytes
+2025-03-11 12:09:38,320 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:38,321 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:39,245 - cloudinary_ocr - WARNING - Geen nummer gevonden in de OCR-tekst
+2025-03-11 12:09:39,246 - cloudinary_ocr - WARNING - Geen nummer gevonden voor IMG_6833_gddldy
+2025-03-11 12:09:39,746 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6831_wnisrh
+2025-03-11 12:09:39,747 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632921/IMG_6831_wnisrh.heic
+2025-03-11 12:09:40,067 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:40,068 - cloudinary_ocr - DEBUG - Content lengte: 1720032 bytes
+2025-03-11 12:09:40,068 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:40,068 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:40,804 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6831_wnisrh: 0
+2025-03-11 12:09:40,805 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6831_wnisrh naar: 0
+2025-03-11 12:09:41,305 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6832_gbgrjx
+2025-03-11 12:09:41,306 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632920/IMG_6832_gbgrjx.heic
+2025-03-11 12:09:41,859 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:41,860 - cloudinary_ocr - DEBUG - Content lengte: 2098625 bytes
+2025-03-11 12:09:41,860 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:41,860 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:42,577 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6832_gbgrjx: 7
+2025-03-11 12:09:42,577 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6832_gbgrjx naar: 7
+2025-03-11 12:09:43,078 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6830_izkp7x
+2025-03-11 12:09:43,079 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632919/IMG_6830_izkp7x.heic
+2025-03-11 12:09:43,622 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:43,623 - cloudinary_ocr - DEBUG - Content lengte: 1391047 bytes
+2025-03-11 12:09:43,623 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:43,623 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:44,525 - cloudinary_ocr - WARNING - Geen nummer gevonden in de OCR-tekst
+2025-03-11 12:09:44,525 - cloudinary_ocr - WARNING - Geen nummer gevonden voor IMG_6830_izkp7x
+2025-03-11 12:09:45,026 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_6829_jpskfy
+2025-03-11 12:09:45,026 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632919/IMG_6829_jpskfy.heic
+2025-03-11 12:09:45,561 - cloudinary_ocr - DEBUG - Content-Type header: image/heic
+2025-03-11 12:09:45,562 - cloudinary_ocr - DEBUG - Content lengte: 1571492 bytes
+2025-03-11 12:09:45,563 - cloudinary_ocr - INFO - HEIC afbeeldingsformaat gedetecteerd
+2025-03-11 12:09:45,563 - cloudinary_ocr - DEBUG - HEIC afbeelding laden met pillow_heif
+2025-03-11 12:09:46,309 - cloudinary_ocr - INFO - Gevonden nummer voor IMG_6829_jpskfy: 7
+2025-03-11 12:09:46,310 - cloudinary_ocr - INFO - DRY RUN: Zou caption bijwerken voor IMG_6829_jpskfy naar: 7
+2025-03-11 12:09:46,810 - cloudinary_ocr - INFO - Verwerken van schilderij: IMG_5851_mexuvs
+2025-03-11 12:09:46,811 - cloudinary_ocr - INFO - Downloaden van afbeelding: https://res.cloudinary.com/dgvqkqvv1/image/upload/v1741632912/IMG_5851_mexuvs.heic
