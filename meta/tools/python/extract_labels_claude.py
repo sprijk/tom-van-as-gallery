@@ -9,11 +9,12 @@ import requests
 import time
 import base64
 from io import BytesIO
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import cloudinary
 import cloudinary.api
 import cloudinary.uploader
 from dotenv import load_dotenv
+import magic  # pip install python-magic
 
 def setup_cloudinary():
     """Configureer Cloudinary met de omgevingsvariabelen."""
@@ -201,6 +202,74 @@ def load_previous_results(output_file):
 
     return previous_results
 
+def download_and_convert_image(url):
+    """
+    Download een afbeelding en converteer deze naar een PIL Image object.
+    Deze functie probeert meerdere formaten als het eerste niet lukt.
+
+    Args:
+        url: URL van de afbeelding
+
+    Returns:
+        PIL Image object of None bij fout
+    """
+    try:
+        # Download de afbeelding eerst
+        response = requests.get(url)
+        if response.status_code != 200:
+            print(f"Fout bij downloaden van afbeelding: status code {response.status_code}")
+            return None
+
+        image_data = BytesIO(response.content)
+
+        # Controleer het bestandstype met python-magic
+        mime = magic.Magic(mime=True)
+        file_type = mime.from_buffer(response.content)
+        print(f"Gedetecteerd bestandstype: {file_type}")
+
+        # Probeer als normale afbeelding
+        try:
+            return Image.open(image_data)
+        except UnidentifiedImageError:
+            print(f"Kan bestandsformaat niet identificeren, probeer conversie...")
+
+            # Als het een HEIC-bestand is, probeer te converteren
+            if "heic" in file_type.lower() or "heif" in file_type.lower():
+                try:
+                    # Installeer pillow-heif als dit nog niet is gebeurd
+                    import importlib.util
+                    if importlib.util.find_spec("pillow_heif") is None:
+                        print("Installeren van pillow-heif bibliotheek...")
+                        import subprocess
+                        subprocess.check_call([sys.executable, "-m", "pip", "install", "pillow-heif"])
+
+                    # Importeer pillow_heif
+                    from pillow_heif import register_heif_opener
+                    register_heif_opener()
+
+                    # Probeer opnieuw te openen als HEIC
+                    image_data.seek(0)
+                    return Image.open(image_data)
+                except Exception as heic_err:
+                    print(f"Fout bij het converteren van HEIC: {str(heic_err)}")
+
+            # Als alternatief, download als JPEG via Cloudinary
+            try:
+                print("Proberen om via Cloudinary een JPEG-versie te krijgen...")
+                # Voeg .jpg transformatie toe aan de URL
+                jpg_url = url.replace("/upload/", "/upload/f_jpg/")
+                jpg_response = requests.get(jpg_url)
+                jpg_data = BytesIO(jpg_response.content)
+                return Image.open(jpg_data)
+            except Exception as jpg_err:
+                print(f"Fout bij het downloaden als JPEG: {str(jpg_err)}")
+
+            return None
+
+    except Exception as e:
+        print(f"Onverwachte fout bij het downloaden/converteren van afbeelding: {str(e)}")
+        return None
+
 def process_image(image_url, public_id, api_key, previous_results):
     """
     Verwerk een enkele afbeelding met Claude, tenzij deze al succesvol verwerkt is.
@@ -239,9 +308,20 @@ def process_image(image_url, public_id, api_key, previous_results):
                 "source": "cloudinary_metadata"
             }
 
-        # Download de afbeelding en gebruik Claude om het label te analyseren
-        response = requests.get(image_url)
-        img = Image.open(BytesIO(response.content))
+        # Download en converteer de afbeelding met verbeterde foutafhandeling
+        img = download_and_convert_image(image_url)
+
+        if img is None:
+            print(f"Kon de afbeelding niet verwerken: {public_id}")
+            return {
+                "public_id": public_id,
+                "label_number": None,
+                "success": False,
+                "error": "Kon de afbeelding niet laden",
+                "source": "error"
+            }
+
+        # Gebruik Claude om het label te analyseren
         label_number = analyze_image_with_claude(img, api_key)
 
         success = label_number is not None
@@ -409,6 +489,34 @@ def update_cloudinary_metadata(results):
 
     print(f"Totaal {updated_count} afbeeldingen bijgewerkt in Cloudinary")
 
+def check_required_packages():
+    """
+    Controleer of alle benodigde packages zijn geïnstalleerd en installeer ontbrekende packages.
+    """
+    required_packages = {
+        'python-magic': 'magic',
+        'pillow-heif': 'pillow_heif'
+    }
+
+    missing_packages = []
+
+    for package, module in required_packages.items():
+        try:
+            __import__(module)
+        except ImportError:
+            missing_packages.append(package)
+
+    if missing_packages:
+        print(f"Installeren van ontbrekende packages: {', '.join(missing_packages)}")
+        import subprocess
+        for package in missing_packages:
+            try:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+                print(f"Package {package} succesvol geïnstalleerd")
+            except subprocess.CalledProcessError as e:
+                print(f"Fout bij installeren van {package}: {str(e)}")
+                print("Mogelijk moet je het script opnieuw starten nadat de packages zijn geïnstalleerd.")
+
 def main():
     """Hoofdfunctie van het script."""
     parser = argparse.ArgumentParser(description='Extraheer labelnummers uit afbeeldingen in Cloudinary met Claude API.')
@@ -422,6 +530,10 @@ def main():
     args = parser.parse_args()
 
     print("Start extractie van labelnummers met Claude...")
+
+    # Controleer en installeer ontbrekende packages
+    check_required_packages()
+
     setup_cloudinary()
     api_key = check_anthropic_api_key()
 
