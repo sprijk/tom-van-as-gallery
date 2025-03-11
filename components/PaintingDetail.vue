@@ -3,7 +3,10 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Schilderij afbeelding -->
       <div class="relative">
-        <div class="aspect-w-4 aspect-h-3 md:aspect-auto md:h-full">
+        <div
+          class="aspect-w-4 aspect-h-3 md:aspect-auto md:h-full cursor-pointer"
+          @click="showFullImage = true"
+        >
           <NuxtImg
             provider="cloudinary"
             :src="painting.id"
@@ -460,6 +463,24 @@ onMounted(() => {
     window.addEventListener("click", (e) => {
       if (showShareOptions.value && !e.target.closest(".share-options")) {
         showShareOptions.value = false;
+      }
+    });
+
+    // Add event listener for Escape key
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        showFullImage.value = false;
+      }
+    });
+  }
+});
+
+// Add onUnmounted to clean up event listeners
+onUnmounted(() => {
+  if (typeof window !== "undefined") {
+    window.removeEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        showFullImage.value = false;
       }
     });
   }
