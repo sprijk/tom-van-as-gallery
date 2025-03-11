@@ -114,7 +114,7 @@ def analyze_image_with_claude(image, api_key):
                     {
                         "type": "text",
                         "text": "Zoek en identificeer een labelnummer in deze afbeelding. "
-                               "Het label is waarschijnlijk een klein wit kaartje met een zwart handgeschreven nummer. "
+                               "Het label is waarschijnlijk een klein wit kaartje of een stukje schilderstape met een zwart handgeschreven nummer. "
                                "Geef alleen het nummer terug (bijv. '123'). Als je geen label of nummer kunt vinden, "
                                "zeg dan 'Geen label gevonden'."
                     }
@@ -366,13 +366,21 @@ def update_cloudinary_metadata(results):
                 continue
 
             try:
-                # Voeg het labelnummer toe als metadata
+                # Voeg het labelnummer toe als contextual metadata
                 cloudinary.uploader.add_context(
                     f'label_number={result["label_number"]}',
                     public_ids=[result['public_id']]
                 )
+
+                # Update ook de titel (caption) met het labelnummer
+                cloudinary.uploader.explicit(
+                    result['public_id'],
+                    type="upload",
+                    caption=f"{result['label_number']}"
+                )
+
                 updated_count += 1
-                print(f"Metadata bijgewerkt voor {result['public_id']}")
+                print(f"Metadata en titel bijgewerkt voor {result['public_id']}")
             except Exception as e:
                 print(f"Fout bij updaten metadata voor {result['public_id']}: {str(e)}")
                 print(f"Details: {type(e).__name__}")
@@ -383,10 +391,19 @@ def update_cloudinary_metadata(results):
                     # Gebruik cloudinary.api.update in plaats van uploader.add_context
                     cloudinary.api.update(
                         result['public_id'],
-                        context=f'label_number={result["label_number"]}'
+                        context=f'label_number={result["label_number"]}',
+                        metadata=True
                     )
+
+                    # Probeer ook de titel bij te werken met alternatieve methode
+                    cloudinary.api.update(
+                        result['public_id'],
+                        display_name=f"Schilderij #{result['label_number']}",
+                        metadata=True
+                    )
+
                     updated_count += 1
-                    print(f"Metadata bijgewerkt voor {result['public_id']} via alternatieve methode")
+                    print(f"Metadata en titel bijgewerkt voor {result['public_id']} via alternatieve methode")
                 except Exception as alt_error:
                     print(f"Ook alternatieve methode faalde: {str(alt_error)}")
 
