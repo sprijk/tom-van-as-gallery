@@ -151,14 +151,64 @@ def analyze_image_with_claude(image, api_key):
         print(f"Fout bij het aanroepen van Claude API: {str(e)}")
         return None
 
-def process_image(image_url, public_id, api_key):
+def get_existing_label_number(public_id):
     """
-    Verwerk een enkele afbeelding met Claude.
+    Haal een bestaand labelnummer op uit Cloudinary metadata.
+
+    Args:
+        public_id: Cloudinary public_id van de afbeelding
+
+    Returns:
+        Het bestaande labelnummer als string of None als het niet bestaat
+    """
+    try:
+        resource = cloudinary.api.resource(public_id, context=True)
+        context = resource.get('context', {})
+
+        # Check voor custom context
+        if 'custom' in context and 'label_number' in context['custom']:
+            label_number = context['custom']['label_number']
+            return label_number
+
+        return None
+    except Exception as e:
+        print(f"Fout bij ophalen van metadata voor {public_id}: {str(e)}")
+        return None
+
+def load_previous_results(output_file):
+    """
+    Laad resultaten van eerdere runs uit een JSON-bestand.
+
+    Args:
+        output_file: Pad naar het JSON-bestand
+
+    Returns:
+        Dictionary met public_ids als sleutels en labelnummers als waarden
+    """
+    previous_results = {}
+
+    if os.path.exists(output_file):
+        try:
+            with open(output_file, 'r', encoding='utf-8') as f:
+                results = json.load(f)
+                for result in results:
+                    if result.get('success') and result.get('label_number'):
+                        previous_results[result['public_id']] = result['label_number']
+            print(f"Geladen resultaten uit vorige run: {len(previous_results)} items")
+        except Exception as e:
+            print(f"Fout bij laden van vorige resultaten: {str(e)}")
+
+    return previous_results
+
+def process_image(image_url, public_id, api_key, previous_results):
+    """
+    Verwerk een enkele afbeelding met Claude, tenzij deze al succesvol verwerkt is.
 
     Args:
         image_url: URL van de afbeelding
         public_id: Cloudinary public_id van de afbeelding
         api_key: Anthropic API sleutel
+        previous_results: Dictionary met eerder gevonden labelnummers
 
     Returns:
         Dict met resultaten
@@ -166,11 +216,31 @@ def process_image(image_url, public_id, api_key):
     try:
         print(f"Verwerken van afbeelding: {public_id}")
 
-        # Download de afbeelding
+        # Controleer of we al een eerder resultaat hebben
+        if public_id in previous_results:
+            label_number = previous_results[public_id]
+            print(f"Gebruikt eerder geïdentificeerd label: {label_number}")
+            return {
+                "public_id": public_id,
+                "label_number": label_number,
+                "success": True,
+                "source": "previous_run"
+            }
+
+        # Controleer of er al een labelnummer in Cloudinary staat
+        existing_label = get_existing_label_number(public_id)
+        if existing_label:
+            print(f"Gebruikt bestaand label uit Cloudinary: {existing_label}")
+            return {
+                "public_id": public_id,
+                "label_number": existing_label,
+                "success": True,
+                "source": "cloudinary_metadata"
+            }
+
+        # Download de afbeelding en gebruik Claude om het label te analyseren
         response = requests.get(image_url)
         img = Image.open(BytesIO(response.content))
-
-        # Gebruik Claude om het label te analyseren
         label_number = analyze_image_with_claude(img, api_key)
 
         success = label_number is not None
@@ -185,7 +255,8 @@ def process_image(image_url, public_id, api_key):
         return {
             "public_id": public_id,
             "label_number": label_number,
-            "success": success
+            "success": success,
+            "source": "claude_api"
         }
     except Exception as e:
         print(f"Fout bij verwerken van afbeelding {public_id}: {str(e)}")
@@ -193,16 +264,18 @@ def process_image(image_url, public_id, api_key):
             "public_id": public_id,
             "label_number": None,
             "success": False,
-            "error": str(e)
+            "error": str(e),
+            "source": "error"
         }
 
-def process_folder(folder_path, api_key, limit=None):
+def process_folder(folder_path, api_key, previous_results, limit=None):
     """
     Verwerk alle afbeeldingen in een specifieke folder.
 
     Args:
         folder_path: Pad naar de Cloudinary folder
         api_key: Anthropic API sleutel
+        previous_results: Dictionary met eerder gevonden labelnummers
         limit: Optionele limiet voor het aantal te verwerken afbeeldingen
 
     Returns:
@@ -222,7 +295,7 @@ def process_folder(folder_path, api_key, limit=None):
 
         # Verwerk elke afbeelding
         for resource in resources:
-            result = process_image(resource['secure_url'], resource['public_id'], api_key)
+            result = process_image(resource['secure_url'], resource['public_id'], api_key, previous_results)
             results.append(result)
 
         return results
@@ -230,13 +303,14 @@ def process_folder(folder_path, api_key, limit=None):
         print(f"Fout bij verwerken van folder {folder_path}: {str(e)}")
         return []
 
-def process_all_folders(main_folder="Tom van As Kunst", api_key=None, limit_per_folder=None):
+def process_all_folders(main_folder="Tom van As Kunst", api_key=None, previous_results=None, limit_per_folder=None):
     """
     Verwerk alle subfolders in de opgegeven hoofdfolder.
 
     Args:
         main_folder: Naam van de hoofdfolder in Cloudinary
         api_key: Anthropic API sleutel
+        previous_results: Dictionary met eerder gevonden labelnummers
         limit_per_folder: Optionele limiet voor het aantal te verwerken afbeeldingen per folder
 
     Returns:
@@ -251,11 +325,11 @@ def process_all_folders(main_folder="Tom van As Kunst", api_key=None, limit_per_
 
         # Verwerk elke subfolder
         for folder in folders_response['folders']:
-            folder_results = process_folder(folder['path'], api_key, limit_per_folder)
+            folder_results = process_folder(folder['path'], api_key, previous_results, limit_per_folder)
             all_results.extend(folder_results)
 
         # Verwerk ook de hoofdfolder zelf als er afbeeldingen direct in zitten
-        main_folder_results = process_folder(main_folder, api_key, limit_per_folder)
+        main_folder_results = process_folder(main_folder, api_key, previous_results, limit_per_folder)
         all_results.extend(main_folder_results)
 
         return all_results
@@ -265,7 +339,7 @@ def process_all_folders(main_folder="Tom van As Kunst", api_key=None, limit_per_
         # Fallback: probeer alleen de hoofdfolder
         try:
             print("Fallback: verwerken van alleen de hoofdfolder...")
-            return process_folder(main_folder, api_key, limit_per_folder)
+            return process_folder(main_folder, api_key, previous_results, limit_per_folder)
         except Exception as fallback_error:
             print(f"Fallback fout: {str(fallback_error)}")
             return []
@@ -281,6 +355,10 @@ def update_cloudinary_metadata(results):
 
     for result in results:
         if result['success'] and result['label_number']:
+            # Als de bron cloudinary_metadata is, hoeven we niet opnieuw bij te werken
+            if result.get('source') == 'cloudinary_metadata':
+                continue
+
             try:
                 # Voeg het labelnummer toe als metadata
                 cloudinary.uploader.add_context(
@@ -302,6 +380,7 @@ def main():
     parser.add_argument('--update-cloudinary', action='store_true', help='Update Cloudinary metadata met gevonden labels')
     parser.add_argument('--single-image', help='Verwerk alleen de opgegeven public_id')
     parser.add_argument('--limit', type=int, help='Limiteer het aantal te verwerken afbeeldingen per folder')
+    parser.add_argument('--force-reprocess', action='store_true', help='Forceer het opnieuw verwerken van alle afbeeldingen')
 
     args = parser.parse_args()
 
@@ -309,18 +388,21 @@ def main():
     setup_cloudinary()
     api_key = check_anthropic_api_key()
 
+    # Laad eerdere resultaten indien niet geforceerd herverwerken
+    previous_results = {} if args.force_reprocess else load_previous_results(args.output)
+
     # Verwerk afbeeldingen
     if args.single_image:
         # Verwerk een enkele afbeelding
         try:
             resource = cloudinary.api.resource(args.single_image)
-            results = [process_image(resource['secure_url'], resource['public_id'], api_key)]
+            results = [process_image(resource['secure_url'], resource['public_id'], api_key, previous_results)]
         except Exception as e:
             print(f"Fout bij ophalen van afbeelding {args.single_image}: {str(e)}")
             results = []
     else:
         # Verwerk alle folders
-        results = process_all_folders(args.folder, api_key, args.limit)
+        results = process_all_folders(args.folder, api_key, previous_results, args.limit)
 
     # Sla resultaten op in een JSON-bestand
     with open(args.output, 'w', encoding='utf-8') as f:
@@ -332,10 +414,20 @@ def main():
     successful = sum(1 for r in results if r['success'])
     total = len(results)
 
+    # Statistieken per bron
+    from_cloudinary = sum(1 for r in results if r.get('source') == 'cloudinary_metadata')
+    from_previous = sum(1 for r in results if r.get('source') == 'previous_run')
+    from_claude = sum(1 for r in results if r.get('source') == 'claude_api')
+
     print(f"Totaal verwerkt: {total}")
     print(f"Succesvol geïdentificeerd: {successful}")
     if total > 0:
         print(f"Percentage succesvol: {successful/total*100:.2f}%")
+
+    print(f"Bronnen:")
+    print(f"  - Uit Cloudinary metadata: {from_cloudinary}")
+    print(f"  - Uit vorige resultaten: {from_previous}")
+    print(f"  - Nieuw geanalyseerd door Claude: {from_claude}")
 
     # Update Cloudinary metadata indien gewenst
     if args.update_cloudinary:
