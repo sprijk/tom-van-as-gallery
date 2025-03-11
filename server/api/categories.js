@@ -1,3 +1,4 @@
+// server/api/categories.js
 import { v2 as cloudinary } from "cloudinary";
 
 export default defineEventHandler(async (event) => {
@@ -22,22 +23,28 @@ export default defineEventHandler(async (event) => {
     console.error("Fout bij het ophalen van categorieën:", error);
 
     // Als de root folder niet bestaat of een andere fout optreedt,
-    // probeer dan alle mappen op het hoogste niveau
+    // probeer dan alle resources te doorzoeken en categorieën te extraheren
     try {
-      const rootFolders = await cloudinary.api.root_folders();
+      const result = await cloudinary.api.resources({
+        type: "upload",
+        max_results: 500,
+        context: true,
+      });
 
-      // Check of "Tom van As Kunst" bestaat als root folder
-      const tomVanAsFolder = rootFolders.folders.find(
-        (folder) => folder.name === "Tom van As Kunst"
-      );
+      // Verzamel unieke foldernamen
+      const categorySet = new Set();
 
-      if (tomVanAsFolder) {
-        return []; // Folder bestaat, maar geen subcategorieën gevonden
-      } else {
-        // Gebruik alle root folders als categorieën
-        const categories = rootFolders.folders.map((folder) => folder.name);
-        return categories;
-      }
+      result.resources.forEach((resource) => {
+        if (resource.folder) {
+          const folderParts = resource.folder.split("/");
+          // Gebruik de laatste mapnaam als categorie
+          if (folderParts.length > 0) {
+            categorySet.add(folderParts[folderParts.length - 1]);
+          }
+        }
+      });
+
+      return Array.from(categorySet);
     } catch (fallbackError) {
       console.error(
         "Fallback fout bij het ophalen van categorieën:",

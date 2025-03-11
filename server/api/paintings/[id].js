@@ -1,3 +1,4 @@
+// server/api/paintings/[id].js
 import { v2 as cloudinary } from "cloudinary";
 
 export default defineEventHandler(async (event) => {

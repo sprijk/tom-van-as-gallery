@@ -1,3 +1,4 @@
+// pages/schilderijen/index.vue
 <template>
   <div>
     <div class="mb-8">
@@ -14,7 +15,20 @@
       @select="handleSelectPainting"
     />
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div v-if="isInitialLoading" class="py-12">
+      <LoadingSpinner showMessage message="Schilderijen laden..." />
+    </div>
+
+    <div v-else-if="allPaintings.length === 0" class="py-12 text-center">
+      <p class="text-gray-700 text-lg mb-4">
+        Er zijn momenteel geen schilderijen beschikbaar.
+      </p>
+      <p class="text-gray-600">
+        Probeer het later nog eens of neem contact op met de galerij.
+      </p>
+    </div>
+
+    <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <!-- Sidebar met filters -->
       <div class="lg:col-span-1">
         <PaintingFilter
@@ -26,14 +40,16 @@
 
       <!-- Resultaten -->
       <div class="lg:col-span-3">
-        <div v-if="isLoading" class="flex justify-center py-12">
+        <div v-if="isFilterLoading" class="flex justify-center py-12">
           <div
             class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"
           ></div>
         </div>
 
         <template v-else>
-          <div class="flex justify-between items-center mb-6">
+          <div
+            class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"
+          >
             <p class="text-gray-600">
               {{ filteredPaintings.length }} schilderijen gevonden
             </p>
@@ -76,7 +92,8 @@ const router = useRouter();
 const allPaintings = ref([]);
 const allCategories = ref([]);
 const allTags = ref([]);
-const isLoading = ref(true);
+const isInitialLoading = ref(true);
+const isFilterLoading = ref(false);
 const activeCategoryFromRoute = ref("");
 const activeTagFromRoute = ref("");
 
@@ -99,7 +116,7 @@ const filteredPaintings = computed(() => {
     const searchTerm = filters.value.search.toLowerCase();
     result = result.filter((painting) => {
       return (
-        painting.title.toLowerCase().includes(searchTerm) ||
+        (painting.title && painting.title.toLowerCase().includes(searchTerm)) ||
         (painting.category &&
           painting.category.toLowerCase().includes(searchTerm)) ||
         (painting.tags &&
@@ -151,9 +168,9 @@ function sortPaintings(paintings) {
       case "oldest":
         return new Date(a.created || 0) - new Date(b.created || 0);
       case "az":
-        return a.title.localeCompare(b.title);
+        return (a.title || "").localeCompare(b.title || "");
       case "za":
-        return b.title.localeCompare(a.title);
+        return (b.title || "").localeCompare(a.title || "");
       default:
         return 0;
     }
@@ -172,9 +189,13 @@ function handleSelectPainting(painting) {
 }
 
 function applyFilters(newFilters) {
-  filters.value = { ...newFilters };
-  currentPage.value = 1;
-  updateRouteParams();
+  isFilterLoading.value = true;
+  setTimeout(() => {
+    filters.value = { ...newFilters };
+    currentPage.value = 1;
+    updateRouteParams();
+    isFilterLoading.value = false;
+  }, 300); // Kleine vertraging voor betere gebruikservaring
 }
 
 function clearFilters() {
@@ -210,57 +231,82 @@ function updateRouteParams() {
     query.tags = filters.value.tags.join(",");
   }
 
+  // Sorteeroptie toevoegen aan URL
+  if (sortOption.value !== "newest") {
+    query.sort = sortOption.value;
+  }
+
   router.push({ query });
 }
 
 // Data ophalen
 async function fetchData() {
-  isLoading.value = true;
+  isInitialLoading.value = true;
 
   try {
     // Alle schilderijen, categorieën en tags ophalen
-    allPaintings.value = await getAllPaintings();
-    allCategories.value = await getAllCategories();
-    allTags.value = await getAllTags();
+    const [paintings, categories, tags] = await Promise.all([
+      getAllPaintings(),
+      getAllCategories(),
+      getAllTags(),
+    ]);
+
+    allPaintings.value = paintings;
+    allCategories.value = categories;
+    allTags.value = tags;
 
     // URL parameters verwerken om filters toe te passen
-    const { category, categories, tag, tags, search } = route.query;
+    const { category, tag, search, sort } = route.query;
+    const categoryParam = route.query.category;
+    const categoriesParam = route.query.categories;
+    const tagParam = route.query.tag;
+    const tagsParam = route.query.tags;
 
     if (search) {
       filters.value.search = search;
     }
 
-    if (category) {
-      filters.value.categories = [category];
-    } else if (categories) {
-      filters.value.categories = categories.split(",");
+    if (categoryParam) {
+      filters.value.categories = [categoryParam];
+    } else if (categoriesParam) {
+      filters.value.categories = categoriesParam.split(",");
     }
 
-    if (tag) {
-      filters.value.tags = [tag];
-    } else if (tags) {
-      filters.value.tags = tags.split(",");
+    if (tagParam) {
+      filters.value.tags = [tagParam];
+    } else if (tagsParam) {
+      filters.value.tags = tagsParam.split(",");
+    }
+
+    if (sort) {
+      sortOption.value = sort;
     }
   } catch (error) {
     console.error("Fout bij het ophalen van data:", error);
   } finally {
-    isLoading.value = false;
+    isInitialLoading.value = false;
   }
 }
 
 // Watch sort option om de URL te updaten
 watch(sortOption, () => {
-  const query = { ...route.query, sort: sortOption.value };
-  router.push({ query });
+  updateRouteParams();
+});
+
+// SEO meta tags
+useHead({
+  title: "Schilderijen | Tom van As Kunstgalerij",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Bekijk de collectie schilderijen van kunstenaar Tom van As. Filter op categorieën en tags om uw favoriete kunstwerk te vinden.",
+    },
+  ],
 });
 
 // Data ophalen bij page load
 onMounted(() => {
   fetchData();
-
-  // Sort optie uit URL halen
-  if (route.query.sort) {
-    sortOption.value = route.query.sort;
-  }
 });
 </script>

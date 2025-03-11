@@ -1,16 +1,15 @@
+// pages/schilderijen/[id].vue
 <template>
   <div>
-    <div v-if="isLoading" class="flex justify-center py-12">
-      <div
-        class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"
-      ></div>
+    <div v-if="isLoading" class="py-12">
+      <LoadingSpinner showMessage message="Schilderij laden..." />
     </div>
 
     <template v-else>
       <!-- Breadcrumbs -->
       <div class="mb-8">
-        <nav class="flex" aria-label="Breadcrumb">
-          <ol class="inline-flex items-center space-x-1 md:space-x-3">
+        <nav class="flex flex-wrap" aria-label="Breadcrumb">
+          <ol class="inline-flex items-center space-x-1 md:space-x-3 flex-wrap">
             <li class="inline-flex items-center">
               <NuxtLink
                 to="/"
@@ -116,6 +115,59 @@
           />
         </div>
       </section>
+
+      <!-- Navigatie tussen schilderijen -->
+      <div
+        v-if="hasPreviousOrNext"
+        class="mt-16 flex justify-between border-t border-gray-200 pt-8"
+      >
+        <div>
+          <NuxtLink
+            v-if="previousPainting"
+            :to="`/schilderijen/${previousPainting.id}`"
+            class="flex items-center text-primary hover:text-primary-dark transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span>Vorig schilderij</span>
+          </NuxtLink>
+        </div>
+        <div>
+          <NuxtLink
+            v-if="nextPainting"
+            :to="`/schilderijen/${nextPainting.id}`"
+            class="flex items-center text-primary hover:text-primary-dark transition-colors"
+          >
+            <span>Volgend schilderij</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 ml-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </NuxtLink>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -128,6 +180,8 @@ const { getPaintingById, getAllPaintings } = useCloudinary();
 const painting = ref(null);
 const allPaintings = ref([]);
 const isLoading = ref(true);
+const previousPainting = ref(null);
+const nextPainting = ref(null);
 
 // Gerelateerde schilderijen op basis van categorie en tags
 const relatedPaintings = computed(() => {
@@ -152,6 +206,11 @@ const relatedPaintings = computed(() => {
       return hasSameCategory || hasMatchingTag;
     })
     .slice(0, 4); // Limiteer tot 4 gerelateerde schilderijen
+});
+
+// Check of er vorige of volgende schilderijen zijn
+const hasPreviousOrNext = computed(() => {
+  return previousPainting.value !== null || nextPainting.value !== null;
 });
 
 // SEO meta tags
@@ -184,6 +243,21 @@ async function fetchData() {
 
     // Haal alle schilderijen op voor gerelateerde werken
     allPaintings.value = await getAllPaintings();
+
+    // Bepaal vorige en volgende schilderijen
+    if (allPaintings.value.length > 0 && painting.value) {
+      const currentIndex = allPaintings.value.findIndex(
+        (p) => p.id === painting.value.id
+      );
+
+      if (currentIndex > 0) {
+        previousPainting.value = allPaintings.value[currentIndex - 1];
+      }
+
+      if (currentIndex < allPaintings.value.length - 1) {
+        nextPainting.value = allPaintings.value[currentIndex + 1];
+      }
+    }
   } catch (error) {
     console.error("Fout bij het ophalen van schilderij:", error);
   } finally {
@@ -191,6 +265,20 @@ async function fetchData() {
   }
 }
 
+// Reset navigatie bij nieuwe pagina
+function resetNavigation() {
+  previousPainting.value = null;
+  nextPainting.value = null;
+}
+
 // Data ophalen bij page load of wanneer de route ID verandert
-watch(() => route.params.id, fetchData, { immediate: true });
+watch(
+  () => route.params.id,
+  () => {
+    resetNavigation();
+    fetchData();
+  },
+  { immediate: true }
+);
 </script>
+// pages/schilderijen/index.vue
