@@ -96,14 +96,13 @@
               Over Tom van As
             </h2>
             <p class="text-gray-700 mb-4">
-              Als Nederlandse kunstenaar werk ik vanuit mijn passie voor kleur
-              en compositie. Mijn schilderijen weerspiegelen een unieke visie op
-              de wereld om ons heen, met een focus op emotie en expressie.
+              Tom studeerde aan de Koninklijke Academie van Beeldende Kunsten in
+              Den Haag. Zijn werk omvat zowel atelierwerk als landschappen.
             </p>
             <p class="text-gray-700 mb-6">
-              Door mijn jaren van ervaring heb ik een herkenbare stijl
-              ontwikkeld die zowel toegankelijk als uitdagend is. Elk schilderij
-              vertelt een eigen verhaal en nodigt uit tot interpretatie.
+              Met olieverf, aquarel en acryl creëerde hij werken die
+              voortborduren op de traditie van de Haagse School, met een eigen
+              twist geïnspireerd door het vroeg 20e-eeuwse kubisme.
             </p>
             <NuxtLink to="/over-tom" class="btn btn-primary">
               Meer over Tom
