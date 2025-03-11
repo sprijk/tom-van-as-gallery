@@ -4,16 +4,16 @@
       :to="`/schilderijen/${painting.id}`"
       class="block overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
     >
-      <div class="relative pb-[100%]">
+      <div class="relative pb-[75%] bg-gray-100">
         <NuxtImg
           provider="cloudinary"
           :src="painting.id"
           format="webp"
           width="600"
           height="600"
-          fit="cover"
+          fit="contain"
           loading="lazy"
-          class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          class="absolute inset-0 w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
           :alt="painting.title"
         />
       </div>

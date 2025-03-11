@@ -4,13 +4,13 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Schilderij afbeelding -->
       <div class="relative">
-        <div class="aspect-w-1 aspect-h-1 md:aspect-auto md:h-full">
+        <div class="aspect-w-4 aspect-h-3 md:aspect-auto md:h-full">
           <NuxtImg
             provider="cloudinary"
             :src="painting.id"
             format="webp"
-            fit="cover"
-            class="w-full object-contain rounded-lg"
+            fit="contain"
+            class="w-full h-full object-contain rounded-lg bg-gray-100"
             :alt="painting.title"
           />
         </div>
