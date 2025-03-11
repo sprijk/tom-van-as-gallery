@@ -55,9 +55,9 @@ Een online galerij voor de kunstwerken van Tom van As, gebouwd met Nuxt 3, Tailw
 
 5. Open in je browser: `http://localhost:3000`
 
-### Categorien
+### Categorieën
 
-De collectie van schilderijen en kunstwerken is onderverdeeld in 5 vaste categorien:
+De collectie van schilderijen en kunstwerken is onderverdeeld in 5 vaste categorieën:
 
 1. VROEG WERK (1950 - 1965)
 2. LANDSCHAPPEN - NEDERLAND
@@ -67,11 +67,23 @@ De collectie van schilderijen en kunstwerken is onderverdeeld in 5 vaste categor
 
 ### Afbeeldingen voorbereiden in Cloudinary
 
-Om de galerij correct te laten werken, moet je afbeeldingen in Cloudinary als volgt taggen:
+Om de galerij correct te laten werken, moet je afbeeldingen in Cloudinary als volgt instellen:
 
-- `title:Naam van het schilderij` - Vereist voor elk schilderij (anders wordt het niet weergegeven)
-- `category:Landschap` - Optionele categorieën (meerdere mogelijk)
-- `tags zonder prefix` - Reguliere tags voor extra filtering
+- Titel: Stel de titel in via het 'Caption' veld in Cloudinary (verplicht voor elk schilderij)
+- Categorieën: Plaats de afbeeldingen in de juiste subfolder onder "Tom van As Kunst"
+- Tags: Voeg reguliere tags toe voor extra filtering mogelijkheden
+
+De mappenstructuur in Cloudinary moet als volgt zijn:
+
+```
+Tom van As Kunst
+ |
+ |-- VROEG WERK (1950 - 1965)
+ |-- LANDSCHAPPEN - NEDERLAND
+ |-- LANDSCHAPPEN - BUITENLAND
+ |-- ATELIER WERK
+ |-- ANDERE (bevriende) KUNSTENAARS
+```
 
 ### Productie build
 
@@ -96,20 +108,8 @@ De productie build komt in de `.output` directory.
 
 Dit project is bedoeld voor Tom van As en wordt niet publiek gedeeld.
 
-## Mappen
-
-```
-Tom van As Kunst
- |
- |-- VROEG WERK (1950 - 1965)       - VROEG WERK (1950 - 1965)
- |-- LANDSCHAPPEN - NEDERLAND       - LANDSCHAPPEN - NEDERLAND
- |-- LANDSCHAPPEN - BUITENLAND      - LANDSCHAPPEN - BUITENLAND
- |-- ATELIER WERK                   - ATELIER WERK
- |-- ANDERE (bevriende) KUNSTENAARS - ANDERE (bevriende) KUNSTENAARS
-```
-
 ## Todos
 
 1. Geen uitsnedes
 2. Call to action knop -> Contactformulier
-3. Geen squeze waneer vergroten van foto
+3. Geen squeeze wanneer vergroten van foto
