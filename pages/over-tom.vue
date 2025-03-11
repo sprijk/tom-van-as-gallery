@@ -30,10 +30,10 @@
             schilders van ‘de Haagse School’
           </p>
 
-          <NuxtImg
+          <img
             src="/images/over-tom-examples.jpg"
             class="w-full"
-            alt="Portretfoto van Tom van As"
+            alt="Voorbeelden van Tom's werk"
           />
 
           <!-- <h2>Tentoonstellingen</h2>
@@ -76,7 +76,7 @@
         <div class="bg-gray-100 rounded-lg overflow-hidden shadow-md p-6">
           <!-- Portretfoto -->
           <div class="bg-gray-200 mb-6 rounded-lg overflow-hidden">
-            <NuxtImg
+            <img
               src="/images/tom-van-as.jpg"
               class="w-full object-cover"
               alt="Portretfoto van Tom van As"

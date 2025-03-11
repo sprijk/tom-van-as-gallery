@@ -110,7 +110,7 @@
             </NuxtLink>
           </div>
           <div class="rounded-lg overflow-hidden shadow-md">
-            <NuxtImg
+            <img
               src="/images/tom-van-as.jpg"
               class="w-full h-full object-cover"
               alt="Portretfoto van Tom van As"
