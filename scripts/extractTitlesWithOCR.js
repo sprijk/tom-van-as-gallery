@@ -1,7 +1,142 @@
-// scripts/extractTitlesWithOCR.js
-const cloudinary = require("cloudinary").v2;
-const fs = require("fs");
-require("dotenv").config();
+// Check if OCR add-on is available via a test request
+async function checkOCRAvailability() {
+  try {
+    logMessage("Controleren of OCR-addon beschikbaar is...");
+
+    // Probeer een eenvoudig OCR verzoek om te testen of het werkt
+    // We gebruiken een willekeurige test afbeelding
+    const testPublicId = "sample"; // Standaard sample afbeelding in Cloudinary
+
+    try {
+      // Test of de OCR functionaliteit beschikbaar is
+      await cloudinary.uploader.explicit(testPublicId, {
+        type: "upload",
+        ocr: "adv_ocr",
+      });
+
+      logMessage("OCR add-on lijkt beschikbaar te zijn!");
+      return true;
+    } catch (testError) {
+      // Als we een specifieke fout krijgen over OCR niet beschikbaar, toon waarschuwing
+      if (
+        testError.message &&
+        (testError.message.includes("ocr") ||
+          testError.message.includes("add-on") ||
+          testError.message.includes("addon") ||
+          testError.message.includes("Advanced OCR"))
+      ) {
+        logMessage(
+          "WAARSCHUWING: OCR add-on test mislukt. Het lijkt erop dat Advanced OCR niet beschikbaar is."
+        );
+        logMessage(`Foutmelding: ${testError.message}`);
+        logMessage(
+          "Ga naar https://cloudinary.com/console/addons om add-ons te activeren."
+        );
+      } else {
+        // Als het een andere fout is (bijv. sample afbeelding niet beschikbaar), negeer dit
+        logMessage(
+          "OCR beschikbaarheidstest gaf een fout, maar het kan zijn dat de test afbeelding niet beschikbaar is."
+        );
+        logMessage(`Foutmelding: ${testError.message}`);
+        logMessage("We gaan door met de aanname dat OCR beschikbaar is.");
+        return true;
+      }
+    }
+
+    // Als OCR niet beschikbaar lijkt, maar gebruiker wil toch doorgaan
+    if (!args.includes("--ignore-availability")) {
+      logMessage(
+        "Script wordt gestopt. Gebruik --ignore-availability om toch door te gaan."
+      );
+      process.exit(1);
+    }
+
+    logMessage(
+      "Doorgaan ondanks mogelijke problemen met OCR beschikbaarheid..."
+    );
+    return false;
+  } catch (error) {
+    logMessage(
+      `Fout bij controleren van OCR beschikbaarheid: ${error.message}`
+    );
+
+    if (!args.includes("--ignore-availability")) {
+      logMessage(
+        "Script wordt gestopt. Gebruik --ignore-availability om toch door te gaan."
+      );
+      process.exit(1);
+    }
+
+    return false;
+  }
+} // Alternative OCR function that uses the explicit OCR URL
+async function performAlternativeOCR(publicId) {
+  try {
+    logMessage(`Alternatieve OCR methode proberen voor ${publicId}...`);
+
+    // Genereer een specifieke OCR URL
+    const ocrUrl = cloudinary.url(publicId, {
+      resource_type: "image",
+      raw_transformation: "adv_ocr:true",
+    });
+
+    logMessage(`OCR URL: ${ocrUrl}`, true);
+
+    // Wacht even zodat de OCR kan worden uitgevoerd
+    await delay(3000);
+
+    // Probeer de OCR resultaten op te halen
+    const ocrInfo = await cloudinary.api.resource(publicId, {
+      ocr: "adv_ocr",
+    });
+
+    if (ocrInfo.info && ocrInfo.info.ocr && ocrInfo.info.ocr.adv_ocr) {
+      const ocrResult = ocrInfo.info.ocr.adv_ocr;
+
+      // Controleer de OCR-status
+      logMessage(`  OCR status: ${ocrResult.status || "Onbekend"}`, true);
+
+      if (
+        ocrResult.status === "complete" &&
+        ocrResult.data &&
+        ocrResult.data[0]
+      ) {
+        // Als er fullTextAnnotation aanwezig is, haal de tekst eruit
+        if (ocrResult.data[0].fullTextAnnotation) {
+          const text = ocrResult.data[0].fullTextAnnotation.text;
+          logMessage(`  OCR-tekst gevonden: "${text}"`, true);
+          return { text };
+        }
+        // Als er textAnnotations zijn, gebruik de description van de eerste (volledige tekst)
+        else if (
+          ocrResult.data[0].textAnnotations &&
+          ocrResult.data[0].textAnnotations.length > 0
+        ) {
+          const text = ocrResult.data[0].textAnnotations[0].description;
+          logMessage(
+            `  OCR-tekst gevonden in textAnnotations: "${text}"`,
+            true
+          );
+          return { text };
+        }
+      }
+    }
+
+    logMessage(`Alternatieve OCR methode gaf geen resultaat voor ${publicId}`);
+    return null;
+  } catch (error) {
+    logMessage(`FOUT bij alternatieve OCR voor ${publicId}: ${error.message}`);
+    return null;
+  }
+} // scripts/extractTitlesWithOCR.js
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+import { config } from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Initialization
+config();
 
 // Command line argumenten verwerken
 const args = process.argv.slice(2);
@@ -187,26 +322,146 @@ async function getExistingCaption(publicId) {
 // Functie om OCR uit te voeren met Cloudinary
 async function performOCR(publicId) {
   try {
-    // Gebruik Cloudinary OCR add-on
-    const ocrUrl = cloudinary.url(publicId, {
-      resource_type: "image",
-      raw_transformation: "adv_ocr:true", // OCR add-on activeren
-    });
+    logMessage(`OCR activeren voor ${publicId}...`);
 
-    // OCR informatie ophalen
-    const ocrInfo = await cloudinary.api.resource(publicId, {
+    // Activeer OCR voor deze resource en sla resultaat op
+    const explicitResult = await cloudinary.uploader.explicit(publicId, {
+      type: "upload",
       ocr: "adv_ocr",
     });
 
-    return ocrInfo.info?.ocr?.adv_ocr || null;
+    // Log het resultaat van de OCR activatie voor debug
+    logMessage(`OCR activatie resultaat voor ${publicId}:`, true);
+
+    // Controleer of er OCR-resultaten beschikbaar zijn
+    if (
+      explicitResult.info &&
+      explicitResult.info.ocr &&
+      explicitResult.info.ocr.adv_ocr
+    ) {
+      const ocrResult = explicitResult.info.ocr.adv_ocr;
+
+      // Controleer de OCR-status
+      logMessage(`  OCR status: ${ocrResult.status || "Onbekend"}`, true);
+
+      if (
+        ocrResult.status === "complete" &&
+        ocrResult.data &&
+        ocrResult.data[0]
+      ) {
+        // Als er fullTextAnnotation aanwezig is, haal de tekst eruit
+        if (ocrResult.data[0].fullTextAnnotation) {
+          const text = ocrResult.data[0].fullTextAnnotation.text;
+          logMessage(`  OCR-tekst gevonden: "${text}"`, true);
+          return { text };
+        }
+        // Als er textAnnotations zijn, gebruik de description van de eerste (volledige tekst)
+        else if (
+          ocrResult.data[0].textAnnotations &&
+          ocrResult.data[0].textAnnotations.length > 0
+        ) {
+          const text = ocrResult.data[0].textAnnotations[0].description;
+          logMessage(
+            `  OCR-tekst gevonden in textAnnotations: "${text}"`,
+            true
+          );
+          return { text };
+        }
+      } else {
+        logMessage(
+          `  OCR niet compleet of geen data gevonden. Status: ${ocrResult.status}`,
+          true
+        );
+      }
+    } else {
+      logMessage(`  Geen OCR informatie gevonden in de response`, true);
+
+      // Volledige respons loggen voor debugging
+      if (logToFile) {
+        fs.appendFileSync(
+          logFilePath,
+          `  Volledige OCR activatie respons: ${JSON.stringify(
+            explicitResult,
+            null,
+            2
+          )}\n`
+        );
+      }
+    }
+
+    // Als we hier komen, hebben we geen OCR-resultaten gevonden
+    // Probeer opnieuw met een vertraging
+    logMessage(`  Wachten en OCR resultaten opnieuw ophalen...`, true);
+    await delay(3000);
+
+    // Haal de resource opnieuw op met OCR informatie
+    const resourceInfo = await cloudinary.api.resource(publicId, {
+      ocr: "adv_ocr",
+    });
+
+    if (
+      resourceInfo.info &&
+      resourceInfo.info.ocr &&
+      resourceInfo.info.ocr.adv_ocr
+    ) {
+      const ocrResult = resourceInfo.info.ocr.adv_ocr;
+
+      if (
+        ocrResult.status === "complete" &&
+        ocrResult.data &&
+        ocrResult.data[0]
+      ) {
+        // Als er fullTextAnnotation aanwezig is, haal de tekst eruit
+        if (ocrResult.data[0].fullTextAnnotation) {
+          const text = ocrResult.data[0].fullTextAnnotation.text;
+          logMessage(`  OCR-tekst gevonden bij tweede poging: "${text}"`, true);
+          return { text };
+        }
+        // Als er textAnnotations zijn, gebruik de description van de eerste (volledige tekst)
+        else if (
+          ocrResult.data[0].textAnnotations &&
+          ocrResult.data[0].textAnnotations.length > 0
+        ) {
+          const text = ocrResult.data[0].textAnnotations[0].description;
+          logMessage(
+            `  OCR-tekst gevonden in textAnnotations bij tweede poging: "${text}"`,
+            true
+          );
+          return { text };
+        }
+      }
+    }
+
+    // Als we nog steeds geen resultaat hebben, probeer de alternatieve methode
+    logMessage(
+      `  Geen OCR resultaat gevonden, alternatieve methode proberen...`
+    );
+    return await performAlternativeOCR(publicId);
   } catch (error) {
-    console.error(`Fout bij OCR uitvoeren voor ${publicId}:`, error.message);
-    return null;
+    logMessage(`FOUT bij OCR uitvoeren voor ${publicId}: ${error.message}`);
+    // Extra debug info over de fout
+    if (error.http_code) {
+      logMessage(`  HTTP code: ${error.http_code}`, true);
+    }
+    if (error.error) {
+      logMessage(
+        `  Error details: ${
+          error.error.message || JSON.stringify(error.error)
+        }`,
+        true
+      );
+    }
+
+    // Als er een fout is, probeer de alternatieve methode
+    logMessage(`  Proberen met alternatieve OCR methode na fout...`);
+    return await performAlternativeOCR(publicId);
   }
 }
 
 // Functie om een nummer te extraheren uit OCR tekst
 function extractNumberFromText(text) {
+  if (!text) return null;
+
   // Zoek naar een nummer in de tekst
   // Dit patroon zoekt naar cijfers in de tekst, mogelijk met extra karakters eromheen
   const numberMatch = text.match(/\d+/);
@@ -282,31 +537,49 @@ Gebruik: node scripts/extractTitlesWithOCR.js [opties]
 Dit script extraheert nummers uit schilderijen van Tom van As via OCR en slaat deze op als captions in Cloudinary.
 
 Opties:
-  -d, --dry-run     Voer een simulatie uit zonder wijzigingen aan te brengen
-  -l, --log-to-file Log alle resultaten naar een bestand (ocr-results.log)
-  -f, --force       Overschrijf bestaande captions
-  -h, --help        Toon deze help tekst
+  -d, --dry-run            Voer een simulatie uit zonder wijzigingen aan te brengen
+  -l, --log-to-file        Log alle resultaten naar een bestand (ocr-results.log)
+  -f, --force              Overschrijf bestaande captions
+  --ignore-availability    Negeer controle op OCR add-on beschikbaarheid
+  --skip-ocr-check         Sla de OCR beschikbaarheidstest over
+  -h, --help               Toon deze help tekst
 
 Voorbeelden:
   node scripts/extractTitlesWithOCR.js --dry-run               Simuleer het proces
   node scripts/extractTitlesWithOCR.js --force                 Voer uit en overschrijf bestaande captions
   node scripts/extractTitlesWithOCR.js --dry-run --log-to-file Simuleer en log resultaten naar bestand
+  node scripts/extractTitlesWithOCR.js --skip-ocr-check        Voer uit zonder OCR beschikbaarheid te controleren
   `);
   process.exit(0);
+}
+
+// Start het script
+async function main() {
+  try {
+    // Als gebruiker forced OCR controle overslaan, skip de check
+    if (!args.includes("--skip-ocr-check")) {
+      // Controleer OCR beschikbaarheid
+      await checkOCRAvailability();
+    } else {
+      logMessage(
+        "OCR beschikbaarheidscontrole overgeslagen door --skip-ocr-check optie"
+      );
+    }
+
+    // Start OCR extractie
+    await extractTitlesWithOCR();
+    console.log("Script succesvol uitgevoerd");
+    process.exit(0);
+  } catch (err) {
+    console.error("Fatale fout in script:", err);
+    process.exit(1);
+  }
 }
 
 // Controleer op help argument
 if (args.includes("--help") || args.includes("-h")) {
   showHelp();
+} else {
+  // Start het script
+  main();
 }
-
-// Start het script
-extractTitlesWithOCR()
-  .then(() => {
-    console.log("Script succesvol uitgevoerd");
-    process.exit(0);
-  })
-  .catch((err) => {
-    console.error("Fatale fout in script:", err);
-    process.exit(1);
-  });
