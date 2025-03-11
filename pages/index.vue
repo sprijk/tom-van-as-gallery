@@ -211,7 +211,7 @@
 
 <script setup>
 // Composable voor Cloudinary data
-const { getAllPaintings, getAllCategories } = useCloudinary();
+const { getAllPaintings } = useCloudinary();
 
 // State voor homepage data
 const paintings = ref([]);
@@ -229,9 +229,6 @@ async function fetchData() {
   try {
     // Alle schilderijen ophalen
     paintings.value = await getAllPaintings();
-
-    // Alle categorieën ophalen
-    const categories = await getAllCategories();
 
     console.log("paintings.value.length", paintings.value.length);
 
