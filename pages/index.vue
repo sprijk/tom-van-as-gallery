@@ -233,6 +233,8 @@ async function fetchData() {
     // Alle categorieën ophalen
     const categories = await getAllCategories();
 
+    console.log("paintings.value.length", paintings.value.length);
+
     if (paintings.value.length > 0) {
       // Willekeurig uitgelicht schilderij kiezen
       const randomIndex = Math.floor(Math.random() * paintings.value.length);

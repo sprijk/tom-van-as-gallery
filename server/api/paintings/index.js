@@ -36,28 +36,19 @@ export default defineEventHandler(async (event) => {
           }
         );
 
-        console.log("reosurces length", result.resources.length);
-
         // Verwerk de schilderijen
         const paintings = result.resources
-          .filter((resource) => {
-            // Alleen resources met titel (caption of title tag) gebruiken
-            const hasCaption = resource.context?.custom?.caption;
-            const hasTitleTag =
-              resource.tags &&
-              resource.tags.some((tag) => tag.startsWith("title:"));
-            return hasCaption || hasTitleTag;
-          })
+          // TODO: filteren op caption
+          // .filter((resource) => {
+          //   // Alleen resources met titel in caption gebruiken
+          //   return resource.context?.custom?.caption;
+          // })
           .map((resource) => {
-            // Tags verwerken
+            // Tags verwerken - alle tags zijn reguliere tags, geen title tags meer
             const tags = resource.tags || [];
-            const titleTag = tags.find((tag) => tag.startsWith("title:"));
-            const regularTags = tags.filter((tag) => !tag.startsWith("title:"));
 
-            // Titel ophalen uit caption of uit tag
-            const title =
-              resource.context?.custom?.caption ||
-              (titleTag ? titleTag.replace("title:", "") : "Ongetiteld");
+            // Titel ophalen uit caption
+            const title = resource.context?.custom?.caption || "Ongetiteld";
 
             // Haal categorienaam uit folder pad
             const pathParts = folderPath.split("/");
@@ -68,7 +59,7 @@ export default defineEventHandler(async (event) => {
               title,
               imageUrl: resource.secure_url,
               category,
-              tags: regularTags,
+              tags,
               width: resource.width,
               height: resource.height,
               format: resource.format,
@@ -93,22 +84,15 @@ export default defineEventHandler(async (event) => {
       // Verwerk de schilderijen
       allPaintings = result.resources
         .filter((resource) => {
-          const hasCaption = resource.context?.custom?.caption;
-          const hasTitleTag =
-            resource.tags &&
-            resource.tags.some((tag) => tag.startsWith("title:"));
-          return hasCaption || hasTitleTag;
+          // Alleen resources met titel in caption gebruiken
+          return resource.context?.custom?.caption;
         })
         .map((resource) => {
-          // Tags verwerken
+          // Tags verwerken - alle tags zijn reguliere tags
           const tags = resource.tags || [];
-          const titleTag = tags.find((tag) => tag.startsWith("title:"));
-          const regularTags = tags.filter((tag) => !tag.startsWith("title:"));
 
-          // Titel ophalen uit caption of uit tag
-          const title =
-            resource.context?.custom?.caption ||
-            (titleTag ? titleTag.replace("title:", "") : "Ongetiteld");
+          // Titel ophalen uit caption
+          const title = resource.context?.custom?.caption || "Ongetiteld";
 
           // Categorie bepalen uit folder pad als het er is
           let category = "";
@@ -122,7 +106,7 @@ export default defineEventHandler(async (event) => {
             title,
             imageUrl: resource.secure_url,
             category,
-            tags: regularTags,
+            tags,
             width: resource.width,
             height: resource.height,
             format: resource.format,
@@ -131,6 +115,8 @@ export default defineEventHandler(async (event) => {
           };
         });
     }
+
+    console.log("Schilderijen opgehaald:", allPaintings.length);
 
     return allPaintings;
   } catch (error) {

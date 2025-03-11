@@ -36,22 +36,18 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    // Tags verwerken
+    // Tags verwerken - alle tags zijn reguliere tags
     const tags = result.tags || [];
-    const titleTag = tags.find((tag) => tag.startsWith("title:"));
-    const regularTags = tags.filter((tag) => !tag.startsWith("title:"));
 
-    // Titel ophalen uit caption of uit tag
-    const title =
-      result.context?.custom?.caption ||
-      (titleTag ? titleTag.replace("title:", "") : "Ongetiteld");
+    // Titel ophalen uit caption
+    const title = result.context?.custom?.caption || "Ongetiteld";
 
     return {
       id: result.public_id,
       title: title,
       imageUrl: result.secure_url,
       category: category,
-      tags: regularTags,
+      tags: tags,
       width: result.width,
       height: result.height,
       format: result.format,
