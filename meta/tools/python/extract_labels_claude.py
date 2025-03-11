@@ -12,6 +12,7 @@ from io import BytesIO
 from PIL import Image
 import cloudinary
 import cloudinary.api
+import cloudinary.uploader
 from dotenv import load_dotenv
 
 def setup_cloudinary():
@@ -353,6 +354,11 @@ def update_cloudinary_metadata(results):
     """
     updated_count = 0
 
+    # Zorg dat de cloudinary modules correct zijn geïmporteerd
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
+
     for result in results:
         if result['success'] and result['label_number']:
             # Als de bron cloudinary_metadata is, hoeven we niet opnieuw bij te werken
@@ -369,6 +375,20 @@ def update_cloudinary_metadata(results):
                 print(f"Metadata bijgewerkt voor {result['public_id']}")
             except Exception as e:
                 print(f"Fout bij updaten metadata voor {result['public_id']}: {str(e)}")
+                print(f"Details: {type(e).__name__}")
+
+                # Alternatieve methode proberen als de eerste methode faalt
+                try:
+                    print("Alternatieve methode proberen via cloudinary.api...")
+                    # Gebruik cloudinary.api.update in plaats van uploader.add_context
+                    cloudinary.api.update(
+                        result['public_id'],
+                        context=f'label_number={result["label_number"]}'
+                    )
+                    updated_count += 1
+                    print(f"Metadata bijgewerkt voor {result['public_id']} via alternatieve methode")
+                except Exception as alt_error:
+                    print(f"Ook alternatieve methode faalde: {str(alt_error)}")
 
     print(f"Totaal {updated_count} afbeeldingen bijgewerkt in Cloudinary")
 
