@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
             type: "upload",
             max_results: 500,
             tags: true,
-          }
+          },
         );
 
         // Verzamel tags uit alle resources
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       } catch (folderError) {
         console.error(
           `Fout bij ophalen van tags voor folder ${folder.path}:`,
-          folderError
+          folderError,
         );
         // Doorgaan met volgende folder
         continue;

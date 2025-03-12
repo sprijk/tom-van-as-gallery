@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
     } catch (fallbackError) {
       console.error(
         "Fallback fout bij het ophalen van categorieën:",
-        fallbackError
+        fallbackError,
       );
       return []; // Geef een lege lijst terug als we echt niets kunnen vinden
     }

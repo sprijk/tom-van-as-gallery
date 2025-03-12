@@ -26,7 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       alert(
         `Er is een fout opgetreden: ${
           error.message || "Onbekende fout"
-        }. Probeer de pagina te vernieuwen.`
+        }. Probeer de pagina te vernieuwen.`,
       );
     }
 
@@ -37,7 +37,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const withRetry = async (
     fn,
     context,
-    maxRetries = apiStatus.value.maxRetries
+    maxRetries = apiStatus.value.maxRetries,
   ) => {
     let lastError = null;
 
@@ -53,7 +53,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         // Wacht exponentieel langer bij elke nieuwe poging
         const delay = Math.pow(2, attempt) * 1000;
         console.log(
-          `Poging ${attempt + 1} mislukt, opnieuw proberen na ${delay}ms...`
+          `Poging ${attempt + 1} mislukt, opnieuw proberen na ${delay}ms...`,
         );
 
         await new Promise((resolve) => setTimeout(resolve, delay));

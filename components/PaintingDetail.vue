@@ -426,19 +426,19 @@ const shareTitle = computed(() => {
 
 const facebookShareUrl = computed(() => {
   return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-    currentUrl.value
+    currentUrl.value,
   )}`;
 });
 
 const twitterShareUrl = computed(() => {
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    shareTitle.value
+    shareTitle.value,
   )}&url=${encodeURIComponent(currentUrl.value)}`;
 });
 
 const whatsappShareUrl = computed(() => {
   return `https://wa.me/?text=${encodeURIComponent(
-    shareTitle.value + " " + currentUrl.value
+    shareTitle.value + " " + currentUrl.value,
   )}`;
 });
 

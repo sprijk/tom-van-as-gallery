@@ -138,7 +138,7 @@ const hasActiveFilters = computed(
   () =>
     searchQuery.value.trim() !== "" ||
     selectedCategories.value.length > 0 ||
-    selectedTags.value.length > 0
+    selectedTags.value.length > 0,
 );
 
 // Debounce voor zoekfunctie
@@ -198,7 +198,7 @@ watch(
       selectedTags.value = newFilters.tags || [];
     }
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 

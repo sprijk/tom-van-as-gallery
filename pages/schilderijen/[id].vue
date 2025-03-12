@@ -270,7 +270,7 @@ async function fetchData() {
     // Bepaal vorige en volgende schilderijen
     if (allPaintings.value.length > 0 && painting.value) {
       const currentIndex = allPaintings.value.findIndex(
-        (p) => p.id === painting.value.id
+        (p) => p.id === painting.value.id,
       );
 
       if (currentIndex > 0) {
@@ -305,6 +305,6 @@ watch(
     resetNavigation();
     fetchData();
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>

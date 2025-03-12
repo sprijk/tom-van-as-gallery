@@ -27,7 +27,7 @@ export const useCloudinary = () => {
       const response = await fetch("/api/paintings");
       if (!response.ok) {
         throw new Error(
-          `Server gaf foutcode ${response.status}: ${response.statusText}`
+          `Server gaf foutcode ${response.status}: ${response.statusText}`,
         );
       }
 
@@ -68,7 +68,7 @@ export const useCloudinary = () => {
       const response = await fetch(`/api/paintings/${id}`);
       if (!response.ok) {
         throw new Error(
-          `Kon schilderij met ID ${id} niet ophalen: ${response.statusText}`
+          `Kon schilderij met ID ${id} niet ophalen: ${response.statusText}`,
         );
       }
 
@@ -171,7 +171,7 @@ export const useCloudinary = () => {
     } catch (error) {
       console.error(
         `Fout bij het ophalen van schilderijen voor categorie ${category}:`,
-        error
+        error,
       );
       apiError.value = {
         message: error.message,

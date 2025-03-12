@@ -3,7 +3,15 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/tailwind.css"],
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@nuxt/eslint"],
+
+  eslint: {
+    config: {
+      stylistic: true, // <---
+      indent: "tab",
+      semi: true,
+    },
+  },
 
   runtimeConfig: {
     // Server-side variables

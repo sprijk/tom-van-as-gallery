@@ -1,13 +1,18 @@
 <template>
   <div>
     <div v-if="paintings.length === 0" class="text-center py-12">
-      <h3 class="text-xl text-gray-600">Geen schilderijen gevonden die overeenkomen met de filters.</h3>
+      <h3 class="text-xl text-gray-600">
+        Geen schilderijen gevonden die overeenkomen met de filters.
+      </h3>
       <button @click="$emit('clearFilters')" class="mt-4 btn btn-primary">
         Wis filters
       </button>
     </div>
 
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div
+      v-else
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    >
       <PaintingCard
         v-for="painting in paintings"
         :key="painting.id"
@@ -27,13 +32,13 @@
 const props = defineProps({
   paintings: {
     type: Array,
-    required: true
+    required: true,
   },
   showLoadMore: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
-defineEmits(['loadMore', 'clearFilters'])
+defineEmits(["loadMore", "clearFilters"]);
 </script>

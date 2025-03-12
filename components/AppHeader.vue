@@ -97,6 +97,6 @@ watch(
   () => useRoute().fullPath,
   () => {
     isMobileMenuOpen.value = false;
-  }
+  },
 );
 </script>

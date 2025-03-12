@@ -84,9 +84,8 @@ const processAllPaintings = async () => {
     // Eerst proberen om alle folders in "Tom van As Kunst" te vinden
     let folders = [];
     try {
-      const foldersResult = await cloudinary.api.sub_folders(
-        "Tom van As Kunst"
-      );
+      const foldersResult =
+        await cloudinary.api.sub_folders("Tom van As Kunst");
       folders = foldersResult.folders.map((folder) => folder.path);
     } catch (folderError) {
       console.error("Fout bij het ophalen van folders:", folderError);
@@ -104,7 +103,7 @@ const processAllPaintings = async () => {
             type: "upload",
             max_results: 500,
             context: true,
-          }
+          },
         );
 
         // Verwerk elke afbeelding in deze folder
@@ -138,7 +137,7 @@ const processAllPaintings = async () => {
               console.log(
                 `Schilderij: ${title}, Label nummer: ${
                   labelNumber || "Niet gevonden"
-                }`
+                }`,
               );
 
               results.push({
@@ -192,7 +191,7 @@ const processAllPaintings = async () => {
             console.log(
               `Schilderij: ${title}, Label nummer: ${
                 labelNumber || "Niet gevonden"
-              }`
+              }`,
             );
 
             results.push({
@@ -212,7 +211,7 @@ const processAllPaintings = async () => {
     fs.writeFileSync(resultsFilePath, JSON.stringify(results, null, 2));
 
     console.log(
-      `Verwerking voltooid. Resultaten opgeslagen in ${resultsFilePath}`
+      `Verwerking voltooid. Resultaten opgeslagen in ${resultsFilePath}`,
     );
     console.log(`Totaal aantal verwerkte schilderijen: ${results.length}`);
 

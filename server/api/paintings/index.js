@@ -16,9 +16,8 @@ export default defineEventHandler(async (event) => {
 
     // Eerst proberen om de hoofdcollectie te benaderen
     try {
-      const foldersResult = await cloudinary.api.sub_folders(
-        "Tom van As Kunst"
-      );
+      const foldersResult =
+        await cloudinary.api.sub_folders("Tom van As Kunst");
       const folders = foldersResult.folders;
 
       // Voor elke folder, haal de schilderijen op
@@ -33,7 +32,7 @@ export default defineEventHandler(async (event) => {
             max_results: 500,
             context: true,
             tags: true,
-          }
+          },
         );
 
         // Verwerk de schilderijen

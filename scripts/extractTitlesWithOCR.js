@@ -26,16 +26,16 @@ async function checkOCRAvailability() {
           testError.message.includes("Advanced OCR"))
       ) {
         logMessage(
-          "WAARSCHUWING: OCR add-on test mislukt. Het lijkt erop dat Advanced OCR niet beschikbaar is."
+          "WAARSCHUWING: OCR add-on test mislukt. Het lijkt erop dat Advanced OCR niet beschikbaar is.",
         );
         logMessage(`Foutmelding: ${testError.message}`);
         logMessage(
-          "Ga naar https://cloudinary.com/console/addons om add-ons te activeren."
+          "Ga naar https://cloudinary.com/console/addons om add-ons te activeren.",
         );
       } else {
         // Als het een andere fout is (bijv. sample afbeelding niet beschikbaar), negeer dit
         logMessage(
-          "OCR beschikbaarheidstest gaf een fout, maar het kan zijn dat de test afbeelding niet beschikbaar is."
+          "OCR beschikbaarheidstest gaf een fout, maar het kan zijn dat de test afbeelding niet beschikbaar is.",
         );
         logMessage(`Foutmelding: ${testError.message}`);
         logMessage("We gaan door met de aanname dat OCR beschikbaar is.");
@@ -46,23 +46,23 @@ async function checkOCRAvailability() {
     // Als OCR niet beschikbaar lijkt, maar gebruiker wil toch doorgaan
     if (!args.includes("--ignore-availability")) {
       logMessage(
-        "Script wordt gestopt. Gebruik --ignore-availability om toch door te gaan."
+        "Script wordt gestopt. Gebruik --ignore-availability om toch door te gaan.",
       );
       process.exit(1);
     }
 
     logMessage(
-      "Doorgaan ondanks mogelijke problemen met OCR beschikbaarheid..."
+      "Doorgaan ondanks mogelijke problemen met OCR beschikbaarheid...",
     );
     return false;
   } catch (error) {
     logMessage(
-      `Fout bij controleren van OCR beschikbaarheid: ${error.message}`
+      `Fout bij controleren van OCR beschikbaarheid: ${error.message}`,
     );
 
     if (!args.includes("--ignore-availability")) {
       logMessage(
-        "Script wordt gestopt. Gebruik --ignore-availability om toch door te gaan."
+        "Script wordt gestopt. Gebruik --ignore-availability om toch door te gaan.",
       );
       process.exit(1);
     }
@@ -115,7 +115,7 @@ async function performAlternativeOCR(publicId) {
           const text = ocrResult.data[0].textAnnotations[0].description;
           logMessage(
             `  OCR-tekst gevonden in textAnnotations: "${text}"`,
-            true
+            true,
           );
           return { text };
         }
@@ -157,7 +157,7 @@ async function extractTitlesWithOCR() {
 
   if (isDryRun) {
     console.log(
-      "DRY RUN MODUS: Er worden geen wijzigingen aangebracht in Cloudinary"
+      "DRY RUN MODUS: Er worden geen wijzigingen aangebracht in Cloudinary",
     );
   }
 
@@ -193,17 +193,17 @@ async function extractTitlesWithOCR() {
         const existingCaption = await getExistingCaption(painting.public_id);
         if (existingCaption) {
           logMessage(
-            `Bestaande caption gevonden voor ${painting.public_id}: "${existingCaption}"`
+            `Bestaande caption gevonden voor ${painting.public_id}: "${existingCaption}"`,
           );
           logMessage(
             `Wil je deze overschrijven? Gebruik --force om bestaande captions te overschrijven.`,
-            true
+            true,
           );
 
           // Als de --force flag niet is meegegeven, sla deze over
           if (!args.includes("--force") && !args.includes("-f")) {
             logMessage(
-              `Overgeslagen: bestaande caption behouden voor ${painting.public_id}`
+              `Overgeslagen: bestaande caption behouden voor ${painting.public_id}`,
             );
             skipped++;
             continue;
@@ -219,25 +219,25 @@ async function extractTitlesWithOCR() {
 
           if (extractedNumber) {
             logMessage(
-              `Nummer gevonden: ${extractedNumber} in ${painting.public_id}`
+              `Nummer gevonden: ${extractedNumber} in ${painting.public_id}`,
             );
 
             // Update de caption in de resource
             if (!isDryRun) {
               await updateCaption(painting.public_id, extractedNumber);
               logMessage(
-                `Caption bijgewerkt voor ${painting.public_id}: "${extractedNumber}"`
+                `Caption bijgewerkt voor ${painting.public_id}: "${extractedNumber}"`,
               );
               updated++;
             } else {
               logMessage(
-                `DRY RUN: Caption ZOU bijgewerkt worden voor ${painting.public_id}: "${extractedNumber}"`
+                `DRY RUN: Caption ZOU bijgewerkt worden voor ${painting.public_id}: "${extractedNumber}"`,
               );
               updated++; // Voor statistieken in dry run
             }
           } else {
             logMessage(
-              `Geen nummer gevonden in OCR tekst voor ${painting.public_id}`
+              `Geen nummer gevonden in OCR tekst voor ${painting.public_id}`,
             );
             logMessage(`  OCR tekst: "${ocrResult.text}"`, true);
             skipped++;
@@ -249,7 +249,7 @@ async function extractTitlesWithOCR() {
       } catch (error) {
         failed++;
         logMessage(
-          `FOUT bij verwerken van ${painting.public_id}: ${error.message}`
+          `FOUT bij verwerken van ${painting.public_id}: ${error.message}`,
         );
       }
 
@@ -278,7 +278,7 @@ async function getAllPaintings(folderPath) {
       {
         resource_type: "image",
         max_results: 500,
-      }
+      },
     );
 
     // Voeg resources toe aan resultatenlijst
@@ -295,7 +295,7 @@ async function getAllPaintings(folderPath) {
   } catch (error) {
     console.error(
       `Fout bij ophalen resources uit map ${folderPath}:`,
-      error.message
+      error.message,
     );
   }
 
@@ -313,7 +313,7 @@ async function getExistingCaption(publicId) {
   } catch (error) {
     console.error(
       `Fout bij ophalen van bestaande caption voor ${publicId}:`,
-      error.message
+      error.message,
     );
     return null;
   }
@@ -363,14 +363,14 @@ async function performOCR(publicId) {
           const text = ocrResult.data[0].textAnnotations[0].description;
           logMessage(
             `  OCR-tekst gevonden in textAnnotations: "${text}"`,
-            true
+            true,
           );
           return { text };
         }
       } else {
         logMessage(
           `  OCR niet compleet of geen data gevonden. Status: ${ocrResult.status}`,
-          true
+          true,
         );
       }
     } else {
@@ -383,8 +383,8 @@ async function performOCR(publicId) {
           `  Volledige OCR activatie respons: ${JSON.stringify(
             explicitResult,
             null,
-            2
-          )}\n`
+            2,
+          )}\n`,
         );
       }
     }
@@ -425,7 +425,7 @@ async function performOCR(publicId) {
           const text = ocrResult.data[0].textAnnotations[0].description;
           logMessage(
             `  OCR-tekst gevonden in textAnnotations bij tweede poging: "${text}"`,
-            true
+            true,
           );
           return { text };
         }
@@ -434,7 +434,7 @@ async function performOCR(publicId) {
 
     // Als we nog steeds geen resultaat hebben, probeer de alternatieve methode
     logMessage(
-      `  Geen OCR resultaat gevonden, alternatieve methode proberen...`
+      `  Geen OCR resultaat gevonden, alternatieve methode proberen...`,
     );
     return await performAlternativeOCR(publicId);
   } catch (error) {
@@ -448,7 +448,7 @@ async function performOCR(publicId) {
         `  Error details: ${
           error.error.message || JSON.stringify(error.error)
         }`,
-        true
+        true,
       );
     }
 
@@ -483,7 +483,7 @@ async function updateCaption(publicId, caption) {
   } catch (error) {
     console.error(
       `Fout bij bijwerken caption voor ${publicId}:`,
-      error.message
+      error.message,
     );
     return false;
   }
@@ -562,7 +562,7 @@ async function main() {
       await checkOCRAvailability();
     } else {
       logMessage(
-        "OCR beschikbaarheidscontrole overgeslagen door --skip-ocr-check optie"
+        "OCR beschikbaarheidscontrole overgeslagen door --skip-ocr-check optie",
       );
     }
 
