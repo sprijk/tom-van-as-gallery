@@ -19,7 +19,7 @@
           placeholder="Zoek op titel..."
           class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           @input="debounceUpdateFilters"
-        >
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5 text-gray-400 absolute left-3 top-2.5"
@@ -37,14 +37,9 @@
       </div>
     </div>
 
-    <div
-      v-if="allCategories.length > 0"
-      class="mb-4"
-    >
+    <div v-if="allCategories.length > 0" class="mb-4">
       <div class="flex items-center justify-between mb-2">
-        <h3 class="text-lg font-medium">
-          Categorieën
-        </h3>
+        <h3 class="text-lg font-medium">Categorieën</h3>
         <button
           v-if="selectedCategories.length > 0"
           class="text-xs text-primary hover:text-primary-dark transition-colors"
@@ -65,7 +60,7 @@
             :value="category"
             class="mr-2 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
             @change="updateFilters"
-          >
+          />
           <span class="text-gray-800">{{ category }}</span>
         </label>
       </div>
@@ -73,9 +68,7 @@
 
     <div v-if="allTags.length > 0">
       <div class="flex items-center justify-between mb-2">
-        <h3 class="text-lg font-medium">
-          Tags
-        </h3>
+        <h3 class="text-lg font-medium">Tags</h3>
         <button
           v-if="selectedTags.length > 0"
           class="text-xs text-primary hover:text-primary-dark transition-colors"
@@ -102,16 +95,8 @@
     </div>
 
     <transition name="fade">
-      <div
-        v-if="hasActiveFilters"
-        class="mt-6 pt-4 border-t border-gray-200"
-      >
-        <button
-          class="btn btn-secondary w-full"
-          @click="resetFilters"
-        >
-          Wis alle filters
-        </button>
+      <div v-if="hasActiveFilters" class="mt-6 pt-4 border-t border-gray-200">
+        <button class="btn btn-secondary w-full" @click="resetFilters">Wis alle filters</button>
       </div>
     </transition>
   </div>
@@ -135,43 +120,42 @@ const props = defineProps({
       tags: [],
     }),
   },
-})
+});
 
-const emit = defineEmits(['update:filters'])
+const emit = defineEmits(['update:filters']);
 
 // Reactieve staat voor filtering
-const searchQuery = ref(props.initialFilters.search || '')
-const selectedCategories = ref(props.initialFilters.categories || [])
-const selectedTags = ref(props.initialFilters.tags || [])
+const searchQuery = ref(props.initialFilters.search || '');
+const selectedCategories = ref(props.initialFilters.categories || []);
+const selectedTags = ref(props.initialFilters.tags || []);
 
 // Computed properties voor UI
-const allCategories = computed(() => props.categories)
-const allTags = computed(() => props.tags)
+const allCategories = computed(() => props.categories);
+const allTags = computed(() => props.tags);
 const hasActiveFilters = computed(
   () =>
-    searchQuery.value.trim() !== ''
-    || selectedCategories.value.length > 0
-    || selectedTags.value.length > 0,
-)
+    searchQuery.value.trim() !== '' ||
+    selectedCategories.value.length > 0 ||
+    selectedTags.value.length > 0
+);
 
 // Debounce voor zoekfunctie
-let searchDebounceTimeout
+let searchDebounceTimeout;
 function debounceUpdateFilters() {
-  clearTimeout(searchDebounceTimeout)
+  clearTimeout(searchDebounceTimeout);
   searchDebounceTimeout = setTimeout(() => {
-    updateFilters()
-  }, 300)
+    updateFilters();
+  }, 300);
 }
 
 // Tags toevoegen of verwijderen
 function toggleTag(tag) {
   if (selectedTags.value.includes(tag)) {
-    selectedTags.value = selectedTags.value.filter(t => t !== tag)
+    selectedTags.value = selectedTags.value.filter((t) => t !== tag);
+  } else {
+    selectedTags.value.push(tag);
   }
-  else {
-    selectedTags.value.push(tag)
-  }
-  updateFilters()
+  updateFilters();
 }
 
 // Filters updaten en emit versturen naar ouder component
@@ -180,26 +164,26 @@ function updateFilters() {
     search: searchQuery.value,
     categories: selectedCategories.value,
     tags: selectedTags.value,
-  })
+  });
 }
 
 // Individuele filter resets
 function clearCategories() {
-  selectedCategories.value = []
-  updateFilters()
+  selectedCategories.value = [];
+  updateFilters();
 }
 
 function clearTags() {
-  selectedTags.value = []
-  updateFilters()
+  selectedTags.value = [];
+  updateFilters();
 }
 
 // Alle filters resetten
 function resetFilters() {
-  searchQuery.value = ''
-  selectedCategories.value = []
-  selectedTags.value = []
-  updateFilters()
+  searchQuery.value = '';
+  selectedCategories.value = [];
+  selectedTags.value = [];
+  updateFilters();
 }
 
 // Bij verandering van externe props de waardes updaten
@@ -207,13 +191,13 @@ watch(
   () => props.initialFilters,
   (newFilters) => {
     if (newFilters) {
-      searchQuery.value = newFilters.search || ''
-      selectedCategories.value = newFilters.categories || []
-      selectedTags.value = newFilters.tags || []
+      searchQuery.value = newFilters.search || '';
+      selectedCategories.value = newFilters.categories || [];
+      selectedTags.value = newFilters.tags || [];
     }
   },
-  { deep: true },
-)
+  { deep: true }
+);
 </script>
 
 <style scoped>

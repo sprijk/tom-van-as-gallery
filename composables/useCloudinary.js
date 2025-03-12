@@ -1,232 +1,219 @@
 // composables/useCloudinary.js
 export const useCloudinary = () => {
-  const config = useRuntimeConfig()
-  const cloudName = config.public.cloudinaryCloudName
+  const config = useRuntimeConfig();
+  const cloudName = config.public.cloudinaryCloudName;
 
   // Cache voor data om herhaalde netwerkaanvragen te verminderen
-  const paintingsCache = useState('paintingsCache', () => null)
-  const categoriesCache = useState('categoriesCache', () => null)
-  const tagsCache = useState('tagsCache', () => null)
+  const paintingsCache = useState('paintingsCache', () => null);
+  const categoriesCache = useState('categoriesCache', () => null);
+  const tagsCache = useState('tagsCache', () => null);
 
   // Error status
-  const apiError = useState('cloudinaryApiError', () => null)
-  const isLoading = useState('cloudinaryIsLoading', () => false)
+  const apiError = useState('cloudinaryApiError', () => null);
+  const isLoading = useState('cloudinaryIsLoading', () => false);
 
   // Alle schilderijen ophalen via een server API route
   const getAllPaintings = async (forceRefresh = false) => {
     try {
-      isLoading.value = true
-      apiError.value = null
+      isLoading.value = true;
+      apiError.value = null;
 
       // Gebruik cache indien beschikbaar en geen forceRefresh
       if (paintingsCache.value && !forceRefresh) {
-        isLoading.value = false
-        return paintingsCache.value
+        isLoading.value = false;
+        return paintingsCache.value;
       }
 
-      const response = await fetch('/api/paintings')
+      const response = await fetch('/api/paintings');
       if (!response.ok) {
-        throw new Error(
-          `Server gaf foutcode ${response.status}: ${response.statusText}`,
-        )
+        throw new Error(`Server gaf foutcode ${response.status}: ${response.statusText}`);
       }
 
-      const data = await response.json()
+      const data = await response.json();
       // Update cache
-      paintingsCache.value = data
-      isLoading.value = false
-      return data
-    }
-    catch (error) {
-      console.error('Fout bij het ophalen van schilderijen:', error)
+      paintingsCache.value = data;
+      isLoading.value = false;
+      return data;
+    } catch (error) {
+      console.error('Fout bij het ophalen van schilderijen:', error);
       apiError.value = {
         message: error.message,
         context: 'getAllPaintings',
         timestamp: new Date().toISOString(),
-      }
-      isLoading.value = false
-      return []
+      };
+      isLoading.value = false;
+      return [];
     }
-  }
+  };
 
   // Eén specifiek schilderij ophalen op basis van ID via een server API route
   const getPaintingById = async (id) => {
     try {
-      if (!id) return null
+      if (!id) return null;
 
-      isLoading.value = true
-      apiError.value = null
+      isLoading.value = true;
+      apiError.value = null;
 
       // Controleer eerst of we het al in de cache hebben
       if (paintingsCache.value) {
-        const cachedPainting = paintingsCache.value.find(p => p.id === id)
+        const cachedPainting = paintingsCache.value.find((p) => p.id === id);
         if (cachedPainting) {
-          isLoading.value = false
-          return cachedPainting
+          isLoading.value = false;
+          return cachedPainting;
         }
       }
 
-      const response = await fetch(`/api/paintings/${id}`)
+      const response = await fetch(`/api/paintings/${id}`);
       if (!response.ok) {
-        throw new Error(
-          `Kon schilderij met ID ${id} niet ophalen: ${response.statusText}`,
-        )
+        throw new Error(`Kon schilderij met ID ${id} niet ophalen: ${response.statusText}`);
       }
 
-      const data = await response.json()
-      isLoading.value = false
-      return data
-    }
-    catch (error) {
-      console.error(`Fout bij het ophalen van schilderij met ID ${id}:`, error)
+      const data = await response.json();
+      isLoading.value = false;
+      return data;
+    } catch (error) {
+      console.error(`Fout bij het ophalen van schilderij met ID ${id}:`, error);
       apiError.value = {
         message: error.message,
         context: 'getPaintingById',
         id,
         timestamp: new Date().toISOString(),
-      }
-      isLoading.value = false
-      return null
+      };
+      isLoading.value = false;
+      return null;
     }
-  }
+  };
 
   // Ophalen van alle beschikbare categorieën
   const getAllCategories = async (forceRefresh = false) => {
     try {
-      isLoading.value = true
-      apiError.value = null
+      isLoading.value = true;
+      apiError.value = null;
 
       // Gebruik cache indien beschikbaar en geen forceRefresh
       if (categoriesCache.value && !forceRefresh) {
-        isLoading.value = false
-        return categoriesCache.value
+        isLoading.value = false;
+        return categoriesCache.value;
       }
 
-      const response = await fetch('/api/categories')
+      const response = await fetch('/api/categories');
       if (!response.ok) {
-        throw new Error('Kon categorieën niet ophalen')
+        throw new Error('Kon categorieën niet ophalen');
       }
 
-      const data = await response.json()
+      const data = await response.json();
       // Update cache
-      categoriesCache.value = data
-      isLoading.value = false
-      return data
-    }
-    catch (error) {
-      console.error('Fout bij het ophalen van categorieën:', error)
+      categoriesCache.value = data;
+      isLoading.value = false;
+      return data;
+    } catch (error) {
+      console.error('Fout bij het ophalen van categorieën:', error);
       apiError.value = {
         message: error.message,
         context: 'getAllCategories',
         timestamp: new Date().toISOString(),
-      }
-      isLoading.value = false
-      return []
+      };
+      isLoading.value = false;
+      return [];
     }
-  }
+  };
 
   // Ophalen van alle beschikbare tags
   const getAllTags = async (forceRefresh = false) => {
     try {
-      isLoading.value = true
-      apiError.value = null
+      isLoading.value = true;
+      apiError.value = null;
 
       // Gebruik cache indien beschikbaar en geen forceRefresh
       if (tagsCache.value && !forceRefresh) {
-        isLoading.value = false
-        return tagsCache.value
+        isLoading.value = false;
+        return tagsCache.value;
       }
 
-      const response = await fetch('/api/tags')
+      const response = await fetch('/api/tags');
       if (!response.ok) {
-        throw new Error('Kon tags niet ophalen')
+        throw new Error('Kon tags niet ophalen');
       }
 
-      const data = await response.json()
+      const data = await response.json();
       // Update cache
-      tagsCache.value = data
-      isLoading.value = false
-      return data
-    }
-    catch (error) {
-      console.error('Fout bij het ophalen van tags:', error)
+      tagsCache.value = data;
+      isLoading.value = false;
+      return data;
+    } catch (error) {
+      console.error('Fout bij het ophalen van tags:', error);
       apiError.value = {
         message: error.message,
         context: 'getAllTags',
         timestamp: new Date().toISOString(),
-      }
-      isLoading.value = false
-      return []
+      };
+      isLoading.value = false;
+      return [];
     }
-  }
+  };
 
   // Ophalen van schilderijen per categorie
   const getPaintingsByCategory = async (category) => {
     try {
-      if (!category) return []
+      if (!category) return [];
 
-      isLoading.value = true
-      apiError.value = null
+      isLoading.value = true;
+      apiError.value = null;
 
-      const allPaintings = await getAllPaintings()
-      isLoading.value = false
+      const allPaintings = await getAllPaintings();
+      isLoading.value = false;
 
-      return allPaintings.filter(painting => painting.category === category)
-    }
-    catch (error) {
-      console.error(
-        `Fout bij het ophalen van schilderijen voor categorie ${category}:`,
-        error,
-      )
+      return allPaintings.filter((painting) => painting.category === category);
+    } catch (error) {
+      console.error(`Fout bij het ophalen van schilderijen voor categorie ${category}:`, error);
       apiError.value = {
         message: error.message,
         context: 'getPaintingsByCategory',
         category,
         timestamp: new Date().toISOString(),
-      }
-      isLoading.value = false
-      return []
+      };
+      isLoading.value = false;
+      return [];
     }
-  }
+  };
 
   // Helper functie om Cloudinary URL te genereren
   const getImageUrl = (publicId, options = {}) => {
     try {
-      if (!publicId) return ''
+      if (!publicId) return '';
 
-      const { width, height, crop = 'fill', format = 'webp' } = options
+      const { width, height, crop = 'fill', format = 'webp' } = options;
 
-      let url = `https://res.cloudinary.com/${cloudName}/image/upload/`
+      let url = `https://res.cloudinary.com/${cloudName}/image/upload/`;
 
       // Transformaties toevoegen
-      const transformations = []
+      const transformations = [];
 
-      if (width) transformations.push(`w_${width}`)
-      if (height) transformations.push(`h_${height}`)
-      if (crop) transformations.push(`c_${crop}`)
-      if (format) transformations.push(`f_${format}`)
+      if (width) transformations.push(`w_${width}`);
+      if (height) transformations.push(`h_${height}`);
+      if (crop) transformations.push(`c_${crop}`);
+      if (format) transformations.push(`f_${format}`);
 
       if (transformations.length > 0) {
-        url += transformations.join(',') + '/'
+        url += transformations.join(',') + '/';
       }
 
-      url += publicId
+      url += publicId;
 
-      return url
+      return url;
+    } catch (error) {
+      console.error('Fout bij het genereren van de afbeelding URL:', error);
+      return '';
     }
-    catch (error) {
-      console.error('Fout bij het genereren van de afbeelding URL:', error)
-      return ''
-    }
-  }
+  };
 
   // Cache wissen (bijvoorbeeld bij verandering van route)
   const clearCache = () => {
-    paintingsCache.value = null
-    categoriesCache.value = null
-    tagsCache.value = null
-    apiError.value = null
-  }
+    paintingsCache.value = null;
+    categoriesCache.value = null;
+    tagsCache.value = null;
+    apiError.value = null;
+  };
 
   return {
     getAllPaintings,
@@ -238,5 +225,5 @@ export const useCloudinary = () => {
     clearCache,
     isLoading,
     apiError,
-  }
-}
+  };
+};

@@ -3,33 +3,22 @@
     <div class="container-custom py-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <h3 class="text-lg font-semibold mb-4">
-            Tom van As
-          </h3>
+          <h3 class="text-lg font-semibold mb-4">Tom van As</h3>
           <p class="text-gray-600">
-            Kunstenaar gespecialiseerd in schilderijen die emotie en verhalen
-            tot leven brengen.
+            Kunstenaar gespecialiseerd in schilderijen die emotie en verhalen tot leven brengen.
           </p>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4">
-            Contact
-          </h3>
+          <h3 class="text-lg font-semibold mb-4">Contact</h3>
           <p class="text-gray-600">
-            Email: info@tomvanas-art.nl<br>
+            Email: info@tomvanas-art.nl<br />
             Telefoonnummer: +31 6 12345678
           </p>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4">
-            Volg mij
-          </h3>
+          <h3 class="text-lg font-semibold mb-4">Volg mij</h3>
           <div class="flex space-x-4">
-            <a
-              href="#"
-              class="text-gray-600 hover:text-primary"
-              aria-label="Instagram"
-            >
+            <a href="#" class="text-gray-600 hover:text-primary" aria-label="Instagram">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
@@ -41,11 +30,7 @@
                 />
               </svg>
             </a>
-            <a
-              href="#"
-              class="text-gray-600 hover:text-primary"
-              aria-label="Facebook"
-            >
+            <a href="#" class="text-gray-600 hover:text-primary" aria-label="Facebook">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
@@ -60,13 +45,8 @@
           </div>
         </div>
       </div>
-      <div
-        class="mt-8 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm"
-      >
-        <p>
-          © {{ new Date().getFullYear() }} Tom van As Kunst. Alle rechten
-          voorbehouden.
-        </p>
+      <div class="mt-8 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm">
+        <p>© {{ new Date().getFullYear() }} Tom van As Kunst. Alle rechten voorbehouden.</p>
       </div>
     </div>
   </footer>

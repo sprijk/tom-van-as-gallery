@@ -3,19 +3,13 @@
     <div class="container-custom py-4">
       <div class="flex items-center justify-between">
         <!-- Logo -->
-        <NuxtLink
-          to="/"
-          class="flex items-center space-x-2"
-        >
+        <NuxtLink to="/" class="flex items-center space-x-2">
           <span class="text-2xl font-serif font-bold text-primary">Tom van As</span>
         </NuxtLink>
 
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex space-x-8">
-          <NuxtLink
-            to="/"
-            class="font-medium text-gray-700 hover:text-primary transition-colors"
-          >
+          <NuxtLink to="/" class="font-medium text-gray-700 hover:text-primary transition-colors">
             Home
           </NuxtLink>
           <NuxtLink
@@ -33,10 +27,7 @@
         </nav>
 
         <!-- Mobile Menu Button -->
-        <button
-          class="md:hidden text-gray-700"
-          @click="toggleMobileMenu"
-        >
+        <button class="md:hidden text-gray-700" @click="toggleMobileMenu">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
@@ -63,15 +54,9 @@
       </div>
 
       <!-- Mobile Navigation -->
-      <div
-        v-if="isMobileMenuOpen"
-        class="mt-4 pb-3 md:hidden"
-      >
+      <div v-if="isMobileMenuOpen" class="mt-4 pb-3 md:hidden">
         <div class="flex flex-col space-y-3">
-          <NuxtLink
-            to="/"
-            class="font-medium text-gray-700 hover:text-primary transition-colors"
-          >
+          <NuxtLink to="/" class="font-medium text-gray-700 hover:text-primary transition-colors">
             Home
           </NuxtLink>
           <NuxtLink
@@ -93,17 +78,17 @@
 </template>
 
 <script setup>
-const isMobileMenuOpen = ref(false)
+const isMobileMenuOpen = ref(false);
 
 function toggleMobileMenu() {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  isMobileMenuOpen.value = !isMobileMenuOpen.value;
 }
 
 // Sluit het mobiele menu als er een route wijziging is
 watch(
   () => useRoute().fullPath,
   () => {
-    isMobileMenuOpen.value = false
-  },
-)
+    isMobileMenuOpen.value = false;
+  }
+);
 </script>

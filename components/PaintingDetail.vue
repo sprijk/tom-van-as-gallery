@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="painting"
-    class="bg-white rounded-lg overflow-hidden shadow-lg"
-  >
+  <div v-if="painting" class="bg-white rounded-lg overflow-hidden shadow-lg">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Schilderij afbeelding -->
       <div class="relative">
@@ -96,13 +93,8 @@
           {{ painting.title }}
         </h1>
 
-        <div
-          v-if="painting.category"
-          class="mb-6"
-        >
-          <h2 class="text-lg font-medium mb-2">
-            Categorie
-          </h2>
+        <div v-if="painting.category" class="mb-6">
+          <h2 class="text-lg font-medium mb-2">Categorie</h2>
           <div class="flex flex-wrap">
             <NuxtLink
               :to="`/schilderijen?category=${painting.category}`"
@@ -113,13 +105,8 @@
           </div>
         </div>
 
-        <div
-          v-if="painting.tags && painting.tags.length"
-          class="mb-6"
-        >
-          <h2 class="text-lg font-medium mb-2">
-            Tags
-          </h2>
+        <div v-if="painting.tags && painting.tags.length" class="mb-6">
+          <h2 class="text-lg font-medium mb-2">Tags</h2>
           <div class="flex flex-wrap">
             <NuxtLink
               v-for="tag in painting.tags"
@@ -133,9 +120,7 @@
         </div>
 
         <div class="mb-6">
-          <h2 class="text-lg font-medium mb-2">
-            Details
-          </h2>
+          <h2 class="text-lg font-medium mb-2">Details</h2>
           <ul class="space-y-2 text-gray-700">
             <li v-if="painting.width && painting.height">
               <span class="font-medium">Afmetingen:</span>
@@ -154,16 +139,12 @@
 
         <div class="mt-8">
           <div class="bg-primary-light/20 rounded-lg p-6">
-            <h2 class="text-lg font-medium mb-2">
-              Interesse in dit werk?
-            </h2>
+            <h2 class="text-lg font-medium mb-2">Interesse in dit werk?</h2>
             <p class="text-gray-700 mb-4">
-              Neem contact met mij op voor meer informatie over dit schilderij
-              of om een aankoop te bespreken.
+              Neem contact met mij op voor meer informatie over dit schilderij of om een aankoop te
+              bespreken.
             </p>
-            <div
-              class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4"
-            >
+            <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
               <a
                 :href="`mailto:info@tomvanas-art.nl?subject=Interesse in schilderij: ${painting.title}`"
                 class="btn btn-primary flex-1 text-center flex items-center justify-center"
@@ -229,10 +210,7 @@
               Deel dit schilderij
             </button>
 
-            <div
-              v-if="showShareOptions"
-              class="mt-3 flex space-x-2"
-            >
+            <div v-if="showShareOptions" class="mt-3 flex space-x-2">
               <a
                 :href="facebookShareUrl"
                 target="_blank"
@@ -348,10 +326,7 @@
           </svg>
         </button>
 
-        <div
-          class="max-w-screen-xl max-h-screen"
-          @click.stop
-        >
+        <div class="max-w-screen-xl max-h-screen" @click.stop>
           <NuxtImg
             provider="cloudinary"
             :src="painting.id"
@@ -363,16 +338,11 @@
           />
         </div>
 
-        <div
-          class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center"
-        >
+        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
           <h3 class="text-xl font-medium">
             {{ painting.title }}
           </h3>
-          <p
-            v-if="painting.category"
-            class="text-sm opacity-80 mt-1"
-          >
+          <p v-if="painting.category" class="text-sm opacity-80 mt-1">
             {{ painting.category }}
           </p>
         </div>
@@ -380,22 +350,10 @@
     </Teleport>
   </div>
 
-  <div
-    v-else
-    class="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow"
-  >
-    <h2 class="text-2xl font-medium text-gray-700 mb-4">
-      Schilderij niet gevonden
-    </h2>
-    <p class="text-gray-600 mb-6">
-      Het gezochte schilderij is niet beschikbaar of bestaat niet.
-    </p>
-    <NuxtLink
-      to="/schilderijen"
-      class="btn btn-primary"
-    >
-      Terug naar de galerij
-    </NuxtLink>
+  <div v-else class="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow">
+    <h2 class="text-2xl font-medium text-gray-700 mb-4">Schilderij niet gevonden</h2>
+    <p class="text-gray-600 mb-6">Het gezochte schilderij is niet beschikbaar of bestaat niet.</p>
+    <NuxtLink to="/schilderijen" class="btn btn-primary"> Terug naar de galerij </NuxtLink>
   </div>
 </template>
 
@@ -413,80 +371,74 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-})
+});
 
-const router = useRouter()
-const showFullImage = ref(false)
-const showShareOptions = ref(false)
-const linkCopied = ref(false)
+const router = useRouter();
+const showFullImage = ref(false);
+const showShareOptions = ref(false);
+const linkCopied = ref(false);
 
 // Navigatie naar ander schilderij
 function navigateToPainting(id) {
-  if (!id) return
+  if (!id) return;
 
   // Sluit de lightbox als deze open is
-  showFullImage.value = false
+  showFullImage.value = false;
 
   // Navigeer naar het nieuwe schilderij
-  router.push(`/schilderijen/${id}`)
+  router.push(`/schilderijen/${id}`);
 }
 
 // Datum formatteren
 function formatDate(dateString) {
-  if (!dateString) return ''
-  const date = new Date(dateString)
+  if (!dateString) return '';
+  const date = new Date(dateString);
   return new Intl.DateTimeFormat('nl-NL', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-  }).format(date)
+  }).format(date);
 }
 
 // Share functionaliteit
-const route = useRoute()
+useRoute();
 const currentUrl = computed(() => {
   if (typeof window !== 'undefined') {
-    return window.location.href
+    return window.location.href;
   }
-  return ''
-})
+  return '';
+});
 
 const shareTitle = computed(() => {
-  return props.painting
-    ? `Bekijk "${props.painting.title}" van Tom van As`
-    : ''
-})
+  return props.painting ? `Bekijk "${props.painting.title}" van Tom van As` : '';
+});
 
 const facebookShareUrl = computed(() => {
-  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-    currentUrl.value,
-  )}`
-})
+  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl.value)}`;
+});
 
 const twitterShareUrl = computed(() => {
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    shareTitle.value,
-  )}&url=${encodeURIComponent(currentUrl.value)}`
-})
+    shareTitle.value
+  )}&url=${encodeURIComponent(currentUrl.value)}`;
+});
 
 const whatsappShareUrl = computed(() => {
-  return `https://wa.me/?text=${encodeURIComponent(
-    shareTitle.value + ' ' + currentUrl.value,
-  )}`
-})
+  return `https://wa.me/?text=${encodeURIComponent(shareTitle.value + ' ' + currentUrl.value)}`;
+});
 
 function toggleShareOptions() {
-  showShareOptions.value = !showShareOptions.value
+  showShareOptions.value = !showShareOptions.value;
 }
 
 function copyShareLink() {
   if (typeof navigator !== 'undefined' && navigator.clipboard) {
     navigator.clipboard.writeText(currentUrl.value).then(() => {
-      linkCopied.value = true
+      linkCopied.value = true;
       setTimeout(() => {
-        linkCopied.value = false
-      }, 2000)
-    })
+        linkCopied.value = false;
+      }, 2000);
+    });
   }
 }
 
@@ -495,27 +447,27 @@ onMounted(() => {
   if (typeof window !== 'undefined') {
     window.addEventListener('click', (e) => {
       if (showShareOptions.value && !e.target.closest('.share-options')) {
-        showShareOptions.value = false
+        showShareOptions.value = false;
       }
-    })
+    });
 
     // Add event listener for Escape key
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        showFullImage.value = false
+        showFullImage.value = false;
       }
-    })
+    });
   }
-})
+});
 
 // Add onUnmounted to clean up event listeners
 onUnmounted(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        showFullImage.value = false
+        showFullImage.value = false;
       }
-    })
+    });
   }
-})
+});
 </script>

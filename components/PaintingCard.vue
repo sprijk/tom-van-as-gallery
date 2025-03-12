@@ -21,10 +21,7 @@
         <h3 class="text-lg font-semibold mb-1 text-gray-900">
           {{ painting.title }}
         </h3>
-        <div
-          v-if="painting.category"
-          class="mb-2"
-        >
+        <div v-if="painting.category" class="mb-2">
           <span
             class="inline-block bg-secondary-light text-gray-800 text-xs px-2 py-1 rounded mr-1 mb-1"
           >
@@ -37,10 +34,10 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   painting: {
     type: Object,
     required: true,
   },
-})
+});
 </script>

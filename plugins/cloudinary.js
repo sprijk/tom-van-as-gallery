@@ -1,13 +1,13 @@
 // plugins/cloudinary.js
 // Import cloudinary alleen op de server, niet in de browser
-let cloudinary
+let cloudinary;
 if (import.meta.server) {
-  const { v2 } = require('cloudinary')
-  cloudinary = v2
+  const { v2 } = require('cloudinary');
+  cloudinary = v2;
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const config = useRuntimeConfig()
+  const config = useRuntimeConfig();
 
   // Cloudinary configureren voor server-side gebruik
   if (import.meta.server && cloudinary) {
@@ -15,20 +15,15 @@ export default defineNuxtPlugin((nuxtApp) => {
       cloud_name: config.cloudinaryCloudName,
       api_key: config.cloudinaryApiKey,
       api_secret: config.cloudinaryApiSecret,
-    })
+    });
   }
 
   // Client-side configuratie voor preview URLs
   const generatePreviewUrl = (publicId, options = {}) => {
-    const {
-      width = 300,
-      height = 300,
-      crop = 'fill',
-      quality = 'auto',
-    } = options
+    const { width = 300, height = 300, crop = 'fill', quality = 'auto' } = options;
 
-    return `https://res.cloudinary.com/${config.public.cloudinaryCloudName}/image/upload/c_${crop},w_${width},h_${height},q_${quality}/${publicId}`
-  }
+    return `https://res.cloudinary.com/${config.public.cloudinaryCloudName}/image/upload/c_${crop},w_${width},h_${height},q_${quality}/${publicId}`;
+  };
 
   return {
     provide: {
@@ -39,5 +34,5 @@ export default defineNuxtPlugin((nuxtApp) => {
         cloudName: config.public.cloudinaryCloudName,
       },
     },
-  }
-})
+  };
+});

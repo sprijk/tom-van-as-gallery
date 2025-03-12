@@ -1,9 +1,7 @@
 <template>
   <div>
     <div class="mb-8">
-      <h1 class="text-3xl md:text-4xl font-serif font-bold">
-        Over Tom van As
-      </h1>
+      <h1 class="text-3xl md:text-4xl font-serif font-bold">Over Tom van As</h1>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
@@ -13,30 +11,29 @@
           <p>(1932 Den Haag – 2024 Haastrecht/Gouda)</p>
 
           <p>
-            Tom studeerde aan de Koninklijke Academie van Beeldende Kunsten in
-            Den Haag (1948 -1953). Zijn vroege werk lijkt onder andere
-            geïnspireerd door het kubisme van begin vorige eeuw.
+            Tom studeerde aan de Koninklijke Academie van Beeldende Kunsten in Den Haag (1948
+            -1953). Zijn vroege werk lijkt onder andere geïnspireerd door het kubisme van begin
+            vorige eeuw.
           </p>
 
           <p>Zijn latere werk bestaat uit atelierwerk en landschappen.</p>
 
           <p>
-            De landschappen maakte hij ter plekke tijdens reizen naar
-            bijvoorbeeld Frankrijk, Spanje, Ierland en de Waddeneilanden maar
-            ook vaak in de omgeving van zijn woonplaats Haastrecht.
+            De landschappen maakte hij ter plekke tijdens reizen naar bijvoorbeeld Frankrijk,
+            Spanje, Ierland en de Waddeneilanden maar ook vaak in de omgeving van zijn woonplaats
+            Haastrecht.
           </p>
 
           <p>
-            Hij schilderde met olieverf op doek en met aquarel en acryl. De
-            stijl van de landschappen zou je kunnen zien als een vervolg op de
-            schilders van ‘de Haagse School’
+            Hij schilderde met olieverf op doek en met aquarel en acryl. De stijl van de
+            landschappen zou je kunnen zien als een vervolg op de schilders van ‘de Haagse School’
           </p>
 
           <img
             src="/images/over-tom-examples.jpg"
             class="w-full"
             alt="Voorbeelden van Tom's werk"
-          >
+          />
 
           <!-- <h2>Tentoonstellingen</h2>
           <p>
@@ -82,49 +79,32 @@
               src="/images/tom-van-as.jpg"
               class="w-full object-cover"
               alt="Portretfoto van Tom van As"
-            >
+            />
           </div>
 
-          <h3 class="text-xl font-semibold mb-4">
-            Snel Overzicht
-          </h3>
+          <h3 class="text-xl font-semibold mb-4">Snel Overzicht</h3>
 
           <div class="space-y-3">
             <div>
-              <h4 class="font-medium text-gray-900">
-                Geboren
-              </h4>
+              <h4 class="font-medium text-gray-900">Geboren</h4>
+              <p class="text-gray-700">1932, Den Haag, Nederland</p>
+            </div>
+
+            <div>
+              <h4 class="font-medium text-gray-900">Opleiding</h4>
               <p class="text-gray-700">
-                1932, Den Haag, Nederland
+                Koninklijke Academie voor Beeldende Kunsten, Den Haag (1948 -1953)
               </p>
             </div>
 
             <div>
-              <h4 class="font-medium text-gray-900">
-                Opleiding
-              </h4>
-              <p class="text-gray-700">
-                Koninklijke Academie voor Beeldende Kunsten, Den Haag (1948
-                -1953)
-              </p>
+              <h4 class="font-medium text-gray-900">Medium</h4>
+              <p class="text-gray-700">Acryl, olieverf, gemengde technieken</p>
             </div>
 
             <div>
-              <h4 class="font-medium text-gray-900">
-                Medium
-              </h4>
-              <p class="text-gray-700">
-                Acryl, olieverf, gemengde technieken
-              </p>
-            </div>
-
-            <div>
-              <h4 class="font-medium text-gray-900">
-                Stijl
-              </h4>
-              <p class="text-gray-700">
-                Hedendaags expressionisme, abstracte landschappen
-              </p>
+              <h4 class="font-medium text-gray-900">Stijl</h4>
+              <p class="text-gray-700">Hedendaags expressionisme, abstracte landschappen</p>
             </div>
           </div>
 
@@ -188,24 +168,13 @@
 
     <!-- Laatste schilderijen sectie -->
     <div v-if="recentPaintings.length > 0">
-      <h2 class="text-2xl font-serif font-semibold mb-6">
-        Mijn Laatste Werken
-      </h2>
+      <h2 class="text-2xl font-serif font-semibold mb-6">Mijn Laatste Werken</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <PaintingCard
-          v-for="painting in recentPaintings"
-          :key="painting.id"
-          :painting="painting"
-        />
+        <PaintingCard v-for="painting in recentPaintings" :key="painting.id" :painting="painting" />
       </div>
 
       <div class="text-center mt-8">
-        <NuxtLink
-          to="/schilderijen"
-          class="btn btn-primary"
-        >
-          Bekijk alle schilderijen
-        </NuxtLink>
+        <NuxtLink to="/schilderijen" class="btn btn-primary"> Bekijk alle schilderijen </NuxtLink>
       </div>
     </div>
   </div>
@@ -213,24 +182,23 @@
 
 <script setup>
 // Composable voor Cloudinary data
-const { getAllPaintings } = useCloudinary()
+const { getAllPaintings } = useCloudinary();
 
 // State
-const recentPaintings = ref([])
+const recentPaintings = ref([]);
 
 // Data ophalen
 async function fetchData() {
   try {
     // Alle schilderijen ophalen
-    const paintings = await getAllPaintings()
+    const paintings = await getAllPaintings();
 
     // Sorteer op datum (nieuwste eerst) en pak de eerste 3
     recentPaintings.value = paintings
       .sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0))
-      .slice(0, 3)
-  }
-  catch (error) {
-    console.error('Fout bij het ophalen van recente schilderijen:', error)
+      .slice(0, 3);
+  } catch (error) {
+    console.error('Fout bij het ophalen van recente schilderijen:', error);
   }
 }
 
@@ -244,10 +212,10 @@ useHead({
         'Leer meer over kunstenaar Tom van As, zijn achtergrond, techniek en artistieke visie. Bekijk zijn portfolio en neem contact op voor aankoop of opdrachten.',
     },
   ],
-})
+});
 
 // Data ophalen bij page load
 onMounted(() => {
-  fetchData()
-})
+  fetchData();
+});
 </script>
