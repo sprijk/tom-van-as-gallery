@@ -1,16 +1,12 @@
 // plugins/cloudinary.js
-// Import cloudinary alleen op de server, niet in de browser
-let cloudinary;
-if (import.meta.server) {
-  const { v2 } = require('cloudinary');
-  cloudinary = v2;
-}
+// Import cloudinary only on the server, not in the browser
+import { v2 as cloudinary } from 'cloudinary';
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
 
-  // Cloudinary configureren voor server-side gebruik
-  if (import.meta.server && cloudinary) {
+  // Cloudinary configuration for server-side use
+  if (import.meta.server) {
     cloudinary.config({
       cloud_name: config.cloudinaryCloudName,
       api_key: config.cloudinaryApiKey,
@@ -18,7 +14,7 @@ export default defineNuxtPlugin(() => {
     });
   }
 
-  // Client-side configuratie voor preview URLs
+  // Client-side configuration for preview URLs
   const generatePreviewUrl = (publicId, options = {}) => {
     const { width = 300, height = 300, crop = 'fill', quality = 'auto' } = options;
 
@@ -28,9 +24,9 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       cloudinary: {
-        // Alleen beschikbaar op server-side
+        // Only available on server-side
         instance: import.meta.server ? cloudinary : null,
-        generatePreviewUrl, // Beschikbaar op client-side
+        generatePreviewUrl, // Available on client-side
         cloudName: config.public.cloudinaryCloudName,
       },
     },
