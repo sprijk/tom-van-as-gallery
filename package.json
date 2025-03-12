@@ -14,7 +14,7 @@
     "prettier:fix": "prettier . --write",
     "prettier": "prettier . --check",
     "preview": "nuxt preview",
-    "start": "ode .output/server/index.mjs"
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "@nuxt/image": "^1.9.0",
