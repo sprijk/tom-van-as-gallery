@@ -45,6 +45,7 @@ Een online galerij voor de kunstwerken van Tom van As, gebouwd met Nuxt 3, Tailw
    CLOUDINARY_CLOUD_NAME=your_cloud_name
    CLOUDINARY_API_KEY=your_api_key
    CLOUDINARY_API_SECRET=your_api_secret
+   ADMIN_PASSWORD=your_admin_password
    ```
 
 4. Start de ontwikkelingsserver:
@@ -69,7 +70,7 @@ De collectie van schilderijen en kunstwerken is onderverdeeld in 5 vaste categor
 
 Om de galerij correct te laten werken, moet je afbeeldingen in Cloudinary als volgt instellen:
 
-- Titel: Stel de titel in via het 'Caption' veld in Cloudinary (verplicht voor elk schilderij)
+- Titels: Worden automatisch gegenereerd als "Nummer X" op basis van het `label_number` veld in Cloudinary. Stel dit in via het 'Custom Metadata' veld in Cloudinary (verplicht voor elk schilderij).
 - Categorieën: Plaats de afbeeldingen in de juiste subfolder onder "Tom van As Kunst"
 - Tags: Voeg reguliere tags toe voor extra filtering mogelijkheden
 
