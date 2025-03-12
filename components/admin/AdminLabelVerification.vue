@@ -33,7 +33,8 @@
       <div
         v-for="painting in filteredPaintings"
         :key="painting.id"
-        class="bg-white rounded-lg shadow-md overflow-hidden"
+        class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+        @click="openDetailView(painting)"
       >
         <div class="p-4 bg-gray-50 flex items-center justify-between">
           <h3 class="font-medium truncate">{{ painting.title }}</h3>
@@ -64,50 +65,19 @@
         </div>
 
         <div class="p-4">
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-1 text-sm">Huidig Label</label>
-            <div class="flex items-center">
+          <div class="mb-2">
+            <div class="flex justify-between items-center">
+              <label class="block text-gray-700 text-sm">Huidig Label</label>
+              <span class="text-sm text-gray-500">Klik voor details</span>
+            </div>
+            <div class="mt-1 flex items-center">
               <input
-                v-model="painting.currentLabel"
+                :value="painting.currentLabel || 'Geen label'"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Geen label gevonden"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
                 readonly
               />
             </div>
-          </div>
-
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-1 text-sm">Correct Label</label>
-            <div class="flex items-center">
-              <input
-                v-model="painting.correctedLabel"
-                type="text"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Voer correct label in"
-              />
-            </div>
-          </div>
-
-          <div class="flex justify-between">
-            <button
-              class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-              :disabled="isUpdating"
-              @click="verifyLabel(painting)"
-            >
-              Verifiëren
-            </button>
-            <button
-              class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
-              :disabled="
-                isUpdating ||
-                !painting.correctedLabel ||
-                painting.correctedLabel === painting.currentLabel
-              "
-              @click="updateLabel(painting)"
-            >
-              Bijwerken
-            </button>
           </div>
         </div>
       </div>
@@ -118,6 +88,19 @@
       <p class="text-gray-600 mb-4">Geen schilderijen gevonden met de huidige filter.</p>
       <button class="btn btn-secondary" @click="labelFilter = 'all'">Toon alle schilderijen</button>
     </div>
+
+    <!-- Detail View Modal -->
+    <AdminPaintingDetail
+      v-if="showDetailView && selectedPainting"
+      :painting="selectedPainting"
+      :has-previous="hasPrevious"
+      :has-next="hasNext"
+      :is-updating="isUpdating"
+      @close="closeDetailView"
+      @navigate="navigatePainting"
+      @verify="verifyLabel"
+      @update="updateLabel"
+    />
   </div>
 </template>
 
@@ -140,6 +123,9 @@ defineEmits(['refresh']);
 // State
 const labelFilter = ref('all');
 const isUpdating = ref(false);
+const showDetailView = ref(false);
+const selectedPainting = ref(null);
+const selectedIndex = ref(-1);
 
 // Computed properties for filtering
 const filteredPaintings = computed(() => {
@@ -162,6 +148,15 @@ const filteredPaintings = computed(() => {
   return props.paintings;
 });
 
+// Navigation properties
+const hasPrevious = computed(() => {
+  return selectedIndex.value > 0;
+});
+
+const hasNext = computed(() => {
+  return selectedIndex.value < filteredPaintings.value.length - 1;
+});
+
 // Helper functions
 function getLabelStatusText(status) {
   switch (status) {
@@ -174,6 +169,31 @@ function getLabelStatusText(status) {
     default:
       return 'Onbekend';
   }
+}
+
+// Detail view handlers
+function openDetailView(painting) {
+  selectedPainting.value = painting;
+  selectedIndex.value = filteredPaintings.value.indexOf(painting);
+  showDetailView.value = true;
+}
+
+function closeDetailView() {
+  showDetailView.value = false;
+  setTimeout(() => {
+    selectedPainting.value = null;
+    selectedIndex.value = -1;
+  }, 200);
+}
+
+function navigatePainting(direction) {
+  if (direction === 'prev' && hasPrevious.value) {
+    selectedIndex.value--;
+  } else if (direction === 'next' && hasNext.value) {
+    selectedIndex.value++;
+  }
+
+  selectedPainting.value = filteredPaintings.value[selectedIndex.value];
 }
 
 // Label verification and update
@@ -202,8 +222,18 @@ async function verifyLabel(painting) {
     // Update local state
     painting.labelStatus = 'verified';
 
+    // Update the selected painting reference (to ensure reactivity)
+    selectedPainting.value = { ...painting };
+
     // Show success notification
     alert(`Label voor "${painting.title}" is geverifieerd.`);
+
+    // Navigate to next painting if available
+    if (hasNext.value) {
+      navigatePainting('next');
+    } else {
+      closeDetailView();
+    }
   } catch (error) {
     console.error('Error verifying label:', error);
     // Show error notification
@@ -213,10 +243,11 @@ async function verifyLabel(painting) {
   }
 }
 
-async function updateLabel(painting) {
-  if (isUpdating.value || !painting.correctedLabel) return;
+async function updateLabel(data) {
+  if (isUpdating.value || !data.correctedLabel) return;
 
   isUpdating.value = true;
+  const painting = data;
 
   try {
     // Call API to update the label in Cloudinary
@@ -227,7 +258,7 @@ async function updateLabel(painting) {
       },
       body: JSON.stringify({
         imageId: painting.id,
-        labelNumber: painting.correctedLabel,
+        labelNumber: data.correctedLabel,
       }),
     });
 
@@ -236,12 +267,22 @@ async function updateLabel(painting) {
     }
 
     // Update local state
-    painting.currentLabel = painting.correctedLabel;
-    painting.labelStatus = 'verified';
-    painting.title = `Nummer ${painting.correctedLabel}`;
+    const updatedPainting = { ...painting };
+    updatedPainting.currentLabel = data.correctedLabel;
+    updatedPainting.labelStatus = 'verified';
+    updatedPainting.title = `Nummer ${data.correctedLabel}`;
+
+    // Find and update the painting in the paintings array
+    const index = props.paintings.findIndex((p) => p.id === painting.id);
+    if (index !== -1) {
+      props.paintings[index] = updatedPainting;
+    }
+
+    // Update the selected painting reference
+    selectedPainting.value = updatedPainting;
 
     // Show success notification
-    alert(`Label voor "${painting.title}" is bijgewerkt naar ${painting.correctedLabel}.`);
+    alert(`Label voor "${updatedPainting.title}" is bijgewerkt naar ${data.correctedLabel}.`);
   } catch (error) {
     console.error('Error updating label:', error);
     // Show error notification
