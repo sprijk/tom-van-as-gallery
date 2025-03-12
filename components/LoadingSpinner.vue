@@ -5,7 +5,12 @@
     >
       <span class="sr-only">Laden...</span>
     </div>
-    <p v-if="showMessage" class="ml-4 text-gray-600">{{ message }}</p>
+    <p
+      v-if="showMessage"
+      class="ml-4 text-gray-600"
+    >
+      {{ message }}
+    </p>
   </div>
 </template>
 
@@ -17,7 +22,7 @@ defineProps({
   },
   message: {
     type: String,
-    default: "Laden...",
+    default: 'Laden...',
   },
-});
+})
 </script>

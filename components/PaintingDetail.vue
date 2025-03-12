@@ -1,5 +1,8 @@
 <template>
-  <div v-if="painting" class="bg-white rounded-lg overflow-hidden shadow-lg">
+  <div
+    v-if="painting"
+    class="bg-white rounded-lg overflow-hidden shadow-lg"
+  >
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Schilderij afbeelding -->
       <div class="relative">
@@ -17,9 +20,9 @@
           />
         </div>
         <button
-          @click="showFullImage = true"
           class="absolute bottom-4 right-4 bg-white bg-opacity-80 p-2 rounded-full shadow hover:bg-opacity-100 transition-all"
           aria-label="Bekijk het volledige schilderij"
+          @click="showFullImage = true"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -41,9 +44,9 @@
         <div class="absolute inset-y-0 left-0 flex items-center">
           <button
             v-if="previousPainting"
-            @click="navigateToPainting(previousPainting.id)"
             class="bg-white bg-opacity-70 p-2 rounded-r-lg shadow hover:bg-opacity-100 transition-all"
             aria-label="Vorig schilderij"
+            @click="navigateToPainting(previousPainting.id)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,9 +68,9 @@
         <div class="absolute inset-y-0 right-0 flex items-center">
           <button
             v-if="nextPainting"
-            @click="navigateToPainting(nextPainting.id)"
             class="bg-white bg-opacity-70 p-2 rounded-l-lg shadow hover:bg-opacity-100 transition-all"
             aria-label="Volgend schilderij"
+            @click="navigateToPainting(nextPainting.id)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -89,10 +92,17 @@
 
       <!-- Schilderij informatie -->
       <div class="p-6">
-        <h1 class="text-3xl font-semibold mb-4">{{ painting.title }}</h1>
+        <h1 class="text-3xl font-semibold mb-4">
+          {{ painting.title }}
+        </h1>
 
-        <div v-if="painting.category" class="mb-6">
-          <h2 class="text-lg font-medium mb-2">Categorie</h2>
+        <div
+          v-if="painting.category"
+          class="mb-6"
+        >
+          <h2 class="text-lg font-medium mb-2">
+            Categorie
+          </h2>
           <div class="flex flex-wrap">
             <NuxtLink
               :to="`/schilderijen?category=${painting.category}`"
@@ -103,8 +113,13 @@
           </div>
         </div>
 
-        <div v-if="painting.tags && painting.tags.length" class="mb-6">
-          <h2 class="text-lg font-medium mb-2">Tags</h2>
+        <div
+          v-if="painting.tags && painting.tags.length"
+          class="mb-6"
+        >
+          <h2 class="text-lg font-medium mb-2">
+            Tags
+          </h2>
           <div class="flex flex-wrap">
             <NuxtLink
               v-for="tag in painting.tags"
@@ -118,7 +133,9 @@
         </div>
 
         <div class="mb-6">
-          <h2 class="text-lg font-medium mb-2">Details</h2>
+          <h2 class="text-lg font-medium mb-2">
+            Details
+          </h2>
           <ul class="space-y-2 text-gray-700">
             <li v-if="painting.width && painting.height">
               <span class="font-medium">Afmetingen:</span>
@@ -137,7 +154,9 @@
 
         <div class="mt-8">
           <div class="bg-primary-light/20 rounded-lg p-6">
-            <h2 class="text-lg font-medium mb-2">Interesse in dit werk?</h2>
+            <h2 class="text-lg font-medium mb-2">
+              Interesse in dit werk?
+            </h2>
             <p class="text-gray-700 mb-4">
               Neem contact met mij op voor meer informatie over dit schilderij
               of om een aankoop te bespreken.
@@ -190,8 +209,8 @@
 
           <div class="mt-6 pt-6 border-t border-gray-200">
             <button
-              @click="toggleShareOptions"
               class="flex items-center text-primary hover:text-primary-dark transition-colors"
+              @click="toggleShareOptions"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -210,7 +229,10 @@
               Deel dit schilderij
             </button>
 
-            <div v-if="showShareOptions" class="mt-3 flex space-x-2">
+            <div
+              v-if="showShareOptions"
+              class="mt-3 flex space-x-2"
+            >
               <a
                 :href="facebookShareUrl"
                 target="_blank"
@@ -266,9 +288,9 @@
                 </svg>
               </a>
               <button
-                @click="copyShareLink"
                 class="p-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 transition-colors relative"
                 aria-label="Kopieer link"
+                @click="copyShareLink"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -306,9 +328,9 @@
         @click="showFullImage = false"
       >
         <button
-          @click.stop="showFullImage = false"
           class="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
           aria-label="Sluit volledig beeld"
+          @click.stop="showFullImage = false"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -326,7 +348,10 @@
           </svg>
         </button>
 
-        <div class="max-w-screen-xl max-h-screen" @click.stop>
+        <div
+          class="max-w-screen-xl max-h-screen"
+          @click.stop
+        >
           <NuxtImg
             provider="cloudinary"
             :src="painting.id"
@@ -341,8 +366,13 @@
         <div
           class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center"
         >
-          <h3 class="text-xl font-medium">{{ painting.title }}</h3>
-          <p v-if="painting.category" class="text-sm opacity-80 mt-1">
+          <h3 class="text-xl font-medium">
+            {{ painting.title }}
+          </h3>
+          <p
+            v-if="painting.category"
+            class="text-sm opacity-80 mt-1"
+          >
             {{ painting.category }}
           </p>
         </div>
@@ -360,7 +390,10 @@
     <p class="text-gray-600 mb-6">
       Het gezochte schilderij is niet beschikbaar of bestaat niet.
     </p>
-    <NuxtLink to="/schilderijen" class="btn btn-primary">
+    <NuxtLink
+      to="/schilderijen"
+      class="btn btn-primary"
+    >
       Terug naar de galerij
     </NuxtLink>
   </div>
@@ -380,109 +413,109 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-});
+})
 
-const router = useRouter();
-const showFullImage = ref(false);
-const showShareOptions = ref(false);
-const linkCopied = ref(false);
+const router = useRouter()
+const showFullImage = ref(false)
+const showShareOptions = ref(false)
+const linkCopied = ref(false)
 
 // Navigatie naar ander schilderij
 function navigateToPainting(id) {
-  if (!id) return;
+  if (!id) return
 
   // Sluit de lightbox als deze open is
-  showFullImage.value = false;
+  showFullImage.value = false
 
   // Navigeer naar het nieuwe schilderij
-  router.push(`/schilderijen/${id}`);
+  router.push(`/schilderijen/${id}`)
 }
 
 // Datum formatteren
 function formatDate(dateString) {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat("nl-NL", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('nl-NL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date)
 }
 
 // Share functionaliteit
-const route = useRoute();
+const route = useRoute()
 const currentUrl = computed(() => {
-  if (typeof window !== "undefined") {
-    return window.location.href;
+  if (typeof window !== 'undefined') {
+    return window.location.href
   }
-  return "";
-});
+  return ''
+})
 
 const shareTitle = computed(() => {
   return props.painting
     ? `Bekijk "${props.painting.title}" van Tom van As`
-    : "";
-});
+    : ''
+})
 
 const facebookShareUrl = computed(() => {
   return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
     currentUrl.value,
-  )}`;
-});
+  )}`
+})
 
 const twitterShareUrl = computed(() => {
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(
     shareTitle.value,
-  )}&url=${encodeURIComponent(currentUrl.value)}`;
-});
+  )}&url=${encodeURIComponent(currentUrl.value)}`
+})
 
 const whatsappShareUrl = computed(() => {
   return `https://wa.me/?text=${encodeURIComponent(
-    shareTitle.value + " " + currentUrl.value,
-  )}`;
-});
+    shareTitle.value + ' ' + currentUrl.value,
+  )}`
+})
 
 function toggleShareOptions() {
-  showShareOptions.value = !showShareOptions.value;
+  showShareOptions.value = !showShareOptions.value
 }
 
 function copyShareLink() {
-  if (typeof navigator !== "undefined" && navigator.clipboard) {
+  if (typeof navigator !== 'undefined' && navigator.clipboard) {
     navigator.clipboard.writeText(currentUrl.value).then(() => {
-      linkCopied.value = true;
+      linkCopied.value = true
       setTimeout(() => {
-        linkCopied.value = false;
-      }, 2000);
-    });
+        linkCopied.value = false
+      }, 2000)
+    })
   }
 }
 
 // Close share options when clicking outside
 onMounted(() => {
-  if (typeof window !== "undefined") {
-    window.addEventListener("click", (e) => {
-      if (showShareOptions.value && !e.target.closest(".share-options")) {
-        showShareOptions.value = false;
+  if (typeof window !== 'undefined') {
+    window.addEventListener('click', (e) => {
+      if (showShareOptions.value && !e.target.closest('.share-options')) {
+        showShareOptions.value = false
       }
-    });
+    })
 
     // Add event listener for Escape key
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        showFullImage.value = false;
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        showFullImage.value = false
       }
-    });
+    })
   }
-});
+})
 
 // Add onUnmounted to clean up event listeners
 onUnmounted(() => {
-  if (typeof window !== "undefined") {
-    window.removeEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        showFullImage.value = false;
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        showFullImage.value = false
       }
-    });
+    })
   }
-});
+})
 </script>

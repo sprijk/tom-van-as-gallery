@@ -1,10 +1,16 @@
 <template>
   <div>
-    <div v-if="paintings.length === 0" class="text-center py-12">
+    <div
+      v-if="paintings.length === 0"
+      class="text-center py-12"
+    >
       <h3 class="text-xl text-gray-600">
         Geen schilderijen gevonden die overeenkomen met de filters.
       </h3>
-      <button @click="$emit('clearFilters')" class="mt-4 btn btn-primary">
+      <button
+        class="mt-4 btn btn-primary"
+        @click="$emit('clearFilters')"
+      >
         Wis filters
       </button>
     </div>
@@ -20,8 +26,14 @@
       />
     </div>
 
-    <div v-if="showLoadMore && paintings.length > 0" class="text-center mt-10">
-      <button @click="$emit('loadMore')" class="btn btn-secondary">
+    <div
+      v-if="showLoadMore && paintings.length > 0"
+      class="text-center mt-10"
+    >
+      <button
+        class="btn btn-secondary"
+        @click="$emit('loadMore')"
+      >
         Meer laden
       </button>
     </div>
@@ -38,7 +50,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
-defineEmits(["loadMore", "clearFilters"]);
+defineEmits(['loadMore', 'clearFilters'])
 </script>

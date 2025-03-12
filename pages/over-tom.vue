@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="mb-8">
-      <h1 class="text-3xl md:text-4xl font-serif font-bold">Over Tom van As</h1>
+      <h1 class="text-3xl md:text-4xl font-serif font-bold">
+        Over Tom van As
+      </h1>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
@@ -34,7 +36,7 @@
             src="/images/over-tom-examples.jpg"
             class="w-full"
             alt="Voorbeelden van Tom's werk"
-          />
+          >
 
           <!-- <h2>Tentoonstellingen</h2>
           <p>
@@ -80,19 +82,27 @@
               src="/images/tom-van-as.jpg"
               class="w-full object-cover"
               alt="Portretfoto van Tom van As"
-            />
+            >
           </div>
 
-          <h3 class="text-xl font-semibold mb-4">Snel Overzicht</h3>
+          <h3 class="text-xl font-semibold mb-4">
+            Snel Overzicht
+          </h3>
 
           <div class="space-y-3">
             <div>
-              <h4 class="font-medium text-gray-900">Geboren</h4>
-              <p class="text-gray-700">1932, Den Haag, Nederland</p>
+              <h4 class="font-medium text-gray-900">
+                Geboren
+              </h4>
+              <p class="text-gray-700">
+                1932, Den Haag, Nederland
+              </p>
             </div>
 
             <div>
-              <h4 class="font-medium text-gray-900">Opleiding</h4>
+              <h4 class="font-medium text-gray-900">
+                Opleiding
+              </h4>
               <p class="text-gray-700">
                 Koninklijke Academie voor Beeldende Kunsten, Den Haag (1948
                 -1953)
@@ -100,12 +110,18 @@
             </div>
 
             <div>
-              <h4 class="font-medium text-gray-900">Medium</h4>
-              <p class="text-gray-700">Acryl, olieverf, gemengde technieken</p>
+              <h4 class="font-medium text-gray-900">
+                Medium
+              </h4>
+              <p class="text-gray-700">
+                Acryl, olieverf, gemengde technieken
+              </p>
             </div>
 
             <div>
-              <h4 class="font-medium text-gray-900">Stijl</h4>
+              <h4 class="font-medium text-gray-900">
+                Stijl
+              </h4>
               <p class="text-gray-700">
                 Hedendaags expressionisme, abstracte landschappen
               </p>
@@ -184,7 +200,10 @@
       </div>
 
       <div class="text-center mt-8">
-        <NuxtLink to="/schilderijen" class="btn btn-primary">
+        <NuxtLink
+          to="/schilderijen"
+          class="btn btn-primary"
+        >
           Bekijk alle schilderijen
         </NuxtLink>
       </div>
@@ -194,40 +213,41 @@
 
 <script setup>
 // Composable voor Cloudinary data
-const { getAllPaintings } = useCloudinary();
+const { getAllPaintings } = useCloudinary()
 
 // State
-const recentPaintings = ref([]);
+const recentPaintings = ref([])
 
 // Data ophalen
 async function fetchData() {
   try {
     // Alle schilderijen ophalen
-    const paintings = await getAllPaintings();
+    const paintings = await getAllPaintings()
 
     // Sorteer op datum (nieuwste eerst) en pak de eerste 3
     recentPaintings.value = paintings
       .sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0))
-      .slice(0, 3);
-  } catch (error) {
-    console.error("Fout bij het ophalen van recente schilderijen:", error);
+      .slice(0, 3)
+  }
+  catch (error) {
+    console.error('Fout bij het ophalen van recente schilderijen:', error)
   }
 }
 
 // SEO meta tags
 useHead({
-  title: "Over Tom van As | Kunstenaar",
+  title: 'Over Tom van As | Kunstenaar',
   meta: [
     {
-      name: "description",
+      name: 'description',
       content:
-        "Leer meer over kunstenaar Tom van As, zijn achtergrond, techniek en artistieke visie. Bekijk zijn portfolio en neem contact op voor aankoop of opdrachten.",
+        'Leer meer over kunstenaar Tom van As, zijn achtergrond, techniek en artistieke visie. Bekijk zijn portfolio en neem contact op voor aankoop of opdrachten.',
     },
   ],
-});
+})
 
 // Data ophalen bij page load
 onMounted(() => {
-  fetchData();
-});
+  fetchData()
+})
 </script>

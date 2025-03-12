@@ -7,10 +7,10 @@
         placeholder="Zoek schilderijen op titel, categorie of tag..."
         class="w-full px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
         @keyup.enter="search"
-      />
+      >
       <button
-        @click="search"
         class="bg-primary text-white px-6 py-3 rounded-r-lg hover:bg-primary-dark transition-colors"
+        @click="search"
       >
         <span class="sr-only">Zoeken</span>
         <svg
@@ -52,8 +52,13 @@
             />
           </div>
           <div>
-            <div class="font-medium">{{ suggestion.title }}</div>
-            <div v-if="suggestion.category" class="text-xs text-gray-500">
+            <div class="font-medium">
+              {{ suggestion.title }}
+            </div>
+            <div
+              v-if="suggestion.category"
+              class="text-xs text-gray-500"
+            >
               {{ suggestion.category }}
             </div>
           </div>
@@ -69,67 +74,67 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-});
+})
 
-const emit = defineEmits(["search", "select"]);
+const emit = defineEmits(['search', 'select'])
 
-const searchTerm = ref("");
-const showSearchSuggestions = ref(false);
+const searchTerm = ref('')
+const showSearchSuggestions = ref(false)
 
 // Zoeksuggesties genereren op basis van de zoekterm
 const suggestions = computed(() => {
-  if (!searchTerm.value || searchTerm.value.length < 2) return [];
+  if (!searchTerm.value || searchTerm.value.length < 2) return []
 
-  const term = searchTerm.value.toLowerCase();
+  const term = searchTerm.value.toLowerCase()
   return props.paintings
     .filter((painting) => {
       // Zoek in titel
-      if (painting.title.toLowerCase().includes(term)) return true;
+      if (painting.title.toLowerCase().includes(term)) return true
 
       // Zoek in categorie
       if (painting.category && painting.category.toLowerCase().includes(term))
-        return true;
+        return true
 
       // Zoek in tags
       if (
-        painting.tags &&
-        painting.tags.some((tag) => tag.toLowerCase().includes(term))
+        painting.tags
+        && painting.tags.some(tag => tag.toLowerCase().includes(term))
       )
-        return true;
+        return true
 
-      return false;
+      return false
     })
-    .slice(0, 5); // Limiteer tot 5 suggesties
-});
+    .slice(0, 5) // Limiteer tot 5 suggesties
+})
 
 // Volledige zoekopdracht uitvoeren
 function search() {
   if (searchTerm.value.trim()) {
-    emit("search", searchTerm.value);
-    showSearchSuggestions.value = false;
+    emit('search', searchTerm.value)
+    showSearchSuggestions.value = false
   }
 }
 
 // Suggestie selecteren
 function selectSuggestion(suggestion) {
-  emit("select", suggestion);
-  searchTerm.value = "";
-  showSearchSuggestions.value = false;
+  emit('select', suggestion)
+  searchTerm.value = ''
+  showSearchSuggestions.value = false
 }
 
 // Event listeners voor focus/blur
 onMounted(() => {
-  const input = document.querySelector("input");
+  const input = document.querySelector('input')
 
-  input.addEventListener("focus", () => {
-    showSearchSuggestions.value = true;
-  });
+  input.addEventListener('focus', () => {
+    showSearchSuggestions.value = true
+  })
 
   // Sluit suggesties wanneer er buiten wordt geklikt
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".relative")) {
-      showSearchSuggestions.value = false;
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.relative')) {
+      showSearchSuggestions.value = false
     }
-  });
-});
+  })
+})
 </script>

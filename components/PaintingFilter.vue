@@ -6,8 +6,8 @@
         <span>Zoeken</span>
         <button
           v-if="hasActiveFilters"
-          @click="resetFilters"
           class="text-sm text-primary hover:text-primary-dark transition-colors"
+          @click="resetFilters"
         >
           Wis filters
         </button>
@@ -19,7 +19,7 @@
           placeholder="Zoek op titel..."
           class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           @input="debounceUpdateFilters"
-        />
+        >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5 text-gray-400 absolute left-3 top-2.5"
@@ -37,13 +37,18 @@
       </div>
     </div>
 
-    <div class="mb-4" v-if="allCategories.length > 0">
+    <div
+      v-if="allCategories.length > 0"
+      class="mb-4"
+    >
       <div class="flex items-center justify-between mb-2">
-        <h3 class="text-lg font-medium">Categorieën</h3>
+        <h3 class="text-lg font-medium">
+          Categorieën
+        </h3>
         <button
           v-if="selectedCategories.length > 0"
-          @click="clearCategories"
           class="text-xs text-primary hover:text-primary-dark transition-colors"
+          @click="clearCategories"
         >
           Wis categorieën
         </button>
@@ -55,12 +60,12 @@
           class="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded transition-colors"
         >
           <input
+            v-model="selectedCategories"
             type="checkbox"
             :value="category"
-            v-model="selectedCategories"
             class="mr-2 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
             @change="updateFilters"
-          />
+          >
           <span class="text-gray-800">{{ category }}</span>
         </label>
       </div>
@@ -68,11 +73,13 @@
 
     <div v-if="allTags.length > 0">
       <div class="flex items-center justify-between mb-2">
-        <h3 class="text-lg font-medium">Tags</h3>
+        <h3 class="text-lg font-medium">
+          Tags
+        </h3>
         <button
           v-if="selectedTags.length > 0"
-          @click="clearTags"
           class="text-xs text-primary hover:text-primary-dark transition-colors"
+          @click="clearTags"
         >
           Wis tags
         </button>
@@ -81,13 +88,13 @@
         <button
           v-for="tag in allTags"
           :key="tag"
-          @click="toggleTag(tag)"
           :class="[
             'mr-2 mb-2 px-3 py-1 text-sm rounded-full transition-colors',
             selectedTags.includes(tag)
               ? 'bg-primary text-white'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
           ]"
+          @click="toggleTag(tag)"
         >
           {{ tag }}
         </button>
@@ -95,8 +102,14 @@
     </div>
 
     <transition name="fade">
-      <div v-if="hasActiveFilters" class="mt-6 pt-4 border-t border-gray-200">
-        <button @click="resetFilters" class="btn btn-secondary w-full">
+      <div
+        v-if="hasActiveFilters"
+        class="mt-6 pt-4 border-t border-gray-200"
+      >
+        <button
+          class="btn btn-secondary w-full"
+          @click="resetFilters"
+        >
           Wis alle filters
         </button>
       </div>
@@ -117,75 +130,76 @@ const props = defineProps({
   initialFilters: {
     type: Object,
     default: () => ({
-      search: "",
+      search: '',
       categories: [],
       tags: [],
     }),
   },
-});
+})
 
-const emit = defineEmits(["update:filters"]);
+const emit = defineEmits(['update:filters'])
 
 // Reactieve staat voor filtering
-const searchQuery = ref(props.initialFilters.search || "");
-const selectedCategories = ref(props.initialFilters.categories || []);
-const selectedTags = ref(props.initialFilters.tags || []);
+const searchQuery = ref(props.initialFilters.search || '')
+const selectedCategories = ref(props.initialFilters.categories || [])
+const selectedTags = ref(props.initialFilters.tags || [])
 
 // Computed properties voor UI
-const allCategories = computed(() => props.categories);
-const allTags = computed(() => props.tags);
+const allCategories = computed(() => props.categories)
+const allTags = computed(() => props.tags)
 const hasActiveFilters = computed(
   () =>
-    searchQuery.value.trim() !== "" ||
-    selectedCategories.value.length > 0 ||
-    selectedTags.value.length > 0,
-);
+    searchQuery.value.trim() !== ''
+    || selectedCategories.value.length > 0
+    || selectedTags.value.length > 0,
+)
 
 // Debounce voor zoekfunctie
-let searchDebounceTimeout;
+let searchDebounceTimeout
 function debounceUpdateFilters() {
-  clearTimeout(searchDebounceTimeout);
+  clearTimeout(searchDebounceTimeout)
   searchDebounceTimeout = setTimeout(() => {
-    updateFilters();
-  }, 300);
+    updateFilters()
+  }, 300)
 }
 
 // Tags toevoegen of verwijderen
 function toggleTag(tag) {
   if (selectedTags.value.includes(tag)) {
-    selectedTags.value = selectedTags.value.filter((t) => t !== tag);
-  } else {
-    selectedTags.value.push(tag);
+    selectedTags.value = selectedTags.value.filter(t => t !== tag)
   }
-  updateFilters();
+  else {
+    selectedTags.value.push(tag)
+  }
+  updateFilters()
 }
 
 // Filters updaten en emit versturen naar ouder component
 function updateFilters() {
-  emit("update:filters", {
+  emit('update:filters', {
     search: searchQuery.value,
     categories: selectedCategories.value,
     tags: selectedTags.value,
-  });
+  })
 }
 
 // Individuele filter resets
 function clearCategories() {
-  selectedCategories.value = [];
-  updateFilters();
+  selectedCategories.value = []
+  updateFilters()
 }
 
 function clearTags() {
-  selectedTags.value = [];
-  updateFilters();
+  selectedTags.value = []
+  updateFilters()
 }
 
 // Alle filters resetten
 function resetFilters() {
-  searchQuery.value = "";
-  selectedCategories.value = [];
-  selectedTags.value = [];
-  updateFilters();
+  searchQuery.value = ''
+  selectedCategories.value = []
+  selectedTags.value = []
+  updateFilters()
 }
 
 // Bij verandering van externe props de waardes updaten
@@ -193,13 +207,13 @@ watch(
   () => props.initialFilters,
   (newFilters) => {
     if (newFilters) {
-      searchQuery.value = newFilters.search || "";
-      selectedCategories.value = newFilters.categories || [];
-      selectedTags.value = newFilters.tags || [];
+      searchQuery.value = newFilters.search || ''
+      selectedCategories.value = newFilters.categories || []
+      selectedTags.value = newFilters.tags || []
     }
   },
   { deep: true },
-);
+)
 </script>
 
 <style scoped>

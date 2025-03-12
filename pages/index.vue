@@ -28,7 +28,7 @@
         </div>
         <div
           class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"
-        ></div>
+        />
         <div
           class="container-custom h-full flex flex-col justify-end relative z-10 pb-12"
         >
@@ -60,8 +60,14 @@
           Uitgelichte Werken
         </h2>
 
-        <div v-if="isLoading" class="py-8">
-          <LoadingSpinner showMessage message="Uitgelichte werken laden..." />
+        <div
+          v-if="isLoading"
+          class="py-8"
+        >
+          <LoadingSpinner
+            show-message
+            message="Uitgelichte werken laden..."
+          />
         </div>
 
         <div
@@ -75,12 +81,18 @@
           />
         </div>
 
-        <div v-else class="text-center py-8 text-gray-600">
+        <div
+          v-else
+          class="text-center py-8 text-gray-600"
+        >
           <p>Geen uitgelichte werken beschikbaar.</p>
         </div>
 
         <div class="text-center mt-12">
-          <NuxtLink to="/schilderijen" class="btn btn-secondary px-6 py-3">
+          <NuxtLink
+            to="/schilderijen"
+            class="btn btn-secondary px-6 py-3"
+          >
             Bekijk alle schilderijen
           </NuxtLink>
         </div>
@@ -104,7 +116,10 @@
               voortborduren op de traditie van de Haagse School, met een eigen
               twist geïnspireerd door het vroeg 20e-eeuwse kubisme.
             </p>
-            <NuxtLink to="/over-tom" class="btn btn-primary">
+            <NuxtLink
+              to="/over-tom"
+              class="btn btn-primary"
+            >
               Meer over Tom
             </NuxtLink>
           </div>
@@ -115,7 +130,7 @@
               alt="Portretfoto van Tom van As"
               width="600"
               height="400"
-            />
+            >
           </div>
         </div>
       </div>
@@ -128,8 +143,14 @@
           Collecties
         </h2>
 
-        <div v-if="isLoading" class="py-8">
-          <LoadingSpinner showMessage message="Collecties laden..." />
+        <div
+          v-if="isLoading"
+          class="py-8"
+        >
+          <LoadingSpinner
+            show-message
+            message="Collecties laden..."
+          />
         </div>
 
         <div
@@ -145,7 +166,7 @@
             <div class="h-48 relative overflow-hidden">
               <div
                 class="absolute inset-0 bg-gray-800/40 group-hover:bg-gray-800/20 transition-colors z-10"
-              ></div>
+              />
               <NuxtImg
                 v-if="category.image"
                 provider="cloudinary"
@@ -175,7 +196,10 @@
           </NuxtLink>
         </div>
 
-        <div v-else class="text-center py-8 text-gray-600">
+        <div
+          v-else
+          class="text-center py-8 text-gray-600"
+        >
           <p>Geen collecties beschikbaar.</p>
         </div>
       </div>
@@ -196,10 +220,16 @@
             <div
               class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center"
             >
-              <a href="mailto:info@tomvanas-art.nl" class="btn btn-primary">
+              <a
+                href="mailto:info@tomvanas-art.nl"
+                class="btn btn-primary"
+              >
                 E-mail mij
               </a>
-              <a href="tel:+31612345678" class="btn btn-secondary"> Bel mij </a>
+              <a
+                href="tel:+31612345678"
+                class="btn btn-secondary"
+              > Bel mij </a>
             </div>
           </div>
         </div>
@@ -210,81 +240,83 @@
 
 <script setup>
 // Composable voor Cloudinary data
-const { getAllPaintings } = useCloudinary();
+const { getAllPaintings } = useCloudinary()
 
 // State voor homepage data
-const paintings = ref([]);
-const featuredPainting = ref(null);
-const featuredPaintings = ref([]);
-const categoryList = ref([]);
-const isLoading = ref(true);
+const paintings = ref([])
+const featuredPainting = ref(null)
+const featuredPaintings = ref([])
+const categoryList = ref([])
+const isLoading = ref(true)
 
 // Data ophalen
 async function fetchData() {
-  isLoading.value = true;
+  isLoading.value = true
 
-  console.log("hia");
+  console.log('hia')
 
   try {
     // Alle schilderijen ophalen
-    paintings.value = await getAllPaintings();
+    paintings.value = await getAllPaintings()
 
-    console.log("paintings.value.length", paintings.value.length);
+    console.log('paintings.value.length', paintings.value.length)
 
     if (paintings.value.length > 0) {
       // Willekeurig uitgelicht schilderij kiezen
-      const randomIndex = Math.floor(Math.random() * paintings.value.length);
-      featuredPainting.value = paintings.value[randomIndex];
+      const randomIndex = Math.floor(Math.random() * paintings.value.length)
+      featuredPainting.value = paintings.value[randomIndex]
 
       // 3-6 uitgelichte schilderijen kiezen (zonder duplicaten)
-      const shuffled = [...paintings.value].sort(() => 0.5 - Math.random());
-      featuredPaintings.value = shuffled.slice(0, 6);
+      const shuffled = [...paintings.value].sort(() => 0.5 - Math.random())
+      featuredPaintings.value = shuffled.slice(0, 6)
 
       // Categorieën verwerken en aantal schilderijen per categorie bepalen
-      const categoryCounts = {};
-      const categoryImages = {};
+      const categoryCounts = {}
+      const categoryImages = {}
 
       paintings.value.forEach((painting) => {
-        const category = painting.category;
+        const category = painting.category
         if (category) {
           if (!categoryCounts[category]) {
-            categoryCounts[category] = 0;
-            categoryImages[category] = painting.id; // Eerste schilderij als voorbeeld afbeelding
+            categoryCounts[category] = 0
+            categoryImages[category] = painting.id // Eerste schilderij als voorbeeld afbeelding
           }
-          categoryCounts[category]++;
+          categoryCounts[category]++
         }
-      });
+      })
 
       // Categorieën voorbereiden voor weergave
       categoryList.value = Object.keys(categoryCounts)
-        .filter((name) => name) // Filter lege categorienamen
-        .map((name) => ({
+        .filter(name => name) // Filter lege categorienamen
+        .map(name => ({
           name,
           count: categoryCounts[name],
           image: categoryImages[name],
-        }));
+        }))
     }
-  } catch (error) {
-    console.error("Fout bij het ophalen van data:", error);
-  } finally {
-    isLoading.value = false;
+  }
+  catch (error) {
+    console.error('Fout bij het ophalen van data:', error)
+  }
+  finally {
+    isLoading.value = false
   }
 }
 
 // SEO meta tags
 useHead({
-  title: "Tom van As - Kunstgalerij",
+  title: 'Tom van As - Kunstgalerij',
   meta: [
     {
-      name: "description",
+      name: 'description',
       content:
-        "Ontdek de unieke schilderijen van kunstenaar Tom van As. Bekijk zijn collectie en vind uw favoriete kunstwerk.",
+        'Ontdek de unieke schilderijen van kunstenaar Tom van As. Bekijk zijn collectie en vind uw favoriete kunstwerk.',
     },
   ],
-});
+})
 
 // Data ophalen bij page load
 onMounted(() => {
-  fetchData();
-});
+  fetchData()
+})
 </script>

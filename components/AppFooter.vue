@@ -3,21 +3,27 @@
     <div class="container-custom py-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <h3 class="text-lg font-semibold mb-4">Tom van As</h3>
+          <h3 class="text-lg font-semibold mb-4">
+            Tom van As
+          </h3>
           <p class="text-gray-600">
             Kunstenaar gespecialiseerd in schilderijen die emotie en verhalen
             tot leven brengen.
           </p>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4">Contact</h3>
+          <h3 class="text-lg font-semibold mb-4">
+            Contact
+          </h3>
           <p class="text-gray-600">
-            Email: info@tomvanas-art.nl<br />
+            Email: info@tomvanas-art.nl<br>
             Telefoonnummer: +31 6 12345678
           </p>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4">Volg mij</h3>
+          <h3 class="text-lg font-semibold mb-4">
+            Volg mij
+          </h3>
           <div class="flex space-x-4">
             <a
               href="#"
