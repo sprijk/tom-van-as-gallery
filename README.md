@@ -112,6 +112,5 @@ Dit project is bedoeld voor Tom van As en wordt niet publiek gedeeld.
 
 - [x] Geen uitsnedes
 - [x] Geen squeeze wanneer vergroten van foto
-- [ ] Grootte images verbeteren
 - [ ] Call to action knop -> Contactformulier
 - [ ] Published aan / uit kunnen zetten in admin
