@@ -189,13 +189,9 @@ const isLoading = ref(true);
 async function fetchData() {
   isLoading.value = true;
 
-  console.log('hia');
-
   try {
     // Alle schilderijen ophalen
     paintings.value = await getAllPaintings();
-
-    console.log('paintings.value.length', paintings.value.length);
 
     if (paintings.value.length > 0) {
       // Willekeurig uitgelicht schilderij kiezen
