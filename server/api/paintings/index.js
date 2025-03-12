@@ -38,14 +38,11 @@ export default defineEventHandler(async () => {
 
           // Titel ophalen uit label_number of caption als fallback
           const labelNumber = resource.context?.custom?.label_number;
-          const caption = resource.context?.custom?.caption;
 
           // Bepaal de titel - gebruik label_number als eerste keuze
           let title;
           if (labelNumber) {
             title = `Nummer ${labelNumber}`;
-          } else if (caption) {
-            title = caption;
           } else {
             title = 'Ongetiteld';
           }
@@ -65,6 +62,8 @@ export default defineEventHandler(async () => {
             format: resource.format,
             created: resource.created_at,
             folder: resource.folder,
+            labelNumber: labelNumber,
+            verified: resource.context?.custom?.verified === 'true',
           };
         });
 

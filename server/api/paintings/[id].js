@@ -41,14 +41,11 @@ export default defineEventHandler(async (event) => {
 
     // Titel ophalen uit label_number of caption als fallback
     const labelNumber = result.context?.custom?.label_number;
-    const caption = result.context?.custom?.caption;
 
     // Bepaal de titel - gebruik label_number als eerste keuze
     let title;
     if (labelNumber) {
       title = `Nummer ${labelNumber}`;
-    } else if (caption) {
-      title = caption;
     } else {
       title = 'Ongetiteld';
     }
@@ -79,6 +76,8 @@ export default defineEventHandler(async (event) => {
       format: result.format,
       created: result.created_at,
       folder: result.folder,
+      labelNumber: labelNumber,
+      verified: result.context?.custom?.verified === 'true',
     };
   } catch (error) {
     console.error(`Fout bij het ophalen van schilderij met ID ${id}:`, error);

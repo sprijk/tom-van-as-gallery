@@ -22,10 +22,6 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // In a real implementation, you would add a tag to Cloudinary's tag database
-    // or store it in your own database
-    // This is a simplified example that assumes you're maintaining tags in Cloudinary
-
     // Get runtime config to set up Cloudinary
     const config = useRuntimeConfig();
 
@@ -36,14 +32,8 @@ export default defineEventHandler(async (event) => {
       api_secret: config.cloudinaryApiSecret,
     });
 
-    // update the label_number in resource.context.custom.label_number
-    const result = await cloudinary.api.update(imageId, {
-      context: {
-        custom: {
-          label_number: labelNumber,
-        },
-      },
-    });
+    await cloudinary.uploader.add_context('verified=true', [imageId]);
+    const result = await cloudinary.uploader.add_context(`label_number=${labelNumber}`, [imageId]);
 
     // get the result status and return the result
     return {
