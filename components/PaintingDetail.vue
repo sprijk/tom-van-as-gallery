@@ -11,6 +11,7 @@
             provider="cloudinary"
             :src="painting.id"
             format="webp"
+            width="600"
             fit="contain"
             class="w-full h-full object-contain rounded-lg bg-gray-100"
             :alt="painting.title"
