@@ -22,14 +22,14 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // Server-side variables
-    cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'default',
+    cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'dgvqkqvv1',
     cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || '',
     cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || '',
     adminPassword: process.env.ADMIN_PASSWORD || 'admin123', // Default password for development
 
     // Client-side variables
     public: {
-      cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'default',
+      cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'dgvqkqvv1',
     },
   },
 
@@ -45,9 +45,7 @@ export default defineNuxtConfig({
 
   image: {
     cloudinary: {
-      baseURL: `https://res.cloudinary.com/${
-        process.env.CLOUDINARY_CLOUD_NAME || 'default'
-      }/image/upload/`,
+      baseURL: `https://res.cloudinary.com/dgvqkqvv1/image/upload/`,
     },
   },
 });
