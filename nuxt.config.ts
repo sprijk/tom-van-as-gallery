@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'default',
     cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || '',
     cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || '',
+    adminPassword: process.env.ADMIN_PASSWORD || 'admin123', // Default password for development
 
     // Client-side variables
     public: {
@@ -36,7 +37,7 @@ export default defineNuxtConfig({
 
   eslint: {
     config: {
-      stylistic: true, // <---
+      stylistic: true,
       indent: 'tab',
       semi: true,
     },
