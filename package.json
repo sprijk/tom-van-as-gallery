@@ -3,17 +3,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev:host": "nuxt dev --port 8000",
     "build": "nuxt build",
+    "dev:host": "nuxt dev --port 8000",
     "dev": "nuxt dev",
+    "extract-labels": "node ./scripts/extractLabelNumbers.js",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prettier": "prettier . --check",
+    "lint": "eslint .",
+    "postinstall": "nuxt prepare",
     "prettier:fix": "prettier . --write",
-    "extract-labels": "node ./scripts/extractLabelNumbers.js"
+    "prettier": "prettier . --check",
+    "preview": "nuxt preview",
+    "start": "ode .output/server/index.mjs"
   },
   "dependencies": {
     "@nuxt/image": "^1.9.0",
