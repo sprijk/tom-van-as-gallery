@@ -56,7 +56,7 @@
             provider="cloudinary"
             :src="painting.id"
             format="webp"
-            quality="auto:best"
+            width="600"
             fit="inside"
             class="w-full h-auto object-contain mx-auto"
             :alt="painting.title"
