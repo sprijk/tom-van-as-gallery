@@ -1,5 +1,5 @@
 # Build stage
-FROM node:20-alpine as builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -10,13 +10,13 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:20-alpine as runner
+FROM node:20-alpine AS runner
 
 WORKDIR /app
 
 COPY --from=builder /app/package.json .
 COPY --from=builder /app/package-lock.json .
-COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/.nuxt ./.nuxt
 COPY --from=builder /app/public ./public
 
 RUN npm ci --production
