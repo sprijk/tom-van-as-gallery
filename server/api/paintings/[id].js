@@ -1,4 +1,4 @@
-// server/api/paintings/[id].js - Update the title logic
+// server/api/paintings/[id].js - Modified for original aspect ratio
 import { v2 as cloudinary } from 'cloudinary';
 
 export default defineEventHandler(async (event) => {
@@ -53,10 +53,25 @@ export default defineEventHandler(async (event) => {
       title = 'Ongetiteld';
     }
 
+    // Genereer een optimale image URL zonder cropping die de aspect ratio behoudt
+    const originalUrl = cloudinary.url(result.public_id, {
+      secure: true,
+      transformation: [
+        {
+          // Geen crop parameter specificeert behoudt de aspect ratio
+          width: 'auto',
+          dpr: 'auto',
+          quality: 'auto',
+          fetch_format: 'auto',
+        },
+      ],
+    });
+
     return {
       id: result.public_id,
       title: title,
       imageUrl: result.secure_url,
+      originalImageUrl: originalUrl,
       category: category,
       tags: tags,
       width: result.width,

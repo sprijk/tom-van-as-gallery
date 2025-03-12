@@ -5,12 +5,20 @@ export default defineEventHandler(async (event) => {
   try {
     // Get request body
     const body = await readBody(event);
-    const { tag } = body;
+    // console.log('Body:', body);
+    const { labelNumber, imageId } = body;
 
-    if (!tag) {
+    if (!imageId) {
       return createError({
         statusCode: 400,
-        statusMessage: 'tag is required',
+        statusMessage: 'image ID is required',
+      });
+    }
+
+    if (!labelNumber) {
+      return createError({
+        statusCode: 400,
+        statusMessage: 'label number is required',
       });
     }
 
@@ -28,12 +36,22 @@ export default defineEventHandler(async (event) => {
       api_secret: config.cloudinaryApiSecret,
     });
 
-    // For simplicity, we're just returning success here
-    // In a real implementation, you would handle storage of the new tag
+    // update the label_number in resource.context.custom.label_number
+    const result = await cloudinary.api.update(imageId, {
+      context: {
+        custom: {
+          label_number: labelNumber,
+        },
+      },
+    });
 
+    // get the result status and return the result
     return {
       success: true,
-      message: `Tag ${tag} added successfully`,
+      statusCode: result.status,
+      statusMessage: result.message,
+      message: `Label number ${labelNumber} added successfully`,
+      data: result,
     };
   } catch (error) {
     console.error('Error adding tag:', error);

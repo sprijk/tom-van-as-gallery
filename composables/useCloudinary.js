@@ -1,4 +1,4 @@
-// composables/useCloudinary.js
+// composables/useCloudinary.js - Modified for better image handling
 export const useCloudinary = () => {
   const config = useRuntimeConfig();
   const cloudName = config.public.cloudinaryCloudName;
@@ -177,22 +177,33 @@ export const useCloudinary = () => {
     }
   };
 
-  // Helper functie om Cloudinary URL te genereren
+  // Helper functie om Cloudinary URL te genereren met originele aspect ratio
   const getImageUrl = (publicId, options = {}) => {
     try {
       if (!publicId) return '';
 
-      const { width, height, crop = 'fill', format = 'webp' } = options;
+      const { width, height, crop, format = 'webp', quality = 'auto' } = options;
 
       let url = `https://res.cloudinary.com/${cloudName}/image/upload/`;
 
       // Transformaties toevoegen
       const transformations = [];
 
+      // Indien geen crop gespecificeerd, gebruik 'limit' om de originele aspect ratio te behouden
+      // zonder cropping, maar met een limiet op de grootte
       if (width) transformations.push(`w_${width}`);
       if (height) transformations.push(`h_${height}`);
-      if (crop) transformations.push(`c_${crop}`);
+
+      // Gebruik 'limit' als standaard crop methode om aspect ratio te behouden
+      // tenzij een ander crop type is opgegeven
+      if (crop) {
+        transformations.push(`c_${crop}`);
+      } else if (width || height) {
+        transformations.push('c_limit');
+      }
+
       if (format) transformations.push(`f_${format}`);
+      if (quality) transformations.push(`q_${quality}`);
 
       if (transformations.length > 0) {
         url += transformations.join(',') + '/';

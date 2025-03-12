@@ -1,4 +1,4 @@
-// components/admin/BatchLabelVerification.vue
+<!-- components/admin/BatchLabelVerification.vue -->
 <template>
   <div class="bg-white rounded-lg shadow-md p-6">
     <h2 class="text-xl font-medium mb-4">Batch Label Verificatie</h2>
@@ -60,15 +60,15 @@
           </label>
         </div>
 
-        <div class="relative">
+        <!-- Modified image container for original aspect ratio -->
+        <div class="relative bg-gray-100">
           <NuxtImg
             provider="cloudinary"
             :src="painting.id"
-            width="200"
-            height="200"
             format="webp"
-            fit="cover"
-            class="w-full h-40 object-contain"
+            quality="auto:best"
+            fit="inside"
+            class="w-full h-auto object-contain mx-auto"
             :alt="painting.title"
           />
         </div>

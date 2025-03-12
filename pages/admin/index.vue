@@ -1,7 +1,7 @@
-// pages/admin/index.vue
+<!-- pages/admin/index.vue -->
 <template>
   <div>
-    <!-- Login Form -->
+    <!-- Login Form (unchanged) -->
     <div v-if="!isAuthenticated" class="max-w-md mx-auto my-12 p-6 bg-white rounded-lg shadow-md">
       <h1 class="text-2xl font-serif font-bold mb-6">Admin Login</h1>
 
@@ -36,7 +36,7 @@
         <button class="btn btn-secondary" @click="logout">Uitloggen</button>
       </div>
 
-      <!-- Admin Tabs -->
+      <!-- Admin Tabs (unchanged) -->
       <div class="mb-6 border-b border-gray-200">
         <nav class="flex space-x-8">
           <button
@@ -85,12 +85,12 @@
           </div>
         </div>
 
-        <!-- Loading indicator -->
+        <!-- Loading indicator (unchanged) -->
         <div v-if="isLoading" class="text-center py-12">
           <LoadingSpinner show-message message="Schilderijen laden..." />
         </div>
 
-        <!-- Paintings Grid -->
+        <!-- Paintings Grid - Modified for original aspect ratio -->
         <div
           v-else-if="filteredPaintings.length > 0"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -115,15 +115,15 @@
               </span>
             </div>
 
-            <div class="relative">
+            <!-- Modified image container for original aspect ratio -->
+            <div class="relative bg-gray-100">
               <NuxtImg
                 provider="cloudinary"
                 :src="painting.id"
-                width="400"
-                height="300"
                 format="webp"
-                fit="cover"
-                class="w-full h-64 object-contain"
+                quality="auto:best"
+                fit="inside"
+                class="w-full h-auto object-contain mx-auto"
                 :alt="painting.title"
               />
             </div>
@@ -178,7 +178,7 @@
           </div>
         </div>
 
-        <!-- Empty state -->
+        <!-- Empty state (unchanged) -->
         <div v-else class="text-center py-12 bg-gray-50 rounded-lg">
           <p class="text-gray-600 mb-4">Geen schilderijen gevonden met de huidige filter.</p>
           <button class="btn btn-secondary" @click="labelFilter = 'all'">
@@ -187,7 +187,7 @@
         </div>
       </div>
 
-      <!-- Tag Management Tab -->
+      <!-- Tag Management Tab - Also modify image display here -->
       <div v-else-if="activeTab === 'tags'">
         <div class="mb-6">
           <h2 class="text-xl font-medium mb-4">Tags Beheren</h2>
@@ -196,7 +196,7 @@
             voor alle schilderijen.
           </p>
 
-          <!-- Global Tags Management -->
+          <!-- Global Tags Management (unchanged) -->
           <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
             <h3 class="text-lg font-medium mb-4">Alle Tags</h3>
 
@@ -243,7 +243,7 @@
             </div>
           </div>
 
-          <!-- Painting Tag Management -->
+          <!-- Painting Tag Management (search bar unchanged) -->
           <div class="mb-4">
             <label for="painting-search" class="block text-gray-700 mb-2">Zoek schilderij</label>
             <div class="relative">
@@ -271,26 +271,27 @@
             </div>
           </div>
 
+          <!-- Modified painting list for Tag Management -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div
               v-for="painting in filteredPaintingsForTags"
               :key="painting.id"
               class="bg-white rounded-lg shadow-md overflow-hidden"
             >
-              <div class="flex">
-                <div class="w-1/3">
+              <div class="flex flex-col md:flex-row">
+                <!-- Modified image container for original aspect ratio -->
+                <div class="md:w-1/3 bg-gray-100">
                   <NuxtImg
                     provider="cloudinary"
                     :src="painting.id"
-                    width="150"
-                    height="150"
                     format="webp"
-                    fit="cover"
-                    class="w-full h-full object-cover"
+                    quality="auto:best"
+                    fit="inside"
+                    class="w-full h-auto object-contain mx-auto"
                     :alt="painting.title"
                   />
                 </div>
-                <div class="w-2/3 p-4">
+                <div class="md:w-2/3 p-4">
                   <h3 class="font-medium mb-2 truncate">{{ painting.title }}</h3>
 
                   <div class="mb-3">
