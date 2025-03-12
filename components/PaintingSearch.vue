@@ -4,7 +4,7 @@
       <input
         v-model="searchTerm"
         type="text"
-        placeholder="Zoek schilderijen op titel, categorie of tag..."
+        placeholder="Zoek schilderijen op nummer, categorie of tag..."
         class="w-full px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
         @keyup.enter="search"
       />

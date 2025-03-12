@@ -1,4 +1,4 @@
-// server/api/paintings/[id].js
+// server/api/paintings/[id].js - Update the title logic
 import { v2 as cloudinary } from 'cloudinary';
 
 export default defineEventHandler(async (event) => {
@@ -39,8 +39,19 @@ export default defineEventHandler(async (event) => {
     // Tags verwerken - alle tags zijn reguliere tags
     const tags = result.tags || [];
 
-    // Titel ophalen uit caption
-    const title = result.context?.custom?.caption || 'Ongetiteld';
+    // Titel ophalen uit label_number of caption als fallback
+    const labelNumber = result.context?.custom?.label_number;
+    const caption = result.context?.custom?.caption;
+
+    // Bepaal de titel - gebruik label_number als eerste keuze
+    let title;
+    if (labelNumber) {
+      title = `Nummer ${labelNumber}`;
+    } else if (caption) {
+      title = caption;
+    } else {
+      title = 'Ongetiteld';
+    }
 
     return {
       id: result.public_id,

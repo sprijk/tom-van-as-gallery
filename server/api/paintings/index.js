@@ -1,4 +1,4 @@
-// server/api/paintings/index.js
+// server/api/paintings/index.js - Update the title logic
 import { v2 as cloudinary } from 'cloudinary';
 
 export default defineEventHandler(async () => {
@@ -32,36 +32,41 @@ export default defineEventHandler(async () => {
         });
 
         // Verwerk de schilderijen
-        const paintings = result.resources
-          // TODO: filteren op caption
-          // .filter((resource) => {
-          //   // Alleen resources met titel in caption gebruiken
-          //   return resource.context?.custom?.caption;
-          // })
-          .map((resource) => {
-            // Tags verwerken - alle tags zijn reguliere tags, geen title tags meer
-            const tags = resource.tags || [];
+        const paintings = result.resources.map((resource) => {
+          // Tags verwerken - alle tags zijn reguliere tags, geen title tags meer
+          const tags = resource.tags || [];
 
-            // Titel ophalen uit caption
-            const title = resource.context?.custom?.caption || 'Ongetiteld';
+          // Titel ophalen uit label_number of caption als fallback
+          const labelNumber = resource.context?.custom?.label_number;
+          const caption = resource.context?.custom?.caption;
 
-            // Haal categorienaam uit folder pad
-            const pathParts = folderPath.split('/');
-            const category = pathParts[pathParts.length - 1];
+          // Bepaal de titel - gebruik label_number als eerste keuze
+          let title;
+          if (labelNumber) {
+            title = `Nummer ${labelNumber}`;
+          } else if (caption) {
+            title = caption;
+          } else {
+            title = 'Ongetiteld';
+          }
 
-            return {
-              id: resource.public_id,
-              title,
-              imageUrl: resource.secure_url,
-              category,
-              tags,
-              width: resource.width,
-              height: resource.height,
-              format: resource.format,
-              created: resource.created_at,
-              folder: resource.folder,
-            };
-          });
+          // Haal categorienaam uit folder pad
+          const pathParts = folderPath.split('/');
+          const category = pathParts[pathParts.length - 1];
+
+          return {
+            id: resource.public_id,
+            title,
+            imageUrl: resource.secure_url,
+            category,
+            tags,
+            width: resource.width,
+            height: resource.height,
+            format: resource.format,
+            created: resource.created_at,
+            folder: resource.folder,
+          };
+        });
 
         allPaintings = [...allPaintings, ...paintings];
       }
@@ -77,38 +82,44 @@ export default defineEventHandler(async () => {
       });
 
       // Verwerk de schilderijen
-      allPaintings = result.resources
-        .filter((resource) => {
-          // Alleen resources met titel in caption gebruiken
-          return resource.context?.custom?.caption;
-        })
-        .map((resource) => {
-          // Tags verwerken - alle tags zijn reguliere tags
-          const tags = resource.tags || [];
+      allPaintings = result.resources.map((resource) => {
+        // Tags verwerken - alle tags zijn reguliere tags
+        const tags = resource.tags || [];
 
-          // Titel ophalen uit caption
-          const title = resource.context?.custom?.caption || 'Ongetiteld';
+        // Titel ophalen uit label_number of caption als fallback
+        const labelNumber = resource.context?.custom?.label_number;
+        const caption = resource.context?.custom?.caption;
 
-          // Categorie bepalen uit folder pad als het er is
-          let category = '';
-          if (resource.folder) {
-            const pathParts = resource.folder.split('/');
-            category = pathParts[pathParts.length - 1];
-          }
+        // Bepaal de titel - gebruik label_number als eerste keuze
+        let title;
+        if (labelNumber) {
+          title = `Nummer ${labelNumber}`;
+        } else if (caption) {
+          title = caption;
+        } else {
+          title = 'Ongetiteld';
+        }
 
-          return {
-            id: resource.public_id,
-            title,
-            imageUrl: resource.secure_url,
-            category,
-            tags,
-            width: resource.width,
-            height: resource.height,
-            format: resource.format,
-            created: resource.created_at,
-            folder: resource.folder,
-          };
-        });
+        // Categorie bepalen uit folder pad als het er is
+        let category = '';
+        if (resource.folder) {
+          const pathParts = resource.folder.split('/');
+          category = pathParts[pathParts.length - 1];
+        }
+
+        return {
+          id: resource.public_id,
+          title,
+          imageUrl: resource.secure_url,
+          category,
+          tags,
+          width: resource.width,
+          height: resource.height,
+          format: resource.format,
+          created: resource.created_at,
+          folder: resource.folder,
+        };
+      });
     }
 
     console.log('Schilderijen opgehaald:', allPaintings.length);
