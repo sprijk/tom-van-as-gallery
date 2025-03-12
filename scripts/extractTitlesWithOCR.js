@@ -1,8 +1,6 @@
 // Check if OCR add-on is available via a test request
 // scripts/extractTitlesWithOCR.js
 import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { v2 as cloudinary } from 'cloudinary';
 import { config } from 'dotenv';
 

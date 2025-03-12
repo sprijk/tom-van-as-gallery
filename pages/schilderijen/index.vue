@@ -236,7 +236,8 @@ async function fetchData() {
     allTags.value = tags;
 
     // URL parameters verwerken om filters toe te passen
-    const { category, tag, search, sort } = route.query;
+    // const { category, tag, search, sort } = route.query;
+    const { search, sort } = route.query;
     const categoryParam = route.query.category;
     const categoriesParam = route.query.categories;
     const tagParam = route.query.tag;

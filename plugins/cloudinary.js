@@ -6,7 +6,7 @@ if (import.meta.server) {
   cloudinary = v2;
 }
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
 
   // Cloudinary configureren voor server-side gebruik

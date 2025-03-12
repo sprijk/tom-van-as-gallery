@@ -1,5 +1,5 @@
 // plugins/error-handler.js
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   // Globale variabele voor API status
   const apiStatus = useState('apiStatus', () => ({
     paintingsLoaded: false,

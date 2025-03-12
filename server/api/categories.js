@@ -1,7 +1,7 @@
 // server/api/categories.js
 import { v2 as cloudinary } from 'cloudinary';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   const config = useRuntimeConfig();
 
   // Cloudinary configureren
