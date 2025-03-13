@@ -70,32 +70,103 @@
       </div>
     </section>
 
-    <!-- Over de Kunstenaar -->
-    <section class="py-16">
+    <!-- How It Works / Favorites explanation section -->
+    <section class="py-16 bg-white">
       <div class="container-custom">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 class="text-3xl font-serif font-semibold mb-6">Over Tom van As</h2>
-            <p class="text-gray-700 mb-4">
-              Tom studeerde aan de Koninklijke Academie van Beeldende Kunsten in Den Haag. Zijn werk
-              omvat zowel atelierwerk als landschappen.
+        <h2 class="text-3xl font-serif font-semibold mb-8 text-center">Hoe het werkt</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Step 1: Browse -->
+          <div class="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+            <div
+              class="w-16 h-16 mx-auto mb-4 bg-secondary-light rounded-full flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-xl font-medium mb-2">Bekijk schilderijen</h3>
+            <p class="text-gray-600">
+              Blader door de collectie van Tom van As en ontdek schilderijen die u aanspreken.
             </p>
-            <p class="text-gray-700 mb-6">
-              Met olieverf, aquarel en acryl creëerde hij werken die voortborduren op de traditie
-              van de Haagse School, met een eigen twist geïnspireerd door het vroeg 20e-eeuwse
-              kubisme.
+          </div>
+
+          <!-- Step 2: Add to favorites -->
+          <div class="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+            <div
+              class="w-16 h-16 mx-auto mb-4 bg-secondary-light rounded-full flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-xl font-medium mb-2">Markeer als favoriet</h3>
+            <p class="text-gray-600">
+              Klik op het hartje bij schilderijen die u interessant vindt om ze toe te voegen aan uw
+              favorieten.
             </p>
-            <NuxtLink to="/over-tom" class="btn btn-primary"> Meer over Tom </NuxtLink>
           </div>
-          <div class="rounded-lg overflow-hidden shadow-md">
-            <img
-              src="/images/tom-van-as.jpg"
-              class="w-full h-full object-cover"
-              alt="Portretfoto van Tom van As"
-              width="600"
-              height="400"
-            />
+
+          <!-- Step 3: Request info -->
+          <div class="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+            <div
+              class="w-16 h-16 mx-auto mb-4 bg-secondary-light rounded-full flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-xl font-medium mb-2">Vraag informatie</h3>
+            <p class="text-gray-600">
+              Ga naar uw favorieten pagina om eenvoudig meer informatie aan te vragen over de
+              geselecteerde werken.
+            </p>
           </div>
+        </div>
+
+        <div class="mt-10 text-center">
+          <NuxtLink to="/schilderijen" class="btn btn-primary px-6 py-3">
+            Begin met verkennen
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -151,22 +222,31 @@
       </div>
     </section>
 
-    <!-- Contact -->
+    <!-- Over de Kunstenaar -->
     <section class="py-16">
       <div class="container-custom">
-        <div class="bg-primary-light/20 rounded-xl p-8 md:p-12">
-          <div class="text-center max-w-3xl mx-auto">
-            <h2 class="text-3xl font-serif font-semibold mb-4">Interesse in een schilderij?</h2>
-            <p class="text-gray-700 mb-8">
-              Neem contact met mij op voor meer informatie over mijn werk, prijzen of om een
-              afspraak te maken voor een bezichtiging.
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-3xl font-serif font-semibold mb-6">Over Tom van As</h2>
+            <p class="text-gray-700 mb-4">
+              Tom studeerde aan de Koninklijke Academie van Beeldende Kunsten in Den Haag. Zijn werk
+              omvat zowel atelierwerk als landschappen.
             </p>
-            <div
-              class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center"
-            >
-              <a href="mailto:info@tomvanas-art.nl" class="btn btn-primary"> E-mail mij </a>
-              <a href="tel:+31612345678" class="btn btn-secondary"> Bel mij </a>
-            </div>
+            <p class="text-gray-700 mb-6">
+              Met olieverf, aquarel en acryl creëerde hij werken die voortborduren op de traditie
+              van de Haagse School, met een eigen twist geïnspireerd door het vroeg 20e-eeuwse
+              kubisme.
+            </p>
+            <NuxtLink to="/over-tom" class="btn btn-primary"> Meer over Tom </NuxtLink>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-md">
+            <img
+              src="/images/tom-van-as.jpg"
+              class="w-full h-full object-cover"
+              alt="Portretfoto van Tom van As"
+              width="600"
+              height="400"
+            />
           </div>
         </div>
       </div>

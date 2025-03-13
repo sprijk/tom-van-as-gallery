@@ -29,6 +29,8 @@
             landschappen zou je kunnen zien als een vervolg op de schilders van ‘de Haagse School’
           </p>
 
+          <p>&nbsp;</p>
+
           <img
             src="/images/over-tom-examples.jpg"
             class="w-full"

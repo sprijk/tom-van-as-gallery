@@ -1,4 +1,4 @@
-<!-- File: components/PaintingCard.vue (update the existing file) -->
+<!-- Modified PaintingCard.vue with tooltip -->
 <template>
   <div class="group relative">
     <NuxtLink
@@ -19,11 +19,21 @@
         />
         <!-- Favorite button -->
         <div class="absolute top-2 right-2 z-10">
-          <FavoriteButton
-            :painting="painting"
-            :is-favorite="isPaintingInFavorites(painting.id)"
-            @toggle="toggleFavorite(painting)"
-          />
+          <div class="relative">
+            <FavoriteButton
+              :painting="painting"
+              :is-favorite="isPaintingInFavorites(painting.id)"
+              @toggle="toggleFavorite(painting)"
+            />
+
+            <!-- Tooltip that appears on hover -->
+            <div
+              class="hidden group-hover:block absolute right-0 top-full mt-2 bg-white text-gray-800 text-xs rounded shadow-md p-2 w-48 pointer-events-none"
+            >
+              <p>Klik op het hart om dit schilderij aan je favorieten toe te voegen</p>
+              <div class="absolute -top-1 right-3 w-2 h-2 bg-white transform rotate-45"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="p-4 bg-white">
