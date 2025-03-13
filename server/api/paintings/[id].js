@@ -15,7 +15,6 @@ export default defineEventHandler(async (event) => {
   });
 
   try {
-    console.log(1);
     // Details van een specifieke resource ophalen
     const result = await cloudinary.api.resource(id, {
       tags: true,
@@ -25,7 +24,6 @@ export default defineEventHandler(async (event) => {
     // Bepaal categorie op basis van folder path
     let category = '';
     const folderPath = result.folder;
-    console.log(2);
 
     if (folderPath) {
       // Check of het pad begint met "Tom van As Kunst"
@@ -39,7 +37,6 @@ export default defineEventHandler(async (event) => {
         category = folderPath.split('/').pop();
       }
     }
-    console.log(3);
 
     // Tags verwerken - alle tags zijn reguliere tags
     const tags = result.tags || [];
@@ -54,7 +51,6 @@ export default defineEventHandler(async (event) => {
     } else {
       title = 'Ongetiteld';
     }
-    console.log(4);
 
     // Genereer een optimale image URL zonder cropping die de aspect ratio behoudt
     const originalUrl = cloudinary.url(result.public_id, {
@@ -69,7 +65,7 @@ export default defineEventHandler(async (event) => {
         },
       ],
     });
-    console.log(5);
+
     return {
       id: result.public_id,
       title: title,
