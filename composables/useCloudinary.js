@@ -1,4 +1,4 @@
-// composables/useCloudinary.js - Modified for better image handling
+// composables/useCloudinary.js - Modified for better image handling and admin support
 export const useCloudinary = () => {
   const config = useRuntimeConfig();
   const cloudName = config.public.cloudinaryCloudName;
@@ -13,7 +13,7 @@ export const useCloudinary = () => {
   const isLoading = useState('cloudinaryIsLoading', () => false);
 
   // Alle schilderijen ophalen via een server API route
-  const getAllPaintings = async (forceRefresh = false) => {
+  const getAllPaintings = async (forceRefresh = false, headers = null) => {
     try {
       isLoading.value = true;
       apiError.value = null;
@@ -24,7 +24,13 @@ export const useCloudinary = () => {
         return paintingsCache.value;
       }
 
-      const response = await fetch('/api/paintings');
+      // Create request options with optional headers
+      const requestOptions = {};
+      if (headers) {
+        requestOptions.headers = headers;
+      }
+
+      const response = await fetch('/api/paintings', requestOptions);
       if (!response.ok) {
         throw new Error(`Server gaf foutcode ${response.status}: ${response.statusText}`);
       }
@@ -47,7 +53,7 @@ export const useCloudinary = () => {
   };
 
   // Eén specifiek schilderij ophalen op basis van ID via een server API route
-  const getPaintingById = async (id) => {
+  const getPaintingById = async (id, isAdmin = false) => {
     try {
       if (!id) return null;
 
@@ -63,7 +69,15 @@ export const useCloudinary = () => {
         }
       }
 
-      const response = await fetch(`/api/paintings/${id}`);
+      // Create request options with optional admin header
+      const requestOptions = {};
+      if (isAdmin) {
+        requestOptions.headers = {
+          'x-is-admin': 'true',
+        };
+      }
+
+      const response = await fetch(`/api/paintings/${id}`, requestOptions);
       if (!response.ok) {
         throw new Error(`Kon schilderij met ID ${id} niet ophalen: ${response.statusText}`);
       }
@@ -153,14 +167,22 @@ export const useCloudinary = () => {
   };
 
   // Ophalen van schilderijen per categorie
-  const getPaintingsByCategory = async (category) => {
+  const getPaintingsByCategory = async (category, isAdmin = false) => {
     try {
       if (!category) return [];
 
       isLoading.value = true;
       apiError.value = null;
 
-      const allPaintings = await getAllPaintings();
+      // Create request options with optional admin header
+      const requestOptions = {};
+      if (isAdmin) {
+        requestOptions.headers = {
+          'x-is-admin': 'true',
+        };
+      }
+
+      const allPaintings = await getAllPaintings(false, isAdmin ? { 'x-is-admin': 'true' } : null);
       isLoading.value = false;
 
       return allPaintings.filter((painting) => painting.category === category);

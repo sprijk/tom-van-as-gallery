@@ -176,6 +176,7 @@
 <script setup>
 // Composable voor Cloudinary data
 const { getAllPaintings, getAllCategories, getAllTags } = useCloudinary();
+const config = useRuntimeConfig();
 const route = useRoute();
 const router = useRouter();
 

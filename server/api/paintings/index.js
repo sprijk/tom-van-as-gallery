@@ -1,8 +1,11 @@
-// server/api/paintings/index.js - Update the title logic
+// server/api/paintings/index.js - Update to include published state
 import { v2 as cloudinary } from 'cloudinary';
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
+
+  // Check if this is an admin request
+  const isAdmin = event.path.includes('/admin') || event.headers.get('x-is-admin') === 'true';
 
   // Cloudinary configureren
   cloudinary.config({
@@ -51,6 +54,13 @@ export default defineEventHandler(async () => {
           const pathParts = folderPath.split('/');
           const category = pathParts[pathParts.length - 1];
 
+          // Check published state - default to true if not specified
+          const publishedStr = resource.context?.custom?.published;
+          const isPublished =
+            publishedStr === undefined || publishedStr === null
+              ? true // Default to published if not specified
+              : publishedStr === 'true';
+
           return {
             id: resource.public_id,
             title,
@@ -64,6 +74,7 @@ export default defineEventHandler(async () => {
             folder: resource.folder,
             labelNumber: labelNumber,
             verified: resource.context?.custom?.verified === 'true',
+            published: isPublished,
           };
         });
 
@@ -106,6 +117,13 @@ export default defineEventHandler(async () => {
           category = pathParts[pathParts.length - 1];
         }
 
+        // Check published state - default to true if not specified
+        const publishedStr = resource.context?.custom?.published;
+        const isPublished =
+          publishedStr === undefined || publishedStr === null
+            ? true // Default to published if not specified
+            : publishedStr === 'true';
+
         return {
           id: resource.public_id,
           title,
@@ -117,11 +135,18 @@ export default defineEventHandler(async () => {
           format: resource.format,
           created: resource.created_at,
           folder: resource.folder,
+          published: isPublished,
         };
       });
     }
 
     console.log('Schilderijen opgehaald:', allPaintings.length);
+
+    // If this is not an admin request, filter out unpublished paintings
+    if (!isAdmin) {
+      allPaintings = allPaintings.filter((painting) => painting.published);
+      console.log('Filtered to published paintings:', allPaintings.length);
+    }
 
     return allPaintings;
   } catch (error) {

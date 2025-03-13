@@ -1,4 +1,4 @@
-<!-- pages/admin/index.vue -->
+<!-- pages/admin/index.vue with publication management -->
 <template>
   <div>
     <!-- Login Form -->
@@ -18,9 +18,9 @@
 
       <!-- Admin Tabs -->
       <div class="mb-6 border-b border-gray-200">
-        <nav class="flex space-x-8">
+        <nav class="flex space-x-8 overflow-x-auto">
           <button
-            class="py-4 px-1 border-b-2 font-medium text-sm"
+            class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
             :class="
               activeTab === 'labels'
                 ? 'border-primary text-primary'
@@ -31,7 +31,7 @@
             Label Verificatie
           </button>
           <button
-            class="py-4 px-1 border-b-2 font-medium text-sm"
+            class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
             :class="
               activeTab === 'tags'
                 ? 'border-primary text-primary'
@@ -40,6 +40,17 @@
             @click="activeTab = 'tags'"
           >
             Tags Beheren
+          </button>
+          <button
+            class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
+            :class="
+              activeTab === 'publish'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            "
+            @click="activeTab = 'publish'"
+          >
+            Publicatiestatus
           </button>
         </nav>
       </div>
@@ -58,6 +69,15 @@
         :paintings="paintings"
         :all-tags="allTags"
         :is-loading="isLoading"
+      />
+
+      <!-- Publication Management Tab -->
+      <AdminPublishManagement
+        v-else-if="activeTab === 'publish'"
+        :paintings="paintings"
+        :is-loading="isLoading"
+        @refresh="fetchPaintings"
+        @update="handlePublishUpdate"
       />
     </div>
   </div>
@@ -151,7 +171,11 @@ async function fetchPaintings() {
   isLoading.value = true;
 
   try {
-    const paintingsData = await getAllPaintings(true); // Force refresh
+    // Add admin header to get all paintings including unpublished ones
+    const headers = new Headers();
+    headers.append('x-is-admin', 'true');
+
+    const paintingsData = await getAllPaintings(true, headers); // Force refresh with admin headers
 
     // Enhance painting data with label information
     paintings.value = paintingsData.map((painting) => {
@@ -164,7 +188,7 @@ async function fetchPaintings() {
         labelStatus = 'needs_review'; // Default to needs review for any label
 
         // In a real implementation, you'd check if it's been verified before
-        // Here we're simulating that with a random check
+        // Here we're checking the verified property from the API
         if (painting.verified) {
           labelStatus = 'verified';
         }
@@ -176,6 +200,7 @@ async function fetchPaintings() {
         correctedLabel: labelNumber || '',
         labelStatus,
         tags: painting.tags || [],
+        published: painting.published !== undefined ? painting.published : true, // Default to published if not specified
       };
     });
 
@@ -197,14 +222,20 @@ async function fetchTags() {
   }
 }
 
+// Handle publication status update
+function handlePublishUpdate({ id, published }) {
+  // Update our local state
+  const painting = paintings.value.find((p) => p.id === id);
+  if (painting) {
+    painting.published = published;
+  }
+}
+
 // Extract label number from painting metadata
 function extractLabelNumber(painting) {
   // In a real implementation, this would come from the Cloudinary metadata
-  // Here we're simulating based on the title
-  if (painting.title && painting.title.startsWith('Nummer ')) {
-    return painting.title.replace('Nummer ', '');
-  }
-  return null;
+  // Here we're accessing the labelNumber property returned from the API
+  return painting.labelNumber || null;
 }
 
 // Check authentication status on page load
