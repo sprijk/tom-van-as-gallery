@@ -160,24 +160,6 @@
           </div>
         </div>
 
-        <div class="mb-6">
-          <h2 class="text-lg font-medium mb-2">Details</h2>
-          <ul class="space-y-2 text-gray-700">
-            <li v-if="painting.width && painting.height">
-              <span class="font-medium">Afmetingen:</span>
-              {{ painting.width }} x {{ painting.height }} pixels
-            </li>
-            <li v-if="painting.format">
-              <span class="font-medium">Formaat:</span>
-              {{ painting.format.toUpperCase() }}
-            </li>
-            <li v-if="painting.created">
-              <span class="font-medium">Toegevoegd op:</span>
-              {{ formatDate(painting.created) }}
-            </li>
-          </ul>
-        </div>
-
         <div class="mt-8">
           <div class="bg-primary-light/20 rounded-lg p-6">
             <h2 class="text-lg font-medium mb-2">Interesse in dit werk?</h2>
