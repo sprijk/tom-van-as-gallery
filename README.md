@@ -9,6 +9,8 @@ Een online galerij voor de kunstwerken van Tom van As, gebouwd met Nuxt 3, Tailw
 - Overzichtspagina met zoeken en filteren
 - Detailpagina per kunstwerk
 - Informatiepagina over de kunstenaar
+- Favorieten-functionaliteit om interesse aan te geven in schilderijen
+- Contactformulier voor favoriete schilderijen met Google Sheets integratie
 - Integratie met Cloudinary voor afbeeldingsbeheer
 
 ## Technische stack

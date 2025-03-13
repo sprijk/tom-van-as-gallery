@@ -27,6 +27,11 @@ export default defineNuxtConfig({
     cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || '',
     adminPassword: process.env.ADMIN_PASSWORD || 'admin123', // Default password for development
 
+    // Google Sheets API configuration
+    googleServiceAccountEmail: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
+    googlePrivateKey: process.env.GOOGLE_PRIVATE_KEY || '',
+    googleSheetId: process.env.GOOGLE_SHEET_ID || '',
+
     // Client-side variables
     public: {
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'dgvqkqvv1',

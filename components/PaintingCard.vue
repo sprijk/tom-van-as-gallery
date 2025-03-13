@@ -1,5 +1,6 @@
+<!-- File: components/PaintingCard.vue (update the existing file) -->
 <template>
-  <div class="group">
+  <div class="group relative">
     <NuxtLink
       :to="`/schilderijen/${painting.id}`"
       class="block overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
@@ -16,6 +17,14 @@
           class="absolute inset-0 w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
           :alt="painting.title"
         />
+        <!-- Favorite button -->
+        <div class="absolute top-2 right-2 z-10">
+          <FavoriteButton
+            :painting="painting"
+            :is-favorite="isPaintingInFavorites(painting.id)"
+            @toggle="toggleFavorite(painting)"
+          />
+        </div>
       </div>
       <div class="p-4 bg-white">
         <h3 class="text-lg font-semibold mb-1 text-gray-900">
@@ -40,4 +49,16 @@ defineProps({
     required: true,
   },
 });
+
+// Use the favorites composable
+const { addFavorite, removeFavorite, isPaintingInFavorites } = useFavorites();
+
+// Toggle favorite status
+function toggleFavorite(painting) {
+  if (isPaintingInFavorites(painting.id)) {
+    removeFavorite(painting.id);
+  } else {
+    addFavorite(painting);
+  }
+}
 </script>
