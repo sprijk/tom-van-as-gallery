@@ -38,6 +38,15 @@
           </svg>
         </button>
 
+        <!-- Favorite button in top-right corner of image -->
+        <div class="absolute top-4 right-4 z-10">
+          <FavoriteButton
+            :painting="painting"
+            :is-favorite="isPaintingInFavorites(painting.id)"
+            @toggle="toggleFavorite(painting)"
+          />
+        </div>
+
         <!-- Navigatieknoppen (links/rechts) -->
         <div class="absolute inset-y-0 left-0 flex items-center">
           <button
@@ -90,9 +99,40 @@
 
       <!-- Schilderij informatie -->
       <div class="p-6">
-        <h1 class="text-3xl font-semibold mb-4">
-          {{ painting.title }}
-        </h1>
+        <!-- Title and favorite button side by side -->
+        <div class="flex items-center justify-between mb-4">
+          <h1 class="text-3xl font-semibold">
+            {{ painting.title }}
+          </h1>
+          <!-- Favorite button next to title -->
+          <button
+            class="flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors"
+            :class="[
+              isPaintingInFavorites(painting.id)
+                ? 'bg-primary text-white hover:bg-primary-dark'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+            ]"
+            @click="toggleFavorite(painting)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              :fill="isPaintingInFavorites(painting.id) ? 'currentColor' : 'none'"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+            <span>{{
+              isPaintingInFavorites(painting.id) ? 'In favorieten' : 'Toevoegen aan favorieten'
+            }}</span>
+          </button>
+        </div>
 
         <div v-if="painting.category" class="mb-6">
           <h2 class="text-lg font-medium mb-2">Categorie</h2>
@@ -295,41 +335,6 @@
               </button>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between mb-4">
-        <h1 class="text-3xl font-semibold">
-          {{ painting.title }}
-        </h1>
-        <div>
-          <button
-            class="flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors"
-            :class="[
-              isPaintingInFavorites(painting.id)
-                ? 'bg-primary text-white hover:bg-primary-dark'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-            ]"
-            @click="toggleFavorite(painting)"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              :fill="isPaintingInFavorites(painting.id) ? 'currentColor' : 'none'"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-            <span>{{
-              isPaintingInFavorites(painting.id) ? 'In favorieten' : 'Toevoegen aan favorieten'
-            }}</span>
-          </button>
         </div>
       </div>
     </div>
