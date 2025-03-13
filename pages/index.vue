@@ -3,68 +3,26 @@
   <div>
     <!-- Hero Sectie -->
     <section class="relative h-96 md:h-[70vh] bg-gray-800 overflow-hidden mb-12">
-      <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center">
-        <LoadingSpinner />
+      <div class="absolute inset-0 z-0 opacity-70">
+        <img
+          src="/images/cover.png"
+          width="1920"
+          height="1080"
+          class="w-full h-full object-cover"
+          alt="Uitgelicht schilderij"
+        />
       </div>
-
-      <template v-else>
-        <div class="absolute inset-0 z-0 opacity-70">
-          <NuxtImg
-            v-if="featuredPainting"
-            provider="cloudinary"
-            :src="featuredPainting.id"
-            format="webp"
-            width="1920"
-            height="1080"
-            fit="cover"
-            class="w-full h-full object-cover"
-            alt="Uitgelicht schilderij"
-          />
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-        <div class="container-custom h-full flex flex-col justify-end relative z-10 pb-12">
-          <h1 class="text-white text-4xl md:text-5xl lg:text-6xl font-serif font-bold max-w-3xl">
-            Tom van As
-          </h1>
-          <p class="text-white/90 text-xl md:text-2xl max-w-2xl mt-4">
-            Ontdek een unieke collectie schilderijen die emotie en verbeelding tot leven brengen
-          </p>
-          <div class="mt-8">
-            <NuxtLink to="/schilderijen" class="btn btn-primary px-8 py-3 text-lg">
-              Bekijk de collectie
-            </NuxtLink>
-          </div>
-        </div>
-      </template>
-    </section>
-
-    <!-- Uitgelichte Werken -->
-    <section class="py-12 bg-gray-50">
-      <div class="container-custom">
-        <h2 class="text-3xl font-serif font-semibold mb-8 text-center">Uitgelichte Werken</h2>
-
-        <div v-if="isLoading" class="py-8">
-          <LoadingSpinner show-message message="Uitgelichte werken laden..." />
-        </div>
-
-        <div
-          v-else-if="featuredPaintings.length > 0"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          <PaintingCard
-            v-for="painting in featuredPaintings"
-            :key="painting.id"
-            :painting="painting"
-          />
-        </div>
-
-        <div v-else class="text-center py-8 text-gray-600">
-          <p>Geen uitgelichte werken beschikbaar.</p>
-        </div>
-
-        <div class="text-center mt-12">
-          <NuxtLink to="/schilderijen" class="btn btn-secondary px-6 py-3">
-            Bekijk alle schilderijen
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+      <div class="container-custom h-full flex flex-col justify-end relative z-10 pb-12">
+        <h1 class="text-white text-4xl md:text-5xl lg:text-6xl font-serif font-bold max-w-3xl">
+          Tom van As
+        </h1>
+        <p class="text-white/90 text-xl md:text-2xl max-w-2xl mt-4">
+          Ontdek een unieke collectie schilderijen die emotie en verbeelding tot leven brengen
+        </p>
+        <div class="mt-8">
+          <NuxtLink to="/schilderijen" class="btn btn-primary px-8 py-3 text-lg">
+            Bekijk de collectie
           </NuxtLink>
         </div>
       </div>

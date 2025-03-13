@@ -48,7 +48,7 @@
           Wis categorieën
         </button>
       </div>
-      <div class="space-y-2 max-h-60 overflow-y-auto pr-2">
+      <div class="space-y-2 max-h-80 overflow-y-auto pr-2 pb-2">
         <label
           v-for="category in allCategories"
           :key="category"
