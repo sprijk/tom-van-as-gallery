@@ -114,59 +114,6 @@
         </div>
       </section>
 
-      <!-- Navigatie tussen schilderijen (als alternatief voor de ingesloten knoppen) -->
-      <div
-        v-if="previousPainting || nextPainting"
-        class="mt-16 flex justify-between border-t border-gray-200 pt-8"
-      >
-        <div>
-          <NuxtLink
-            v-if="previousPainting"
-            :to="`/schilderijen/${previousPainting.id}`"
-            class="flex items-center text-primary hover:text-primary-dark transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            <span>Vorig schilderij</span>
-          </NuxtLink>
-        </div>
-        <div>
-          <NuxtLink
-            v-if="nextPainting"
-            :to="`/schilderijen/${nextPainting.id}`"
-            class="flex items-center text-primary hover:text-primary-dark transition-colors"
-          >
-            <span>Volgend schilderij</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 ml-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </NuxtLink>
-        </div>
-      </div>
-
       <!-- Terug naar overzicht knop -->
       <div class="mt-8 text-center">
         <NuxtLink
