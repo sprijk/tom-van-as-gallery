@@ -27,12 +27,12 @@
             />
 
             <!-- Tooltip that appears on hover -->
-            <div
+            <!-- <div
               class="hidden group-hover:block absolute right-0 top-full mt-2 bg-white text-gray-800 text-xs rounded shadow-md p-2 w-48 pointer-events-none"
             >
               <p>Klik op het hart om dit schilderij aan je favorieten toe te voegen</p>
               <div class="absolute -top-1 right-3 w-2 h-2 bg-white transform rotate-45"></div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
