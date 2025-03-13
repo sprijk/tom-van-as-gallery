@@ -248,12 +248,12 @@ useHead(() => {
   // Generate image URL for the painting if available
   const imageUrl = painting.value
     ? `https://res.cloudinary.com/${config.public.cloudinaryCloudName}/image/upload/w_1200,h_630,c_fill,q_auto:good/${painting.value.id}`
-    : 'https://tomvanas-art.nl/images/og-image.jpg';
+    : 'https://tomvanas-kunst.nl/images/og-image.jpg';
 
   // Calculate canonical URL
   const canonicalUrl = painting.value
-    ? `https://tomvanas-art.nl/schilderijen/${painting.value.id}`
-    : 'https://tomvanas-art.nl/schilderijen';
+    ? `https://tomvanas-kunst.nl/schilderijen/${painting.value.id}`
+    : 'https://tomvanas-kunst.nl/schilderijen';
 
   return {
     title: title,

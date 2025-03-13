@@ -397,7 +397,7 @@ useHead(() => {
   }
 
   // Try to find an appropriate image for the category/tag
-  let imageUrl = 'https://tomvanas-art.nl/images/og-image.jpg'; // Default fallback
+  let imageUrl = 'https://tomvanas-kunst.nl/images/og-image.jpg'; // Default fallback
 
   // If we have filtered paintings and they've been loaded, use the first one as OG image
   if (!isInitialLoading.value && filteredPaintings.value.length > 0) {
@@ -406,7 +406,7 @@ useHead(() => {
   }
 
   // Calculate canonical URL with filters
-  let canonicalUrl = 'https://tomvanas-art.nl/schilderijen';
+  let canonicalUrl = 'https://tomvanas-kunst.nl/schilderijen';
   if (category) {
     canonicalUrl += `?category=${encodeURIComponent(category)}`;
   } else if (tag) {

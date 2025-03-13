@@ -2,7 +2,7 @@
 
 export default defineNuxtPlugin((nuxtApp) => {
   // Set base URL for the site - change this to your production domain
-  const baseUrl = 'https://tomvanas-art.nl';
+  const baseUrl = 'https://tomvanas-kunst.nl';
 
   // Helper function to get absolute URL
   const getAbsoluteUrl = (path) => {
