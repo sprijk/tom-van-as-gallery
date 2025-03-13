@@ -60,7 +60,7 @@
           </p>
 
           <ul>
-            <li>Email: info@tomvanas-art.nl</li>
+            <li>Email: info@tomvanas-kunst.nl</li>
             <li>Telefoon: +31 6 12345678</li>
           </ul>
 

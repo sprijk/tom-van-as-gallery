@@ -11,7 +11,7 @@
         <div>
           <h3 class="text-lg font-semibold mb-4">Contact</h3>
           <p class="text-gray-600">
-            Email: info@tomvanas-art.nl<br />
+            Email: info@tomvanas-kunst.nl<br />
             Telefoonnummer: +31 6 12345678
           </p>
         </div>

@@ -376,15 +376,69 @@ watch(sortOption, () => {
 });
 
 // SEO meta tags
-useHead({
-  title: 'Schilderijen | Tom van As Kunstgalerij',
-  meta: [
-    {
-      name: 'description',
-      content:
-        'Bekijk de collectie schilderijen van kunstenaar Tom van As. Filter op categorieën en tags om uw favoriete kunstwerk te vinden.',
-    },
-  ],
+// Add this to your pages/schilderijen/index.vue file, replacing your current useHead call
+
+// Inside the script setup section of the paintings overview page
+useHead(() => {
+  // Extract category from route query if available
+  const category = route.query.category ? String(route.query.category) : null;
+  const tag = route.query.tag ? String(route.query.tag) : null;
+
+  // Create appropriate title and description based on filters
+  let title = 'Schilderijen | Tom van As Kunstgalerij';
+  let description = 'Bekijk de collectie schilderijen van kunstenaar Tom van As.';
+
+  if (category) {
+    title = `${category} | Tom van As Kunstgalerij`;
+    description = `Bekijk de ${category} collectie van kunstenaar Tom van As.`;
+  } else if (tag) {
+    title = `${tag} schilderijen | Tom van As Kunstgalerij`;
+    description = `Bekijk schilderijen met tag "${tag}" van kunstenaar Tom van As.`;
+  }
+
+  // Try to find an appropriate image for the category/tag
+  let imageUrl = 'https://tomvanas-art.nl/images/og-image.jpg'; // Default fallback
+
+  // If we have filtered paintings and they've been loaded, use the first one as OG image
+  if (!isInitialLoading.value && filteredPaintings.value.length > 0) {
+    const firstPainting = filteredPaintings.value[0];
+    imageUrl = `https://res.cloudinary.com/${config.public.cloudinaryCloudName}/image/upload/w_1200,h_630,c_fill,q_auto:good/${firstPainting.id}`;
+  }
+
+  // Calculate canonical URL with filters
+  let canonicalUrl = 'https://tomvanas-art.nl/schilderijen';
+  if (category) {
+    canonicalUrl += `?category=${encodeURIComponent(category)}`;
+  } else if (tag) {
+    canonicalUrl += `?tag=${encodeURIComponent(tag)}`;
+  }
+
+  return {
+    title: title,
+    meta: [
+      { name: 'description', content: description },
+
+      // Open Graph / Facebook
+      { property: 'og:type', content: 'website' },
+      { property: 'og:url', content: canonicalUrl },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+      { property: 'og:image', content: imageUrl },
+
+      // Twitter
+      { property: 'twitter:card', content: 'summary_large_image' },
+      { property: 'twitter:url', content: canonicalUrl },
+      { property: 'twitter:title', content: title },
+      { property: 'twitter:description', content: description },
+      { property: 'twitter:image', content: imageUrl },
+    ],
+    link: [
+      {
+        rel: 'canonical',
+        href: canonicalUrl,
+      },
+    ],
+  };
 });
 
 // Data ophalen bij page load

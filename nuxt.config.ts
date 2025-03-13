@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxt/eslint'],
+
+  plugins: ['~/plugins/og-meta.js'],
   devtools: { enabled: true },
 
   app: {
@@ -13,6 +15,34 @@ export default defineNuxtConfig({
           name: 'description',
           content:
             'Ontdek de schilderijen van kunstenaar Tom van As. Bekijk zijn collectie en vind uw favoriete kunstwerk.',
+        },
+
+        // Open Graph / Facebook
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: 'https://tomvanas-kunst.nl/' },
+        { property: 'og:title', content: 'Tom van As - Kunstgalerie' },
+        {
+          property: 'og:description',
+          content:
+            'Ontdek de schilderijen van kunstenaar Tom van As. Bekijk zijn collectie en vind uw favoriete kunstwerk.',
+        },
+        {
+          property: 'og:image',
+          content: 'https://tomvanas-kunst.nl/images/og-image.jpg',
+        },
+
+        // Twitter
+        { property: 'twitter:card', content: 'summary_large_image' },
+        { property: 'twitter:url', content: 'https://tomvanas-kunst.nl/' },
+        { property: 'twitter:title', content: 'Tom van As - Kunstgalerie' },
+        {
+          property: 'twitter:description',
+          content:
+            'Ontdek de schilderijen van kunstenaar Tom van As. Bekijk zijn collectie en vind uw favoriete kunstwerk.',
+        },
+        {
+          property: 'twitter:image',
+          content: 'https://tomvanas-kunst.nl/images/og-image.jpg',
         },
       ],
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],

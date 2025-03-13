@@ -231,21 +231,57 @@ const relatedPaintings = computed(() => {
 });
 
 // SEO meta tags
-useHead(() => ({
-  title: painting.value
+// Add this to your pages/schilderijen/[id].vue file, replacing your current useHead call
+
+// Inside the script setup section
+useHead(() => {
+  const title = painting.value
     ? `${painting.value.title} | Tom van As Schilderijen`
-    : 'Schilderij details | Tom van As',
-  meta: [
-    {
-      name: 'description',
-      content: painting.value
-        ? `Bekijk "${painting.value.title}" door kunstenaar Tom van As. ${
-            painting.value.category ? `Categorie: ${painting.value.category}.` : ''
-          }`
-        : 'Ontdek de schilderijen van kunstenaar Tom van As.',
-    },
-  ],
-}));
+    : 'Schilderij details | Tom van As';
+
+  const description = painting.value
+    ? `Bekijk "${painting.value.title}" door kunstenaar Tom van As. ${
+        painting.value.category ? `Categorie: ${painting.value.category}.` : ''
+      }`
+    : 'Ontdek de schilderijen van kunstenaar Tom van As.';
+
+  // Generate image URL for the painting if available
+  const imageUrl = painting.value
+    ? `https://res.cloudinary.com/${config.public.cloudinaryCloudName}/image/upload/w_1200,h_630,c_fill,q_auto:good/${painting.value.id}`
+    : 'https://tomvanas-art.nl/images/og-image.jpg';
+
+  // Calculate canonical URL
+  const canonicalUrl = painting.value
+    ? `https://tomvanas-art.nl/schilderijen/${painting.value.id}`
+    : 'https://tomvanas-art.nl/schilderijen';
+
+  return {
+    title: title,
+    meta: [
+      { name: 'description', content: description },
+
+      // Open Graph / Facebook
+      { property: 'og:type', content: 'website' },
+      { property: 'og:url', content: canonicalUrl },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+      { property: 'og:image', content: imageUrl },
+
+      // Twitter
+      { property: 'twitter:card', content: 'summary_large_image' },
+      { property: 'twitter:url', content: canonicalUrl },
+      { property: 'twitter:title', content: title },
+      { property: 'twitter:description', content: description },
+      { property: 'twitter:image', content: imageUrl },
+    ],
+    link: [
+      {
+        rel: 'canonical',
+        href: canonicalUrl,
+      },
+    ],
+  };
+});
 
 // Data ophalen
 async function fetchData() {
