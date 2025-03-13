@@ -193,6 +193,7 @@
 
 <script setup>
 const { favorites, removeFavorite, clearAllFavorites } = useFavorites();
+const { showSuccess, showError } = useToast();
 
 // Form data
 const form = reactive({
@@ -209,7 +210,10 @@ const formSubmitted = ref(false);
 // Function to submit inquiry
 async function submitInquiry() {
   if (favorites.value.length === 0) {
-    alert('Selecteer eerst schilderijen als favoriet voordat je een aanvraag doet.');
+    showError(
+      'Selecteer eerst schilderijen als favoriet voordat je een aanvraag doet.',
+      'Geen favorieten'
+    );
     return;
   }
 
@@ -226,7 +230,7 @@ async function submitInquiry() {
       })),
     };
 
-    // Mock API call for now (replace with actual API endpoint)
+    // API call
     const response = await fetch('/api/inquiry', {
       method: 'POST',
       headers: {
@@ -240,7 +244,11 @@ async function submitInquiry() {
     }
 
     // Handle success
-    alert('Bedankt voor je aanvraag! We nemen zo snel mogelijk contact met je op.');
+    showSuccess(
+      'We hebben je aanvraag ontvangen en nemen zo snel mogelijk contact met je op.',
+      'Aanvraag verzonden',
+      6000
+    );
 
     // Reset form
     Object.keys(form).forEach((key) => {
@@ -255,7 +263,10 @@ async function submitInquiry() {
     formSubmitted.value = true;
   } catch (error) {
     console.error('Error submitting inquiry:', error);
-    alert('Er is een fout opgetreden. Probeer het later opnieuw of neem direct contact op.');
+    showError(
+      'Er is een fout opgetreden bij het verzenden van je aanvraag. Probeer het later opnieuw of neem direct contact op.',
+      'Verzenden mislukt'
+    );
   } finally {
     isSubmitting.value = false;
   }

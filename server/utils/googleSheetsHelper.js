@@ -22,8 +22,7 @@ export async function appendToGoogleSheet(data) {
     const auth = new google.auth.JWT(
       config.googleServiceAccountEmail,
       null,
-      // config.googlePrivateKey,
-      config.googlePrivateKey.replace(/\\n/g, '\n'),
+      config.googlePrivateKey.replace(/\\n/gm, '\n'),
       ['https://www.googleapis.com/auth/spreadsheets']
     );
 

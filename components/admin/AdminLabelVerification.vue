@@ -120,6 +120,9 @@ const props = defineProps({
 
 defineEmits(['refresh']);
 
+// Import toast notifications
+const { showSuccess, showError } = useToast();
+
 // State
 const labelFilter = ref('all');
 const isUpdating = ref(false);
@@ -226,7 +229,7 @@ async function verifyLabel(painting) {
     selectedPainting.value = { ...painting };
 
     // Show success notification
-    alert(`Label voor "${painting.title}" is geverifieerd.`);
+    showSuccess(`Label voor "${painting.title}" is geverifieerd.`, 'Label geverifieerd');
 
     // Navigate to next painting if available
     if (hasNext.value) {
@@ -237,7 +240,7 @@ async function verifyLabel(painting) {
   } catch (error) {
     console.error('Error verifying label:', error);
     // Show error notification
-    alert(`Fout bij het verifiëren van het label: ${error.message}`);
+    showError(`Fout bij het verifiëren van het label: ${error.message}`, 'Verificatie mislukt');
   } finally {
     isUpdating.value = false;
   }
@@ -282,11 +285,14 @@ async function updateLabel(data) {
     selectedPainting.value = updatedPainting;
 
     // Show success notification
-    alert(`Label voor "${updatedPainting.title}" is bijgewerkt naar ${data.correctedLabel}.`);
+    showSuccess(
+      `Label voor "${updatedPainting.title}" is bijgewerkt naar ${data.correctedLabel}.`,
+      'Label bijgewerkt'
+    );
   } catch (error) {
     console.error('Error updating label:', error);
     // Show error notification
-    alert(`Fout bij het bijwerken van het label: ${error.message}`);
+    showError(`Fout bij het bijwerken van het label: ${error.message}`, 'Bijwerken mislukt');
   } finally {
     isUpdating.value = false;
   }

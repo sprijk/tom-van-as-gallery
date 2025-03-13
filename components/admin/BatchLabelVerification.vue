@@ -160,6 +160,9 @@ const props = defineProps({
 
 const emit = defineEmits(['verify-complete']);
 
+// Import toast notifications
+const { showSuccess, showError, showInfo } = useToast();
+
 // State
 const paintings = computed(() => props.paintingsToVerify);
 const selected = ref([]);
@@ -197,13 +200,23 @@ function toggleSelect(painting) {
 function toggleSelectAll() {
   if (allSelected.value) {
     selected.value = [];
+    showInfo('Alle schilderijen zijn gedeselecteerd.', 'Selectie bijgewerkt');
   } else {
     selected.value = paintings.value.map((painting) => painting.id);
+    showInfo('Alle schilderijen zijn geselecteerd.', 'Selectie bijgewerkt');
   }
 }
 
 async function verifySelected() {
   if (selectedPaintings.value.length === 0 || isProcessing.value) return;
+
+  if (selectedPaintings.value.length > 20) {
+    // Show warning for large batch operations
+    showInfo(
+      'Je staat op het punt om een grote batch te verwerken. Dit kan even duren.',
+      'Grote batch detectie'
+    );
+  }
 
   isProcessing.value = true;
   verificationResults.value = {
@@ -242,6 +255,19 @@ async function verifySelected() {
       }
     }
 
+    // Show notification about results
+    if (verificationResults.value.failed.length === 0) {
+      showSuccess(
+        `Alle ${verificationResults.value.success.length} geselecteerde labels zijn succesvol geverifieerd.`,
+        'Batch verificatie voltooid'
+      );
+    } else {
+      showError(
+        `${verificationResults.value.success.length} labels geverifieerd, ${verificationResults.value.failed.length} mislukt.`,
+        'Batch verificatie deels mislukt'
+      );
+    }
+
     // Show results modal
     showResultsModal.value = true;
 
@@ -252,6 +278,10 @@ async function verifySelected() {
     });
   } catch (error) {
     console.error('Error during batch verification:', error);
+    showError(
+      'Er is een onverwachte fout opgetreden tijdens de batchverificatie.',
+      'Batchverificatie mislukt'
+    );
   } finally {
     isProcessing.value = false;
   }

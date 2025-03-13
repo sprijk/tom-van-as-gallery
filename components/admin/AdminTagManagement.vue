@@ -190,6 +190,9 @@ const props = defineProps({
   },
 });
 
+// Import toast notifications
+const { showSuccess, showError } = useToast();
+
 // Tag management
 const newGlobalTag = ref('');
 const paintingNewTag = ref({});
@@ -239,11 +242,11 @@ async function addGlobalTag() {
     newGlobalTag.value = '';
 
     // Show success notification
-    alert(`Tag is toegevoegd.`);
+    showSuccess('Tag is toegevoegd.', 'Tag toegevoegd');
   } catch (error) {
     console.error('Error adding tag:', error);
     // Show error notification
-    alert(`Fout bij het toevoegen van de tag: ${error.message}`);
+    showError(`Fout bij het toevoegen van de tag: ${error.message}`, 'Tag toevoegen mislukt');
   }
 }
 
@@ -269,11 +272,11 @@ async function removeGlobalTag(tag) {
     }
 
     // Show success notification
-    alert(`Tag "${tag}" is verwijderd.`);
+    showSuccess(`Tag "${tag}" is verwijderd.`, 'Tag verwijderd');
   } catch (error) {
     console.error('Error removing tag:', error);
     // Show error notification
-    alert(`Fout bij het verwijderen van de tag: ${error.message}`);
+    showError(`Fout bij het verwijderen van de tag: ${error.message}`, 'Tag verwijderen mislukt');
   }
 }
 
@@ -306,11 +309,11 @@ async function addTagToPainting(painting) {
     paintingNewTag.value[painting.id] = '';
 
     // Show success notification
-    alert(`Tag "${tag}" is toegevoegd aan ${painting.title}.`);
+    showSuccess(`Tag "${tag}" is toegevoegd aan ${painting.title}.`, 'Tag toegevoegd');
   } catch (error) {
     console.error('Error adding tag to painting:', error);
     // Show error notification
-    alert(`Fout bij het toevoegen van de tag: ${error.message}`);
+    showError(`Fout bij het toevoegen van de tag: ${error.message}`, 'Tag toevoegen mislukt');
   }
 }
 
@@ -336,11 +339,11 @@ async function removeTagFromPainting(painting, tag) {
     painting.tags = painting.tags.filter((t) => t !== tag);
 
     // Show success notification
-    alert(`Tag "${tag}" is verwijderd van ${painting.title}.`);
+    showSuccess(`Tag "${tag}" is verwijderd van ${painting.title}.`, 'Tag verwijderd');
   } catch (error) {
     console.error('Error removing tag from painting:', error);
     // Show error notification
-    alert(`Fout bij het verwijderen van de tag: ${error.message}`);
+    showError(`Fout bij het verwijderen van de tag: ${error.message}`, 'Tag verwijderen mislukt');
   }
 }
 </script>

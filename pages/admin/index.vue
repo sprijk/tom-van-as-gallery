@@ -78,6 +78,7 @@ const isLoggingIn = ref(false);
 
 // Painting data and loading states
 const { getAllPaintings, getAllTags } = useCloudinary();
+const { showSuccess, showError, showInfo } = useToast();
 const paintings = ref([]);
 const allTags = ref([]);
 const isLoading = ref(false);
@@ -111,18 +112,24 @@ async function handleLogin(password) {
           localStorage.setItem('adminAuthenticated', 'true');
         }
 
+        // Show success toast
+        showSuccess('Je bent succesvol ingelogd als administrator.', 'Ingelogd');
+
         // Fetch data for admin dashboard
         fetchPaintings();
         fetchTags();
       } else {
         loginError.value = 'Incorrect wachtwoord';
+        showError('Het ingevoerde wachtwoord is incorrect.', 'Aanmelding mislukt');
       }
     } else {
       loginError.value = 'Er ging iets mis bij het verifiëren van het wachtwoord';
+      showError('Er ging iets mis bij het verifiëren van het wachtwoord.', 'Server fout');
     }
   } catch (error) {
     console.error('Login error:', error);
     loginError.value = 'Er ging iets mis bij het inloggen. Probeer het opnieuw.';
+    showError('Er ging iets mis bij het inloggen. Probeer het opnieuw.', 'Verbindingsfout');
   } finally {
     isLoggingIn.value = false;
   }
@@ -135,6 +142,8 @@ function logout() {
   if (import.meta.client) {
     localStorage.removeItem('adminAuthenticated');
   }
+
+  showInfo('Je bent uitgelogd.', 'Uitgelogd');
 }
 
 // Data fetching
@@ -169,9 +178,11 @@ async function fetchPaintings() {
         tags: painting.tags || [],
       };
     });
+
+    showSuccess('Schilderijen succesvol geladen.', 'Data geladen');
   } catch (error) {
     console.error('Error fetching paintings:', error);
-    // Show error notification
+    showError('Kon de schilderijen niet laden. Probeer het later nog eens.', 'Laad fout');
   } finally {
     isLoading.value = false;
   }
@@ -182,6 +193,7 @@ async function fetchTags() {
     allTags.value = await getAllTags(true); // Force refresh
   } catch (error) {
     console.error('Error fetching tags:', error);
+    showError('Kon de tags niet laden. Probeer het later nog eens.', 'Laad fout');
   }
 }
 
