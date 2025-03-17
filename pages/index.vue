@@ -18,7 +18,7 @@
           Tom van As
         </h1>
         <p class="text-white/90 text-xl md:text-2xl max-w-2xl mt-4">
-          Ontdek een unieke collectie schilderijen die emotie en verbeelding tot leven brengen
+          Overzicht van 60 jaar werk: kijken, visie, en verbeelden
         </p>
         <div class="mt-8">
           <NuxtLink to="/schilderijen" class="btn btn-primary px-8 py-3 text-lg">
@@ -88,8 +88,7 @@
             </div>
             <h3 class="text-xl font-medium mb-2">Markeer als favoriet</h3>
             <p class="text-gray-600">
-              Klik op het hartje bij schilderijen die u interessant vindt om ze toe te voegen aan uw
-              favorieten.
+              Klik op het hartje bij schilderijen die u interessant vindt om te bezichtigen.
             </p>
           </div>
 
@@ -115,8 +114,8 @@
             </div>
             <h3 class="text-xl font-medium mb-2">Vraag informatie</h3>
             <p class="text-gray-600">
-              Ga naar uw favorieten pagina om eenvoudig meer informatie aan te vragen over de
-              geselecteerde werken.
+              Ga naar uw favorieten pagina om eenvoudig meer informatie aan te vagen over de
+              geselecteerde werken en eventueel een afspraak te maken voor bezichtiging (aan huis).
             </p>
           </div>
         </div>

@@ -122,7 +122,7 @@
         <h2 class="text-2xl font-serif font-semibold mb-4">Informatie aanvragen</h2>
         <p class="text-gray-700 mb-6">
           Vul het onderstaande formulier in om meer informatie te ontvangen over je geselecteerde
-          schilderijen.
+          schilderijen en eventueel een afspraak te maken voor bezichtiging (aan huis).
         </p>
 
         <form @submit.prevent="submitInquiry">
