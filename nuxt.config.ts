@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxt/eslint'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/plausible', '@nuxt/eslint'],
 
   plugins: ['~/plugins/og-meta.js'],
   devtools: { enabled: true },
@@ -82,5 +82,10 @@ export default defineNuxtConfig({
     cloudinary: {
       baseURL: `https://res.cloudinary.com/dgvqkqvv1/image/upload/`,
     },
+  },
+
+  plausible: {
+    domain: 'tomvanas-kunst.nl',
+    autoPageviews: true,
   },
 });
