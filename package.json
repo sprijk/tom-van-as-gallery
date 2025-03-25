@@ -23,7 +23,8 @@
     "dotenv": "^16.4.7",
     "googleapis": "^146.0.0",
     "node-tesseract-ocr": "^2.2.1",
-    "nuxt": "^3.16.0"
+    "nuxt": "^3.16.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.2.0",
