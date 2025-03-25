@@ -82,6 +82,20 @@ export default defineNuxtConfig({
     cloudinary: {
       baseURL: `https://res.cloudinary.com/dgvqkqvv1/image/upload/`,
     },
+    providers: {
+      imagor: {
+        name: 'imagor',
+        provider: '~/providers/imagor-provider.ts',
+        options: {
+          baseURL: process.env.IMAGOR_BASE_URL || 'http://localhost:8080',
+          // Your self-hosted images base URL
+          imageBaseURL: process.env.IMAGE_STORAGE_URL || 'http://localhost:9000/images',
+          // Default operations if needed
+          defaultFormat: 'webp',
+          defaultQuality: 80,
+        },
+      },
+    },
   },
 
   plausible: {
