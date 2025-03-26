@@ -63,8 +63,8 @@
         <!-- Modified image container for original aspect ratio -->
         <div class="relative bg-gray-100">
           <NuxtImg
-            provider="cloudinary"
-            :src="painting.id"
+            provider="imagor"
+            :src="painting.destPath"
             format="webp"
             quality="auto:best"
             fit="inside"

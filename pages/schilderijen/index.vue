@@ -169,8 +169,8 @@
 </template>
 
 <script setup>
-// Composable voor Cloudinary data
-const { getAllPaintings, getAllCategories } = useCloudinary();
+// Composable voor data
+const { getAllPaintings, getAllCategories } = useImageService();
 const config = useRuntimeConfig();
 const route = useRoute();
 const router = useRouter();

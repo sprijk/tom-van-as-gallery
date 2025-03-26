@@ -143,7 +143,7 @@
 <script setup>
 const route = useRoute();
 const config = useRuntimeConfig();
-const { getPaintingById, getAllPaintings } = useCloudinary();
+const { getPaintingById, getAllPaintings } = useImageService();
 
 // State
 const painting = ref(null);

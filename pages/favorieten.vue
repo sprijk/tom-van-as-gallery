@@ -69,8 +69,8 @@
           <NuxtLink :to="`/schilderijen/${painting.id}`" class="block">
             <div class="relative pb-[75%] bg-gray-100">
               <NuxtImg
-                provider="cloudinary"
-                :src="painting.id"
+                provider="imagor"
+                :src="painting.destPath"
                 format="webp"
                 width="600"
                 height="600"

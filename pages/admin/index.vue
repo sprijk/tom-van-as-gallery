@@ -78,7 +78,7 @@ const loginError = ref('');
 const isLoggingIn = ref(false);
 
 // Painting data and loading states
-const { getAllPaintings } = useCloudinary();
+const { getAllPaintings } = useImageService();
 const { showSuccess, showError, showInfo } = useToast();
 const paintings = ref([]);
 const isLoading = ref(false);

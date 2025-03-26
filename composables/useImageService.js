@@ -1,15 +1,16 @@
-// composables/useCloudinary.js - Modified for better image handling and admin support
-export const useCloudinary = () => {
+// composables/useImageService.js
+export const useImageService = () => {
   const config = useRuntimeConfig();
-  const cloudName = config.public.cloudinaryCloudName;
+  const imageStorageUrl = config.public.imageStorageUrl;
+  const imagorBaseUrl = config.public.imagorBaseUrl;
 
   // Cache voor data om herhaalde netwerkaanvragen te verminderen
   const paintingsCache = useState('paintingsCache', () => null);
   const categoriesCache = useState('categoriesCache', () => null);
 
   // Error status
-  const apiError = useState('cloudinaryApiError', () => null);
-  const isLoading = useState('cloudinaryIsLoading', () => false);
+  const apiError = useState('imageApiError', () => null);
+  const isLoading = useState('imageApiIsLoading', () => false);
 
   // Alle schilderijen ophalen via een server API route
   const getAllPaintings = async (forceRefresh = false, headers = null) => {
@@ -164,41 +165,39 @@ export const useCloudinary = () => {
     }
   };
 
-  // Helper functie om Cloudinary URL te genereren met originele aspect ratio
-  const getImageUrl = (publicId, options = {}) => {
+  // Helper functie om image URL te genereren met Imagor
+  const getImageUrl = (destPath, options = {}) => {
     try {
-      if (!publicId) return '';
+      if (!destPath) return '';
 
-      const { width, height, crop, format = 'webp', quality = 'auto' } = options;
+      const { width, height, crop = 'fit-in', format = 'webp', quality = 'auto' } = options;
 
-      let url = `https://res.cloudinary.com/${cloudName}/image/upload/`;
+      // Build the operations array for Imagor URL
+      const operations = [];
 
-      // Transformaties toevoegen
-      const transformations = [];
+      // Add crop operation
+      operations.push(crop);
 
-      // Indien geen crop gespecificeerd, gebruik 'limit' om de originele aspect ratio te behouden
-      // zonder cropping, maar met een limiet op de grootte
-      if (width) transformations.push(`w_${width}`);
-      if (height) transformations.push(`h_${height}`);
-
-      // Gebruik 'limit' als standaard crop methode om aspect ratio te behouden
-      // tenzij een ander crop type is opgegeven
-      if (crop) {
-        transformations.push(`c_${crop}`);
-      } else if (width || height) {
-        transformations.push('c_limit');
+      // Add resize if width or height is specified
+      if (width || height) {
+        let resizeString = '';
+        if (width) resizeString += width;
+        resizeString += 'x';
+        if (height) resizeString += height;
+        operations.push(resizeString);
       }
 
-      if (format) transformations.push(`f_${format}`);
-      if (quality) transformations.push(`q_${quality}`);
+      // Format and quality
+      if (format) operations.push(`format(${format})`);
+      if (quality) operations.push(`quality(${quality})`);
 
-      if (transformations.length > 0) {
-        url += transformations.join(',') + '/';
-      }
+      // Combine operations into URL path
+      const operationsPath = operations.length > 0 ? operations.join('/') : '';
 
-      url += publicId;
+      // Build the final URL
+      const finalUrl = `${imagorBaseUrl}/unsafe/${operationsPath}/${imageStorageUrl}/${destPath}`;
 
-      return url;
+      return finalUrl;
     } catch (error) {
       console.error('Fout bij het genereren van de afbeelding URL:', error);
       return '';

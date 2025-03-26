@@ -183,8 +183,8 @@
 </template>
 
 <script setup>
-// Composable voor Cloudinary data
-const { getAllPaintings } = useCloudinary();
+// Composable voor data
+const { getAllPaintings } = useImageService();
 
 // State
 const recentPaintings = ref([]);

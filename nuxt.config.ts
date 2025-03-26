@@ -1,4 +1,4 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// nuxt.config.ts
 export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/plausible', '@nuxt/eslint'],
 
@@ -52,10 +52,14 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // Server-side variables
-    cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'dgvqkqvv1',
-    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || '',
-    cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || '',
     adminPassword: process.env.ADMIN_PASSWORD || 'admin123', // Default password for development
+
+    // Database configuration
+    dbPath: process.env.DB_PATH || './data/database.sqlite',
+
+    // Imagor configuration
+    imagorBaseUrl: process.env.IMAGOR_BASE_URL || 'http://localhost:8080',
+    imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://localhost:9000/images',
 
     // Google Sheets API configuration
     googleServiceAccountEmail: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
@@ -64,7 +68,8 @@ export default defineNuxtConfig({
 
     // Client-side variables
     public: {
-      cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'dgvqkqvv1',
+      imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://localhost:9000/images',
+      imagorBaseUrl: process.env.IMAGOR_BASE_URL || 'http://localhost:8080',
     },
   },
 
@@ -79,23 +84,20 @@ export default defineNuxtConfig({
   },
 
   image: {
-    cloudinary: {
-      baseURL: `https://res.cloudinary.com/dgvqkqvv1/image/upload/`,
+    providers: {
+      imagor: {
+        name: 'imagor',
+        provider: '~/providers/imagor-provider.js',
+        options: {
+          baseURL: process.env.IMAGOR_BASE_URL || 'http://localhost:8080',
+          // Your self-hosted images base URL
+          imageBaseURL: process.env.IMAGE_STORAGE_URL || 'http://localhost:9000/images',
+          // Default operations if needed
+          defaultFormat: 'webp',
+          defaultQuality: 80,
+        },
+      },
     },
-    // providers: {
-    //   imagor: {
-    //     name: 'imagor',
-    //     provider: '~/providers/imagor-provider.js',
-    //     options: {
-    //       baseURL: process.env.IMAGOR_BASE_URL || 'http://localhost:8080',
-    //       // Your self-hosted images base URL
-    //       imageBaseURL: process.env.IMAGE_STORAGE_URL || 'http://localhost:9000/images',
-    //       // Default operations if needed
-    //       defaultFormat: 'webp',
-    //       defaultQuality: 80,
-    //     },
-    //   },
-    // },
   },
 
   plausible: {

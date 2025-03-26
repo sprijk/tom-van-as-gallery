@@ -8,8 +8,8 @@
           @click="showFullImage = true"
         >
           <NuxtImg
-            provider="cloudinary"
-            :src="painting.id"
+            provider="imagor"
+            :src="painting.destPath"
             format="webp"
             width="600"
             fit="contain"
@@ -321,8 +321,8 @@
 
         <div class="max-w-screen-xl max-h-screen" @click.stop>
           <NuxtImg
-            provider="cloudinary"
-            :src="painting.id"
+            provider="imagor"
+            :src="painting.destPath"
             format="webp"
             quality="auto:best"
             fit="contain"
@@ -380,17 +380,6 @@ function navigateToPainting(id) {
 
   // Navigeer naar het nieuwe schilderij
   router.push(`/schilderijen/${id}`);
-}
-
-// Datum formatteren
-function formatDate(dateString) {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat('nl-NL', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(date);
 }
 
 // Share functionaliteit

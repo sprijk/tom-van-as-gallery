@@ -42,8 +42,8 @@
         >
           <div class="h-10 w-10 flex-shrink-0 mr-2">
             <NuxtImg
-              provider="cloudinary"
-              :src="suggestion.id"
+              provider="imagor"
+              :src="painting.destPath"
               width="40"
               height="40"
               fit="cover"

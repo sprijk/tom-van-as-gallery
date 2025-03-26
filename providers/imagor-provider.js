@@ -1,10 +1,10 @@
-// providers/imagor-provider.ts
+// providers/imagor-provider.js
 import { defineImageProvider } from '#image';
 
 export default defineImageProvider({
   name: 'imagor',
 
-  provider: '~/providers/imagor-provider.ts',
+  provider: '~/providers/imagor-provider.js',
 
   /**
    * Transforms an image using Imagor
@@ -17,7 +17,7 @@ export default defineImageProvider({
     // Get configuration options
     const {
       baseURL = 'http://localhost:8080',
-      imageStorageURL = 'http://localhost:9000/images',
+      imageBaseURL = 'http://localhost:9000/images',
       securityKey = '',
       defaultFormat = 'webp',
       defaultQuality = 80,
@@ -86,12 +86,16 @@ export default defineImageProvider({
     }
 
     // Determine the source URL for the image
-    let sourceUrl = src;
+    let sourceUrl = '';
 
-    // If the path doesn't start with http or https, treat it as a relative path
-    // and prepend the imageStorageURL
+    // If the path is a public ID (from previous Cloudinary setup)
+    // we need to map it to the new storage path
     if (!src.startsWith('http://') && !src.startsWith('https://')) {
-      sourceUrl = `${imageStorageURL}/${src.replace(/^\//, '')}`;
+      // This is just the ID, so we construct the full path to the image in MinIO
+      sourceUrl = `${imageBaseURL}/${src}`;
+    } else {
+      // This is already a full URL
+      sourceUrl = src;
     }
 
     // URL-encode the source URL for Imagor

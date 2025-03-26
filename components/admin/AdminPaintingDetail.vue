@@ -29,8 +29,8 @@
           <!-- Image container -->
           <div class="relative bg-gray-100 rounded-lg overflow-hidden">
             <NuxtImg
-              provider="cloudinary"
-              :src="painting.id"
+              provider="imagor"
+              :src="painting.destPath"
               format="webp"
               quality="auto:best"
               fit="inside"

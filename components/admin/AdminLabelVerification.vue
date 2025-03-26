@@ -54,8 +54,8 @@
         <!-- Image container for original aspect ratio -->
         <div class="relative bg-gray-100">
           <NuxtImg
-            provider="cloudinary"
-            :src="painting.id"
+            provider="imagor"
+            :src="painting.destPath"
             format="webp"
             width="600"
             fit="inside"
@@ -253,7 +253,7 @@ async function updateLabel(data) {
   const painting = data;
 
   try {
-    // Call API to update the label in Cloudinary
+    // Call API to update the label
     const response = await fetch('/api/admin/update-label', {
       method: 'POST',
       headers: {

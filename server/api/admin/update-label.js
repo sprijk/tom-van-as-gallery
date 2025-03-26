@@ -1,11 +1,10 @@
-// server/api/admin/add-tag.js
-import { v2 as cloudinary } from 'cloudinary';
+// server/api/admin/update-label.js
+import { getDatabase } from '../../utils/db';
 
 export default defineEventHandler(async (event) => {
   try {
     // Get request body
     const body = await readBody(event);
-    // console.log('Body:', body);
     const { labelNumber, imageId } = body;
 
     if (!imageId) {
@@ -22,33 +21,27 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // Get runtime config to set up Cloudinary
-    const config = useRuntimeConfig();
+    // Update label number in database
+    const db = await getDatabase();
+    const success = await db.updateLabelNumber(imageId, labelNumber);
 
-    // Configure Cloudinary
-    cloudinary.config({
-      cloud_name: config.cloudinaryCloudName,
-      api_key: config.cloudinaryApiKey,
-      api_secret: config.cloudinaryApiSecret,
-    });
+    if (!success) {
+      return createError({
+        statusCode: 404,
+        statusMessage: `Image with ID ${imageId} not found`,
+      });
+    }
 
-    await cloudinary.uploader.add_context('verified=true', [imageId]);
-    const result = await cloudinary.uploader.add_context(`label_number=${labelNumber}`, [imageId]);
-
-    // get the result status and return the result
     return {
       success: true,
-      statusCode: result.status,
-      statusMessage: result.message,
-      message: `Label number ${labelNumber} added successfully`,
-      data: result,
+      message: `Label number ${labelNumber} added successfully to image ${imageId}`,
     };
   } catch (error) {
-    console.error('Error adding tag:', error);
+    console.error('Error updating label:', error);
 
     return createError({
       statusCode: 500,
-      statusMessage: 'Failed to add tag',
+      statusMessage: 'Failed to update label',
       data: error,
     });
   }

@@ -1,4 +1,4 @@
-<!-- Modified PaintingCard.vue with unpublished indicator for admin -->
+<!-- Updated PaintingCard.vue with Imagor provider -->
 <template>
   <div class="group relative">
     <NuxtLink
@@ -7,8 +7,8 @@
     >
       <div class="relative pb-[75%] bg-gray-100">
         <NuxtImg
-          provider="cloudinary"
-          :src="painting.id"
+          provider="imagor"
+          :src="painting.destPath"
           format="webp"
           width="600"
           height="600"
@@ -36,14 +36,6 @@
               :is-favorite="isPaintingInFavorites(painting.id)"
               @toggle="toggleFavorite(painting)"
             />
-
-            <!-- Tooltip that appears on hover -->
-            <!-- <div
-              class="hidden group-hover:block absolute right-0 top-full mt-2 bg-white text-gray-800 text-xs rounded shadow-md p-2 w-48 pointer-events-none"
-            >
-              <p>Klik op het hart om dit schilderij aan je favorieten toe te voegen</p>
-              <div class="absolute -top-1 right-3 w-2 h-2 bg-white transform rotate-45"></div>
-            </div> -->
           </div>
         </div>
       </div>

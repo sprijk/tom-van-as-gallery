@@ -1,5 +1,5 @@
 // server/api/admin/toggle-published.js
-import { v2 as cloudinary } from 'cloudinary';
+import { getDatabase } from '../../utils/db';
 
 export default defineEventHandler(async (event) => {
   try {
@@ -14,29 +14,20 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // Get runtime config to set up Cloudinary
-    const config = useRuntimeConfig();
+    // Update published status in database
+    const db = await getDatabase();
+    const success = await db.updatePublishedStatus(imageId, published);
 
-    // Configure Cloudinary
-    cloudinary.config({
-      cloud_name: config.cloudinaryCloudName,
-      api_key: config.cloudinaryApiKey,
-      api_secret: config.cloudinaryApiSecret,
-    });
+    if (!success) {
+      return createError({
+        statusCode: 404,
+        statusMessage: `Image with ID ${imageId} not found`,
+      });
+    }
 
-    // Convert boolean to string for cloudinary context
-    const publishedValue = published ? 'true' : 'false';
-
-    // Update metadata in Cloudinary to set published state
-    const result = await cloudinary.uploader.add_context(`published=${publishedValue}`, [imageId]);
-
-    console.log(`Image ${imageId} publish state changed to ${publishedValue}`);
-
-    // Return success response
     return {
       success: true,
-      message: `Image ${imageId} publish state changed to ${publishedValue}`,
-      data: result,
+      message: `Image ${imageId} publish state changed to ${published}`,
     };
   } catch (error) {
     console.error('Error toggling published state:', error);

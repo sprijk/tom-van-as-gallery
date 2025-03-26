@@ -153,8 +153,8 @@
               />
               <NuxtImg
                 v-if="category.image"
-                provider="cloudinary"
-                :src="category.image"
+                provider="imagor"
+                :src="painting.destPath"
                 format="webp"
                 width="600"
                 height="400"
@@ -212,8 +212,10 @@
 </template>
 
 <script setup>
-// Composable voor Cloudinary data
-const { getAllPaintings } = useCloudinary();
+import { useImageService } from '../composables/useImageService';
+
+// Composable voor data
+const { getAllPaintings } = useImageService();
 
 // State voor homepage data
 const paintings = ref([]);
