@@ -68,8 +68,8 @@ export default defineNuxtConfig({
 
     // Client-side variables
     public: {
-      imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://localhost:9000/images',
-      imagorBaseUrl: process.env.IMAGOR_BASE_URL || 'http://localhost:8080',
+      imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://minio.minio:9000/tomvanas-kunst',
+      imagorBaseUrl: process.env.IMAGOR_BASE_URL || 'http://localhost:8000',
     },
   },
 
@@ -86,13 +86,10 @@ export default defineNuxtConfig({
   image: {
     providers: {
       imagor: {
-        name: 'imagor',
         provider: '~/providers/imagor-provider.js',
         options: {
-          baseURL: process.env.IMAGOR_BASE_URL || 'http://localhost:8080',
-          // Your self-hosted images base URL
-          imageBaseURL: process.env.IMAGE_STORAGE_URL || 'http://localhost:9000/images',
-          // Default operations if needed
+          baseURL: process.env.IMAGOR_BASE_URL || 'http://localhost:8000',
+          imageBaseURL: process.env.IMAGE_STORAGE_URL || 'http://minio.minio:9000/tomvanas-kunst',
           defaultFormat: 'webp',
           defaultQuality: 80,
         },

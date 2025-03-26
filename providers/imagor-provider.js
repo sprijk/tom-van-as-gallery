@@ -1,123 +1,106 @@
-// providers/imagor-provider.js
-import { defineImageProvider } from '#image';
+/**
+ * Transforms an image using Imagor
+ *
+ * @param src - Source image path (could be a path on MinIO or full URL)
+ * @param modifiers - Transformation parameters
+ * @param options - Provider options from Nuxt config
+ */
+export const getImage = (src, { modifiers, baseURL }) => {
+  console.log('Imagor provider called with:', src, modifiers, baseURL);
 
-export default defineImageProvider({
-  name: 'imagor',
+  console.log(useRuntimeConfig());
 
-  provider: '~/providers/imagor-provider.js',
+  // Get configuration options
+  baseURL = useRuntimeConfig().imagor.baseURL;
+  const imageBaseURL = useRuntimeConfig().imagor.imageBaseURL;
+  const defaultFormat = 'webp';
+  const defaultQuality = 80;
 
-  /**
-   * Transforms an image using Imagor
-   *
-   * @param src - Source image path (could be a path on MinIO or full URL)
-   * @param modifiers - Transformation parameters
-   * @param options - Provider options from Nuxt config
-   */
-  async getImage(src, { modifiers, options }) {
-    // Get configuration options
-    const {
-      baseURL = 'http://localhost:8080',
-      imageBaseURL = 'http://localhost:9000/images',
-      securityKey = '',
-      defaultFormat = 'webp',
-      defaultQuality = 80,
-    } = options || {};
+  // Build the operations array for Imagor URL
+  const operations = [];
 
-    // Build the operations array for Imagor URL
-    const operations = [];
+  // Handle resizing
+  if (modifiers.width || modifiers.height) {
+    const resize = ['resize'];
+    if (modifiers.width) resize.push(modifiers.width);
+    if (modifiers.height) resize.push(modifiers.height);
+    operations.push(resize.join('-'));
+  }
 
-    // Handle resizing
-    if (modifiers.width || modifiers.height) {
-      const resize = ['resize'];
-      if (modifiers.width) resize.push(modifiers.width);
-      if (modifiers.height) resize.push(modifiers.height);
-      operations.push(resize.join('-'));
+  // Handle cropping based on fit parameter
+  if (modifiers.fit) {
+    switch (modifiers.fit) {
+      case 'cover':
+        operations.push('smart');
+        break;
+      case 'contain':
+        operations.push('fit-in');
+        break;
+      case 'fill':
+        // Default imagor behavior for fill is to stretch
+        // No need to add any operation
+        break;
+      case 'inside':
+        operations.push('fit-in');
+        break;
+      case 'outside':
+        // There's no direct equivalent, using fit-in as closest
+        operations.push('fit-in');
+        break;
     }
+  }
 
-    // Handle cropping based on fit parameter
-    if (modifiers.fit) {
-      switch (modifiers.fit) {
-        case 'cover':
-          operations.push('smart');
-          break;
-        case 'contain':
-          operations.push('fit-in');
-          break;
-        case 'fill':
-          // Default imagor behavior for fill is to stretch
-          // No need to add any operation
-          break;
-        case 'inside':
-          operations.push('fit-in');
-          break;
-        case 'outside':
-          // There's no direct equivalent, using fit-in as closest
-          operations.push('fit-in');
-          break;
-      }
-    }
+  // Handle format conversion
+  const format = modifiers.format || defaultFormat;
+  if (format) {
+    operations.push(`format-${format}`);
+  }
 
-    // Handle format conversion
-    const format = modifiers.format || defaultFormat;
-    if (format) {
-      operations.push(`format-${format}`);
-    }
+  // Handle quality
+  const quality = modifiers.quality || defaultQuality;
+  if (quality) {
+    operations.push(`quality-${quality}`);
+  }
 
-    // Handle quality
-    const quality = modifiers.quality || defaultQuality;
-    if (quality) {
-      operations.push(`quality-${quality}`);
-    }
+  // Handle common additional operations
+  if (modifiers.blur) operations.push(`blur-${modifiers.blur}`);
+  if (modifiers.sharpen) operations.push(`sharpen-${modifiers.sharpen}`);
+  if (modifiers.grayscale) operations.push('grayscale');
+  if (modifiers.brightness) operations.push(`brightness-${modifiers.brightness}`);
+  if (modifiers.contrast) operations.push(`contrast-${modifiers.contrast}`);
+  if (modifiers.rotate) operations.push(`rotate-${modifiers.rotate}`);
+  if (modifiers.flip) operations.push('flip');
+  if (modifiers.flop) operations.push('flop');
 
-    // Handle common additional operations
-    if (modifiers.blur) operations.push(`blur-${modifiers.blur}`);
-    if (modifiers.sharpen) operations.push(`sharpen-${modifiers.sharpen}`);
-    if (modifiers.grayscale) operations.push('grayscale');
-    if (modifiers.brightness) operations.push(`brightness-${modifiers.brightness}`);
-    if (modifiers.contrast) operations.push(`contrast-${modifiers.contrast}`);
-    if (modifiers.rotate) operations.push(`rotate-${modifiers.rotate}`);
-    if (modifiers.flip) operations.push('flip');
-    if (modifiers.flop) operations.push('flop');
+  // Generate the URL path
+  let imagorPath = '';
+  if (operations.length > 0) {
+    imagorPath = '/' + operations.join('/');
+  }
 
-    // Generate the URL path
-    let imagorPath = '';
-    if (operations.length > 0) {
-      imagorPath = '/' + operations.join('/');
-    }
+  // Determine the source URL for the image
+  let sourceUrl = '';
 
-    // Determine the source URL for the image
-    let sourceUrl = '';
+  // Check if the source is already an absolute path with the domain
+  if (!src.startsWith('http://') && !src.startsWith('https://')) {
+    // This is just the path, so we assume it's relative to imageBaseURL
+    sourceUrl = `${imageBaseURL}/${src}`;
+  } else {
+    // This is already a full URL
+    sourceUrl = src;
+  }
 
-    // If the path is a public ID (from previous Cloudinary setup)
-    // we need to map it to the new storage path
-    if (!src.startsWith('http://') && !src.startsWith('https://')) {
-      // This is just the ID, so we construct the full path to the image in MinIO
-      sourceUrl = `${imageBaseURL}/${src}`;
-    } else {
-      // This is already a full URL
-      sourceUrl = src;
-    }
+  // URL-encode the source URL for Imagor
+  const encodedSrc = encodeURIComponent(sourceUrl);
 
-    // URL-encode the source URL for Imagor
-    const encodedSrc = encodeURIComponent(sourceUrl);
+  // Build the final URL
+  // If security key is provided, we should generate a signed URL
+  const finalURL = `${baseURL}/unsafe${imagorPath}/${encodedSrc}`;
 
-    // Build the final URL
-    // If security key is provided, we should generate a signed URL
-    let finalURL;
+  console.log('Source URL:', sourceUrl);
+  console.log('Final URL:', finalURL);
 
-    if (securityKey) {
-      // For signed URLs, implement signing logic here
-      // This would require crypto functions
-      // For simplicity, this example doesn't include signing
-      console.warn('URL signing is not implemented in this example');
-      finalURL = `${baseURL}${imagorPath}/${encodedSrc}`;
-    } else {
-      // For unsigned URLs (unsafe mode in Imagor)
-      finalURL = `${baseURL}/unsafe${imagorPath}/${encodedSrc}`;
-    }
-
-    return {
-      url: finalURL,
-    };
-  },
-});
+  return {
+    url: finalURL,
+  };
+};

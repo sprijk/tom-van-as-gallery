@@ -232,6 +232,8 @@ async function fetchData() {
     // Alle schilderijen ophalen
     paintings.value = await getAllPaintings();
 
+    console.log('paintings', paintings.value);
+
     if (paintings.value.length > 0) {
       // Willekeurig uitgelicht schilderij kiezen
       const randomIndex = Math.floor(Math.random() * paintings.value.length);
