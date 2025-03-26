@@ -1,3 +1,5 @@
+import { joinURL } from 'ufo';
+
 /**
  * Transforms an image using Imagor
  *
@@ -19,12 +21,13 @@ export const getImage = (
 
   // Build the operations array for Imagor URL
   const operations = [];
+  const filters = [];
 
   // Handle fit parameter first as it affects how other operations work
   if (modifiers.fit) {
     switch (modifiers.fit) {
       case 'cover':
-        operations.push('smart');
+        // nothing needed, this is default
         break;
       case 'contain':
         operations.push('fit-in');
@@ -35,8 +38,7 @@ export const getImage = (
       case 'outside':
         operations.push('fit-in');
         break;
-      // Default imagor behavior for fill is to stretch
-      // No need to add any operation for 'fill'
+      // Default imagor behavior for fill is to stretch, no operation needed
     }
   }
 
@@ -49,51 +51,59 @@ export const getImage = (
     operations.push(resizeString);
   }
 
-  // Handle format conversion
-  const format = modifiers.format || defaultFormat;
-  if (format) {
-    operations.push(`format(${format})`);
+  // Add filters using the imagor syntax
+  // Format filter
+  if (modifiers.format) {
+    filters.push(`format(${modifiers.format})`);
   }
 
-  // Handle quality
-  const quality = modifiers.quality || defaultQuality;
-  if (quality) {
-    operations.push(`quality(${quality})`);
+  // Quality filter
+  if (modifiers.quality) {
+    filters.push(`quality(${modifiers.quality})`);
   }
 
-  // Handle common additional operations
-  if (modifiers.blur) operations.push(`blur(${modifiers.blur})`);
-  if (modifiers.sharpen) operations.push(`sharpen(${modifiers.sharpen})`);
-  if (modifiers.grayscale) operations.push('grayscale()');
-  if (modifiers.brightness) operations.push(`brightness(${modifiers.brightness})`);
-  if (modifiers.contrast) operations.push(`contrast(${modifiers.contrast})`);
-  if (modifiers.rotate) operations.push(`rotate(${modifiers.rotate})`);
-  if (modifiers.flip) operations.push('flip()');
-  if (modifiers.flop) operations.push('flop()');
+  // Other filters
+  if (modifiers.blur) filters.push(`blur(${modifiers.blur})`);
+  if (modifiers.sharpen) filters.push(`sharpen(${modifiers.sharpen})`);
+  if (modifiers.grayscale) filters.push('grayscale()');
+  if (modifiers.brightness) filters.push(`brightness(${modifiers.brightness})`);
+  if (modifiers.contrast) filters.push(`contrast(${modifiers.contrast})`);
+  if (modifiers.rotate) filters.push(`rotate(${modifiers.rotate})`);
+  if (modifiers.background) filters.push(`background_color(${modifiers.background})`);
+  if (modifiers.fill) filters.push(`fill(${modifiers.fill})`);
 
-  // Generate the URL path
-  let operationsPath = '';
-  if (operations.length > 0) {
-    operationsPath = operations.join('/') + '/';
+  // Add filters part if needed
+  if (filters.length > 0) {
+    operations.push(`filters:${filters.join(':')}`);
   }
 
   // Determine the source URL for the image
   let sourceUrl = '';
 
-  // Check if the source is already an absolute path with the domain
-  if (!src.startsWith('http://') && !src.startsWith('https://')) {
-    // This is just the path, so we assume it's relative to imageBaseURL
-    sourceUrl = `${imageBaseURL}/${src}`;
-  } else {
-    // This is already a full URL
+  // Check if the source is already an absolute URL with a domain
+  if (src.startsWith('http://') || src.startsWith('https://')) {
     sourceUrl = src;
+  } else {
+    // This is just the path, assume it's relative to imageBaseURL if provided
+
+    sourceUrl = imageBaseURL ? `${imageBaseURL}${src.startsWith('/') ? '' : '/'}${src}` : src;
   }
 
-  // Encode the source URL
-  const encodedSrc = encodeURIComponent(sourceUrl);
+  // Build the final URL using the unsafe path for development
+  // In production, you'd likely want to implement the HMAC signature
+  const pathParts = ['unsafe'];
 
-  // Build the final URL using the unsafe path (we're not using signed URLs)
-  const finalURL = `${baseURL}/unsafe/${operationsPath}${encodedSrc}`;
+  // Add all operations
+  pathParts.push(...operations);
+
+  // Add the source URL
+  pathParts.push(encodeURIComponent(sourceUrl));
+
+  // Join all parts with slashes
+  const path = pathParts.join('/');
+
+  // Join with base URL
+  const finalURL = joinURL(baseURL, path);
 
   return {
     url: finalURL,

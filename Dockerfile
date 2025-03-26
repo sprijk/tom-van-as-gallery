@@ -16,6 +16,9 @@ COPY . .
 # Build the application
 RUN npm run build
 
+# Create a directory for the database if it doesn't exist
+RUN mkdir -p /app/db
+
 # Expose the port the app runs on
 EXPOSE 3000
 
