@@ -33,7 +33,7 @@ export default defineNuxtConfig({
 
         // Twitter
         { property: 'twitter:card', content: 'summary_large_image' },
-        { property: 'twitter:url', content: 'https://tomvanas-kunst.nl/' },
+        { property: 'twitter:url', content: 'https://tomvanas-kunst.nl' },
         { property: 'twitter:title', content: 'Tom van As - Kunstgalerie' },
         {
           property: 'twitter:description',
@@ -59,7 +59,7 @@ export default defineNuxtConfig({
 
     // Imagor configuration
     imagorBaseUrl: process.env.IMAGOR_BASE_URL || 'http://localhost:8080',
-    imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://localhost:9000/images',
+    imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://minio.minio:9000/tomvanas-kunst',
 
     // Google Sheets API configuration
     googleServiceAccountEmail: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
@@ -68,8 +68,8 @@ export default defineNuxtConfig({
 
     // Client-side variables
     public: {
-      imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://minio.minio:9000/tomvanas-kunst',
       imagorBaseUrl: process.env.IMAGOR_BASE_URL || 'http://localhost:8000',
+      imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://minio.minio:9000/tomvanas-kunst',
     },
   },
 
