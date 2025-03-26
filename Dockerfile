@@ -1,23 +1,31 @@
-# Use an official Node runtime as the base image
-FROM node:22
+# Build stage
+FROM node:22 AS builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+COPY package.json package-lock.json ./
+RUN npm ci
 
-# Install dependencies
-RUN npm install
-
-# Copy the application code
 COPY . .
-
-# Build the application
 RUN npm run build
 
-# Create a directory for the database if it doesn't exist
-RUN mkdir -p /app/db
+# Production stage
+FROM node:22 AS runner
+
+WORKDIR /app
+
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/package-lock.json .
+COPY --from=builder /app/.nuxt ./.nuxt
+COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/seed.js ./seed.js
+COPY --from=builder /app/data/images.json ./data/images.json
+
+RUN npm ci --production
+
+ENV NODE_ENV=production
+ENV PORT=3000
 
 # Expose the port the app runs on
 EXPOSE 3000

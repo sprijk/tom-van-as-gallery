@@ -1,5 +1,6 @@
 import { joinURL } from 'ufo';
 
+
 /**
  * Transforms an image using Imagor
  *
@@ -11,8 +12,8 @@ export const getImage = (
   src,
   {
     modifiers = {},
-    baseURL = 'http://localhost:8080',
-    imageBaseURL = 'http://minio.minio:9000/tomvanas-kunst',
+    baseURL,
+    imageBaseURL,
   } = {}
 ) => {
   // Get configuration options from the provided parameters

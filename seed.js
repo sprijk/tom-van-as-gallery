@@ -9,6 +9,8 @@ const JSON_PATH = process.env.JSON_PATH || './data/images.json';
 
 async function seed() {
   console.log('Starting seed process...');
+  console.log(`Database path: ${DB_PATH}`);
+  console.log(`JSON file path: ${JSON_PATH}`);
 
   // Ensure the database directory exists
   const dbDir = path.dirname(DB_PATH);
