@@ -154,7 +154,7 @@
               <NuxtImg
                 v-if="category.image"
                 provider="imagor"
-                :src="painting.destPath"
+                :src="category.image"
                 format="webp"
                 width="600"
                 height="400"
@@ -232,8 +232,6 @@ async function fetchData() {
     // Alle schilderijen ophalen
     paintings.value = await getAllPaintings();
 
-    console.log('paintings', paintings.value);
-
     if (paintings.value.length > 0) {
       // Willekeurig uitgelicht schilderij kiezen
       const randomIndex = Math.floor(Math.random() * paintings.value.length);
@@ -252,7 +250,7 @@ async function fetchData() {
         if (category) {
           if (!categoryCounts[category]) {
             categoryCounts[category] = 0;
-            categoryImages[category] = painting.id; // Eerste schilderij als voorbeeld afbeelding
+            categoryImages[category] = painting.destPath; // Eerste schilderij als voorbeeld afbeelding
           }
           categoryCounts[category]++;
         }

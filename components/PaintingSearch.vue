@@ -43,7 +43,7 @@
           <div class="h-10 w-10 flex-shrink-0 mr-2">
             <NuxtImg
               provider="imagor"
-              :src="painting.destPath"
+              :src="suggestion.destPath"
               width="40"
               height="40"
               fit="cover"
