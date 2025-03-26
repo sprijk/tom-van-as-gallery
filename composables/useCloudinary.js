@@ -6,7 +6,6 @@ export const useCloudinary = () => {
   // Cache voor data om herhaalde netwerkaanvragen te verminderen
   const paintingsCache = useState('paintingsCache', () => null);
   const categoriesCache = useState('categoriesCache', () => null);
-  const tagsCache = useState('tagsCache', () => null);
 
   // Error status
   const apiError = useState('cloudinaryApiError', () => null);
@@ -132,40 +131,6 @@ export const useCloudinary = () => {
     }
   };
 
-  // Ophalen van alle beschikbare tags
-  const getAllTags = async (forceRefresh = false) => {
-    try {
-      isLoading.value = true;
-      apiError.value = null;
-
-      // Gebruik cache indien beschikbaar en geen forceRefresh
-      if (tagsCache.value && !forceRefresh) {
-        isLoading.value = false;
-        return tagsCache.value;
-      }
-
-      const response = await fetch('/api/tags');
-      if (!response.ok) {
-        throw new Error('Kon tags niet ophalen');
-      }
-
-      const data = await response.json();
-      // Update cache
-      tagsCache.value = data;
-      isLoading.value = false;
-      return data;
-    } catch (error) {
-      console.error('Fout bij het ophalen van tags:', error);
-      apiError.value = {
-        message: error.message,
-        context: 'getAllTags',
-        timestamp: new Date().toISOString(),
-      };
-      isLoading.value = false;
-      return [];
-    }
-  };
-
   // Ophalen van schilderijen per categorie
   const getPaintingsByCategory = async (category, isAdmin = false) => {
     try {
@@ -244,7 +209,6 @@ export const useCloudinary = () => {
   const clearCache = () => {
     paintingsCache.value = null;
     categoriesCache.value = null;
-    tagsCache.value = null;
     apiError.value = null;
   };
 
@@ -252,7 +216,6 @@ export const useCloudinary = () => {
     getAllPaintings,
     getPaintingById,
     getAllCategories,
-    getAllTags,
     getPaintingsByCategory,
     getImageUrl,
     clearCache,

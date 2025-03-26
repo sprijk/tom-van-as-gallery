@@ -106,12 +106,6 @@
                 </div>
                 <div class="text-sm text-gray-600 mb-4">
                   <p>Categorie: {{ painting.category || 'Geen categorie' }}</p>
-                  <p>
-                    Tags:
-                    {{
-                      painting.tags && painting.tags.length ? painting.tags.join(', ') : 'Geen tags'
-                    }}
-                  </p>
                 </div>
               </div>
 

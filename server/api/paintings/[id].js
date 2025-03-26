@@ -20,7 +20,6 @@ export default defineEventHandler(async (event) => {
   try {
     // Details van een specifieke resource ophalen
     const result = await cloudinary.api.resource(id, {
-      tags: true,
       context: true,
     });
 
@@ -40,9 +39,6 @@ export default defineEventHandler(async (event) => {
         category = folderPath.split('/').pop();
       }
     }
-
-    // Tags verwerken - alle tags zijn reguliere tags
-    const tags = result.tags || [];
 
     // Titel ophalen uit label_number of caption als fallback
     const labelNumber = result.context?.custom?.label_number;
@@ -90,7 +86,6 @@ export default defineEventHandler(async (event) => {
       imageUrl: result.secure_url,
       originalImageUrl: originalUrl,
       category: category,
-      tags: tags,
       width: result.width,
       height: result.height,
       format: result.format,

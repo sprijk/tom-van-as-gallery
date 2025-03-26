@@ -1,4 +1,3 @@
-// pages/schilderijen/index.vue
 <template>
   <div>
     <div class="mb-8">
@@ -27,11 +26,7 @@
     <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <!-- Sidebar met filters -->
       <div class="lg:col-span-1">
-        <PaintingFilter
-          :categories="allCategories"
-          :tags="allTags"
-          @update:filters="applyFilters"
-        />
+        <PaintingFilter :categories="allCategories" @update:filters="applyFilters" />
       </div>
 
       <!-- Resultaten -->
@@ -175,7 +170,7 @@
 
 <script setup>
 // Composable voor Cloudinary data
-const { getAllPaintings, getAllCategories, getAllTags } = useCloudinary();
+const { getAllPaintings, getAllCategories } = useCloudinary();
 const config = useRuntimeConfig();
 const route = useRoute();
 const router = useRouter();
@@ -183,7 +178,6 @@ const router = useRouter();
 // State
 const allPaintings = ref([]);
 const allCategories = ref([]);
-const allTags = ref([]);
 const isInitialLoading = ref(true);
 const isFilterLoading = ref(false);
 
@@ -191,7 +185,6 @@ const isFilterLoading = ref(false);
 const filters = ref({
   search: '',
   categories: [],
-  tags: [],
 });
 const sortOption = ref('newest');
 const perPage = ref(12);
@@ -207,8 +200,7 @@ const filteredPaintings = computed(() => {
     result = result.filter((painting) => {
       return (
         (painting.title && painting.title.toLowerCase().includes(searchTerm)) ||
-        (painting.category && painting.category.toLowerCase().includes(searchTerm)) ||
-        (painting.tags && painting.tags.some((tag) => tag.toLowerCase().includes(searchTerm)))
+        (painting.category && painting.category.toLowerCase().includes(searchTerm))
       );
     });
   }
@@ -217,13 +209,6 @@ const filteredPaintings = computed(() => {
   if (filters.value.categories.length > 0) {
     result = result.filter((painting) => {
       return painting.category && filters.value.categories.includes(painting.category);
-    });
-  }
-
-  // Filter op tags
-  if (filters.value.tags.length > 0) {
-    result = result.filter((painting) => {
-      return painting.tags && painting.tags.some((tag) => filters.value.tags.includes(tag));
     });
   }
 
@@ -284,7 +269,6 @@ function clearFilters() {
   filters.value = {
     search: '',
     categories: [],
-    tags: [],
   };
   updateRouteParams();
 }
@@ -307,12 +291,6 @@ function updateRouteParams() {
     query.categories = filters.value.categories.join(',');
   }
 
-  if (filters.value.tags.length === 1) {
-    query.tag = filters.value.tags[0];
-  } else if (filters.value.tags.length > 1) {
-    query.tags = filters.value.tags.join(',');
-  }
-
   // Sorteeroptie toevoegen aan URL
   if (sortOption.value !== 'newest') {
     query.sort = sortOption.value;
@@ -326,24 +304,17 @@ async function fetchData() {
   isInitialLoading.value = true;
 
   try {
-    // Alle schilderijen, categorieën en tags ophalen
-    const [paintings, categories, tags] = await Promise.all([
-      getAllPaintings(),
-      getAllCategories(),
-      getAllTags(),
-    ]);
+    // Alle schilderijen en categorieën
+    const [paintings, categories] = await Promise.all([getAllPaintings(), getAllCategories()]);
 
     allPaintings.value = paintings;
     allCategories.value = categories;
-    allTags.value = tags;
 
     // URL parameters verwerken om filters toe te passen
-    // const { category, tag, search, sort } = route.query;
+    // const { category, search, sort } = route.query;
     const { search, sort } = route.query;
     const categoryParam = route.query.category;
     const categoriesParam = route.query.categories;
-    const tagParam = route.query.tag;
-    const tagsParam = route.query.tags;
 
     if (search) {
       filters.value.search = search;
@@ -353,12 +324,6 @@ async function fetchData() {
       filters.value.categories = [categoryParam];
     } else if (categoriesParam) {
       filters.value.categories = categoriesParam.split(',');
-    }
-
-    if (tagParam) {
-      filters.value.tags = [tagParam];
-    } else if (tagsParam) {
-      filters.value.tags = tagsParam.split(',');
     }
 
     if (sort) {
@@ -383,7 +348,6 @@ watch(sortOption, () => {
 useHead(() => {
   // Extract category from route query if available
   const category = route.query.category ? String(route.query.category) : null;
-  const tag = route.query.tag ? String(route.query.tag) : null;
 
   // Create appropriate title and description based on filters
   let title = 'Schilderijen | Tom van As Kunstgalerij';
@@ -392,12 +356,9 @@ useHead(() => {
   if (category) {
     title = `${category} | Tom van As Kunstgalerij`;
     description = `Bekijk de ${category} collectie van kunstenaar Tom van As.`;
-  } else if (tag) {
-    title = `${tag} schilderijen | Tom van As Kunstgalerij`;
-    description = `Bekijk schilderijen met tag "${tag}" van kunstenaar Tom van As.`;
   }
 
-  // Try to find an appropriate image for the category/tag
+  // Try to find an appropriate image for the category
   let imageUrl = 'https://tomvanas-kunst.nl/images/og-image.jpg'; // Default fallback
 
   // If we have filtered paintings and they've been loaded, use the first one as OG image
@@ -410,8 +371,6 @@ useHead(() => {
   let canonicalUrl = 'https://tomvanas-kunst.nl/schilderijen';
   if (category) {
     canonicalUrl += `?category=${encodeURIComponent(category)}`;
-  } else if (tag) {
-    canonicalUrl += `?tag=${encodeURIComponent(tag)}`;
   }
 
   return {

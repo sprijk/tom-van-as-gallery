@@ -85,22 +85,6 @@
             <div class="text-sm text-gray-500 mb-2">
               Categorie: {{ painting.category || 'Geen categorie' }}
             </div>
-
-            <div class="flex flex-wrap gap-1 mb-3">
-              <span
-                v-for="tag in painting.tags"
-                :key="`${painting.id}-${tag}`"
-                class="px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded-full"
-              >
-                {{ tag }}
-              </span>
-              <span
-                v-if="!painting.tags || painting.tags.length === 0"
-                class="text-xs text-gray-500"
-              >
-                Geen tags
-              </span>
-            </div>
           </div>
         </div>
       </div>

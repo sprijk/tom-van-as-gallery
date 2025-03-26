@@ -151,7 +151,6 @@ async function migrateFolder(folderPath = '') {
         type: 'upload',
         max_results: 500,
         context: true,
-        tags: true,
       });
 
       // Verwerk de schilderijen

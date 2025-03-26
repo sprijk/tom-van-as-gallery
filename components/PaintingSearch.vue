@@ -4,7 +4,7 @@
       <input
         v-model="searchTerm"
         type="text"
-        placeholder="Zoek schilderijen op nummer, categorie of tag..."
+        placeholder="Zoek schilderijen op nummer of categorie..."
         class="w-full px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
         @keyup.enter="search"
       />
@@ -90,10 +90,6 @@ const suggestions = computed(() => {
 
       // Zoek in categorie
       if (painting.category && painting.category.toLowerCase().includes(term)) return true;
-
-      // Zoek in tags
-      if (painting.tags && painting.tags.some((tag) => tag.toLowerCase().includes(term)))
-        return true;
 
       return false;
     })

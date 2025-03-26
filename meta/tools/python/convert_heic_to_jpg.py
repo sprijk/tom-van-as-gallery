@@ -97,4 +97,4 @@ def convert_heic_to_jpg(override=False):
     print("Conversion complete!")
 
 if __name__ == "__main__":
-    convert_heic_to_jpg(override=True)
+    convert_heic_to_jpg(override=False)

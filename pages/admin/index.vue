@@ -33,17 +33,6 @@
           <button
             class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
             :class="
-              activeTab === 'tags'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            "
-            @click="activeTab = 'tags'"
-          >
-            Tags Beheren
-          </button>
-          <button
-            class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
-            :class="
               activeTab === 'publish'
                 ? 'border-primary text-primary'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -61,14 +50,6 @@
         :paintings="paintings"
         :is-loading="isLoading"
         @refresh="fetchPaintings"
-      />
-
-      <!-- Tag Management Tab -->
-      <AdminTagManagement
-        v-else-if="activeTab === 'tags'"
-        :paintings="paintings"
-        :all-tags="allTags"
-        :is-loading="isLoading"
       />
 
       <!-- Publication Management Tab -->
@@ -97,10 +78,9 @@ const loginError = ref('');
 const isLoggingIn = ref(false);
 
 // Painting data and loading states
-const { getAllPaintings, getAllTags } = useCloudinary();
+const { getAllPaintings } = useCloudinary();
 const { showSuccess, showError, showInfo } = useToast();
 const paintings = ref([]);
-const allTags = ref([]);
 const isLoading = ref(false);
 
 // Tab management
@@ -137,7 +117,6 @@ async function handleLogin(password) {
 
         // Fetch data for admin dashboard
         fetchPaintings();
-        fetchTags();
       } else {
         loginError.value = 'Incorrect wachtwoord';
         showError('Het ingevoerde wachtwoord is incorrect.', 'Aanmelding mislukt');
@@ -199,7 +178,6 @@ async function fetchPaintings() {
         currentLabel: labelNumber || '',
         correctedLabel: labelNumber || '',
         labelStatus,
-        tags: painting.tags || [],
         published: painting.published !== undefined ? painting.published : true, // Default to published if not specified
       };
     });
@@ -210,15 +188,6 @@ async function fetchPaintings() {
     showError('Kon de schilderijen niet laden. Probeer het later nog eens.', 'Laad fout');
   } finally {
     isLoading.value = false;
-  }
-}
-
-async function fetchTags() {
-  try {
-    allTags.value = await getAllTags(true); // Force refresh
-  } catch (error) {
-    console.error('Error fetching tags:', error);
-    showError('Kon de tags niet laden. Probeer het later nog eens.', 'Laad fout');
   }
 }
 
@@ -245,7 +214,6 @@ onMounted(() => {
     if (authenticated) {
       isAuthenticated.value = true;
       fetchPaintings();
-      fetchTags();
     }
   }
 });

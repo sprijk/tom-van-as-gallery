@@ -1,4 +1,3 @@
-// pages/schilderijen/[id].vue
 <template>
   <div>
     <div v-if="isLoading" class="py-12">
@@ -153,15 +152,14 @@ const isLoading = ref(true);
 const previousPainting = ref(null);
 const nextPainting = ref(null);
 
-// Gerelateerde schilderijen op basis van categorie en tags
+// Gerelateerde schilderijen op basis van categorie
 const relatedPaintings = computed(() => {
   if (!painting.value || allPaintings.value.length === 0) return [];
 
   const paintingId = painting.value.id;
   const category = painting.value.category;
-  const tags = painting.value.tags || [];
 
-  // Zoek schilderijen in dezelfde categorie of met overeenkomende tags
+  // Zoek schilderijen in dezelfde categorie
   return allPaintings.value
     .filter((p) => {
       // Negeer het huidige schilderij
@@ -170,10 +168,7 @@ const relatedPaintings = computed(() => {
       // Controleer op dezelfde categorie
       const hasSameCategory = p.category === category;
 
-      // Controleer op overeenkomende tags
-      const hasMatchingTag = p.tags && p.tags.some((tag) => tags.includes(tag));
-
-      return hasSameCategory || hasMatchingTag;
+      return hasSameCategory;
     })
     .slice(0, 4); // Limiteer tot 4 gerelateerde schilderijen
 });

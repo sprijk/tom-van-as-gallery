@@ -146,20 +146,6 @@
           </div>
         </div>
 
-        <div v-if="painting.tags && painting.tags.length" class="mb-6">
-          <h2 class="text-lg font-medium mb-2">Tags</h2>
-          <div class="flex flex-wrap">
-            <NuxtLink
-              v-for="tag in painting.tags"
-              :key="tag"
-              :to="`/schilderijen?tag=${tag}`"
-              class="mr-2 mb-2 bg-gray-100 px-3 py-1 rounded-full text-gray-700 hover:bg-gray-200 transition-colors"
-            >
-              {{ tag }}
-            </NuxtLink>
-          </div>
-        </div>
-
         <div class="mt-8">
           <div class="bg-primary-light/20 rounded-lg p-6">
             <h2 class="text-lg font-medium mb-2">Interesse in dit werk?</h2>

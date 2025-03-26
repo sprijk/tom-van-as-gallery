@@ -66,34 +66,6 @@
       </div>
     </div>
 
-    <div v-if="allTags.length > 0">
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="text-lg font-medium">Tags</h3>
-        <button
-          v-if="selectedTags.length > 0"
-          class="text-xs text-primary hover:text-primary-dark transition-colors"
-          @click="clearTags"
-        >
-          Wis tags
-        </button>
-      </div>
-      <div class="flex flex-wrap max-h-72 overflow-y-auto pb-2">
-        <button
-          v-for="tag in allTags"
-          :key="tag"
-          :class="[
-            'mr-2 mb-2 px-3 py-1 text-sm rounded-full transition-colors',
-            selectedTags.includes(tag)
-              ? 'bg-primary text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
-          ]"
-          @click="toggleTag(tag)"
-        >
-          {{ tag }}
-        </button>
-      </div>
-    </div>
-
     <transition name="fade">
       <div v-if="hasActiveFilters" class="mt-6 pt-4 border-t border-gray-200">
         <button class="btn btn-secondary w-full" @click="resetFilters">Wis alle filters</button>
@@ -108,16 +80,11 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  tags: {
-    type: Array,
-    required: true,
-  },
   initialFilters: {
     type: Object,
     default: () => ({
       search: '',
       categories: [],
-      tags: [],
     }),
   },
 });
@@ -127,16 +94,11 @@ const emit = defineEmits(['update:filters']);
 // Reactieve staat voor filtering
 const searchQuery = ref(props.initialFilters.search || '');
 const selectedCategories = ref(props.initialFilters.categories || []);
-const selectedTags = ref(props.initialFilters.tags || []);
 
 // Computed properties voor UI
 const allCategories = computed(() => props.categories);
-const allTags = computed(() => props.tags);
 const hasActiveFilters = computed(
-  () =>
-    searchQuery.value.trim() !== '' ||
-    selectedCategories.value.length > 0 ||
-    selectedTags.value.length > 0
+  () => searchQuery.value.trim() !== '' || selectedCategories.value.length > 0
 );
 
 // Debounce voor zoekfunctie
@@ -148,22 +110,11 @@ function debounceUpdateFilters() {
   }, 300);
 }
 
-// Tags toevoegen of verwijderen
-function toggleTag(tag) {
-  if (selectedTags.value.includes(tag)) {
-    selectedTags.value = selectedTags.value.filter((t) => t !== tag);
-  } else {
-    selectedTags.value.push(tag);
-  }
-  updateFilters();
-}
-
 // Filters updaten en emit versturen naar ouder component
 function updateFilters() {
   emit('update:filters', {
     search: searchQuery.value,
     categories: selectedCategories.value,
-    tags: selectedTags.value,
   });
 }
 
@@ -173,16 +124,10 @@ function clearCategories() {
   updateFilters();
 }
 
-function clearTags() {
-  selectedTags.value = [];
-  updateFilters();
-}
-
 // Alle filters resetten
 function resetFilters() {
   searchQuery.value = '';
   selectedCategories.value = [];
-  selectedTags.value = [];
   updateFilters();
 }
 
@@ -193,7 +138,6 @@ watch(
     if (newFilters) {
       searchQuery.value = newFilters.search || '';
       selectedCategories.value = newFilters.categories || [];
-      selectedTags.value = newFilters.tags || [];
     }
   },
   { deep: true }

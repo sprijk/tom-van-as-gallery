@@ -31,14 +31,10 @@ export default defineEventHandler(async (event) => {
           type: 'upload',
           max_results: 500,
           context: true,
-          tags: true,
         });
 
         // Verwerk de schilderijen
         const paintings = result.resources.map((resource) => {
-          // Tags verwerken - alle tags zijn reguliere tags, geen title tags meer
-          const tags = resource.tags || [];
-
           // Titel ophalen uit label_number of caption als fallback
           const labelNumber = resource.context?.custom?.label_number;
 
@@ -66,7 +62,6 @@ export default defineEventHandler(async (event) => {
             title,
             imageUrl: resource.secure_url,
             category,
-            tags,
             width: resource.width,
             height: resource.height,
             format: resource.format,
@@ -88,14 +83,10 @@ export default defineEventHandler(async (event) => {
         type: 'upload',
         max_results: 500,
         context: true,
-        tags: true,
       });
 
       // Verwerk de schilderijen
       allPaintings = result.resources.map((resource) => {
-        // Tags verwerken - alle tags zijn reguliere tags
-        const tags = resource.tags || [];
-
         // Titel ophalen uit label_number of caption als fallback
         const labelNumber = resource.context?.custom?.label_number;
         const caption = resource.context?.custom?.caption;
@@ -129,7 +120,6 @@ export default defineEventHandler(async (event) => {
           title,
           imageUrl: resource.secure_url,
           category,
-          tags,
           width: resource.width,
           height: resource.height,
           format: resource.format,
