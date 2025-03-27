@@ -57,6 +57,10 @@ export default defineNuxtConfig({
     // Database configuration
     dbPath: process.env.DB_PATH || './data/database.sqlite',
 
+    // Imagor configuration
+    imagorBaseUrl: process.env.IMAGOR_BASE_URL || 'https://afbeeldingen.tomvanas-kunst.nl',
+    imageStorageUrl: process.env.IMAGE_STORAGE_URL || 'http://minio.minio:9000/tomvanas-kunst',
+
     // Google Sheets API configuration
     googleServiceAccountEmail: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
     googlePrivateKey: process.env.GOOGLE_PRIVATE_KEY || '',

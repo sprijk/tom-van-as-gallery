@@ -1,6 +1,5 @@
 import { joinURL } from 'ufo';
 
-
 /**
  * Transforms an image using Imagor
  *
@@ -8,14 +7,7 @@ import { joinURL } from 'ufo';
  * @param modifiers - Transformation parameters
  * @param options - Provider options from Nuxt config
  */
-export const getImage = (
-  src,
-  {
-    modifiers = {},
-    baseURL,
-    imageBaseURL,
-  } = {}
-) => {
+export const getImage = (src, { modifiers = {}, baseURL, imageBaseURL } = {}) => {
   // Get configuration options from the provided parameters
   const defaultFormat = 'webp';
   const defaultQuality = 80;
