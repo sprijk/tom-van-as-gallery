@@ -1,66 +1,74 @@
-<!-- pages/admin/index.vue with publication management -->
+<!-- pages/admin/index.vue with hydration fix -->
 <template>
   <div>
-    <!-- Login Form -->
-    <AdminLogin
-      v-if="!isAuthenticated"
-      :is-logging-in="isLoggingIn"
-      :login-error="loginError"
-      @login="handleLogin"
-    />
-
-    <!-- Admin Dashboard -->
-    <div v-else>
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-serif font-bold">Admin Dashboard</h1>
-        <button class="btn btn-secondary" @click="logout">Uitloggen</button>
-      </div>
-
-      <!-- Admin Tabs -->
-      <div class="mb-6 border-b border-gray-200">
-        <nav class="flex space-x-8 overflow-x-auto">
-          <button
-            class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
-            :class="
-              activeTab === 'labels'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            "
-            @click="activeTab = 'labels'"
-          >
-            Label Verificatie
-          </button>
-          <button
-            class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
-            :class="
-              activeTab === 'publish'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            "
-            @click="activeTab = 'publish'"
-          >
-            Publicatiestatus
-          </button>
-        </nav>
-      </div>
-
-      <!-- Label Verification Tab -->
-      <AdminLabelVerification
-        v-if="activeTab === 'labels'"
-        :paintings="paintings"
-        :is-loading="isLoading"
-        @refresh="fetchPaintings"
+    <ClientOnly>
+      <!-- Login Form -->
+      <AdminLogin
+        v-if="!isAuthenticated"
+        :is-logging-in="isLoggingIn"
+        :login-error="loginError"
+        @login="handleLogin"
       />
 
-      <!-- Publication Management Tab -->
-      <AdminPublishManagement
-        v-else-if="activeTab === 'publish'"
-        :paintings="paintings"
-        :is-loading="isLoading"
-        @refresh="fetchPaintings"
-        @update="handlePublishUpdate"
-      />
-    </div>
+      <!-- Admin Dashboard -->
+      <div v-else>
+        <div class="flex justify-between items-center mb-6">
+          <h1 class="text-3xl font-serif font-bold">Admin Dashboard</h1>
+          <button class="btn btn-secondary" @click="logout">Uitloggen</button>
+        </div>
+
+        <!-- Admin Tabs -->
+        <div class="mb-6 border-b border-gray-200">
+          <nav class="flex space-x-8 overflow-x-auto">
+            <button
+              class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
+              :class="
+                activeTab === 'labels'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              "
+              @click="activeTab = 'labels'"
+            >
+              Label Verificatie
+            </button>
+            <button
+              class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
+              :class="
+                activeTab === 'publish'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              "
+              @click="activeTab = 'publish'"
+            >
+              Publicatiestatus
+            </button>
+          </nav>
+        </div>
+
+        <!-- Label Verification Tab -->
+        <AdminLabelVerification
+          v-if="activeTab === 'labels'"
+          :paintings="paintings"
+          :is-loading="isLoading"
+          @refresh="fetchPaintings"
+        />
+
+        <!-- Publication Management Tab -->
+        <AdminPublishManagement
+          v-else-if="activeTab === 'publish'"
+          :paintings="paintings"
+          :is-loading="isLoading"
+          @refresh="fetchPaintings"
+          @update="handlePublishUpdate"
+        />
+      </div>
+
+      <template #fallback>
+        <div class="py-12 text-center">
+          <LoadingSpinner show-message message="Admin dashboard laden..." />
+        </div>
+      </template>
+    </ClientOnly>
   </div>
 </template>
 
@@ -81,7 +89,7 @@ const isLoggingIn = ref(false);
 const { getAllPaintings } = useImageService();
 const { showSuccess, showError, showInfo } = useToast();
 const paintings = ref([]);
-const isLoading = ref(false);
+const isLoading = ref(true);
 
 // Tab management
 const activeTab = ref('labels');

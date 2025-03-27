@@ -66,7 +66,7 @@
             provider="imagor"
             :src="painting.destPath"
             format="webp"
-            quality="auto:best"
+            width="400"
             fit="inside"
             class="w-full h-auto object-contain mx-auto"
             :alt="painting.title"
