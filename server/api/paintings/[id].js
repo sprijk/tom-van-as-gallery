@@ -20,8 +20,11 @@ export default defineEventHandler(async (event) => {
 
     // Get config for image URL construction
     const config = useRuntimeConfig();
-    const imageStorageUrl = config.imageStorageUrl || 'http://localhost:9000/images';
-    const imagorBaseUrl = config.imagorBaseUrl || 'http://localhost:8080';
+    const imageStorageUrl = config.public.imageStorageUrl;
+    const imagorBaseUrl = config.public.imagorBaseUrl;
+
+    console.log('server/api/[id].js imageStorageUrl', imageStorageUrl);
+    console.log('server/api/[id].js imagorBaseUrl', imagorBaseUrl);
 
     // Generate an optimized image URL using Imagor
     const originalUrl = `${imagorBaseUrl}/unsafe/fit-in/${painting.destPath}`;
