@@ -23,9 +23,6 @@ export default defineEventHandler(async (event) => {
     const imageStorageUrl = config.public.imageStorageUrl;
     const imagorBaseUrl = config.public.imagorBaseUrl;
 
-    console.log('server/api/[id].js imageStorageUrl', imageStorageUrl);
-    console.log('server/api/[id].js imagorBaseUrl', imagorBaseUrl);
-
     // Generate an optimized image URL using Imagor
     const originalUrl = `${imagorBaseUrl}/unsafe/fit-in/${painting.destPath}`;
 

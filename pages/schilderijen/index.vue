@@ -26,7 +26,11 @@
     <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <!-- Sidebar met filters -->
       <div class="lg:col-span-1">
-        <PaintingFilter :categories="allCategories" @update:filters="applyFilters" />
+        <PaintingFilter
+          :categories="allCategories"
+          :initial-filters="filters"
+          @update:filters="applyFilters"
+        />
       </div>
 
       <!-- Resultaten -->
@@ -401,6 +405,28 @@ useHead(() => {
     ],
   };
 });
+
+function initializeFiltersFromUrl() {
+  const { search, sort } = route.query;
+  const categoryParam = route.query.category;
+  const categoriesParam = route.query.categories;
+
+  if (search) {
+    filters.value.search = search;
+  }
+
+  if (categoryParam) {
+    filters.value.categories = [categoryParam];
+  } else if (categoriesParam) {
+    filters.value.categories = categoriesParam.split(',');
+  }
+
+  if (sort) {
+    sortOption.value = sort;
+  }
+}
+
+initializeFiltersFromUrl();
 
 // Data ophalen bij page load
 onMounted(() => {

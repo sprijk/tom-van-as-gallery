@@ -32,8 +32,8 @@
               provider="imagor"
               :src="painting.destPath"
               format="webp"
-              quality="auto:best"
               fit="inside"
+              width="600"
               class="w-full h-auto object-contain mx-auto"
               :alt="painting.title"
             />

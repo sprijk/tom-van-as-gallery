@@ -4,9 +4,6 @@ export const useImageService = () => {
   const imageStorageUrl = config.public.imageStorageUrl;
   const imagorBaseUrl = config.public.imagorBaseUrl;
 
-  console.log('useImageService imagorBaseUrl', imagorBaseUrl);
-  console.log('useImageService imageStorageUrl', imageStorageUrl);
-
   // Cache voor data om herhaalde netwerkaanvragen te verminderen
   const paintingsCache = useState('paintingsCache', () => null);
   const categoriesCache = useState('categoriesCache', () => null);
@@ -199,8 +196,6 @@ export const useImageService = () => {
 
       // Build the final URL
       const finalUrl = `${imagorBaseUrl}/unsafe/${operationsPath}/${imageStorageUrl}/${destPath}`;
-
-      console.log('useImageService: finalUrl:', finalUrl);
 
       return finalUrl;
     } catch (error) {
