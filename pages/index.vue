@@ -215,12 +215,10 @@
 import { useImageService } from '../composables/useImageService';
 
 // Composable voor data
-const { getAllPaintings } = useImageService();
+const { getAllPaintings, getAllCategories } = useImageService();
 
 // State voor homepage data
 const paintings = ref([]);
-const featuredPainting = ref(null);
-const featuredPaintings = ref([]);
 const categoryList = ref([]);
 const isLoading = ref(true);
 
@@ -231,16 +229,9 @@ async function fetchData() {
   try {
     // Alle schilderijen ophalen
     paintings.value = await getAllPaintings();
+    const catergories = await getAllCategories();
 
     if (paintings.value.length > 0) {
-      // Willekeurig uitgelicht schilderij kiezen
-      const randomIndex = Math.floor(Math.random() * paintings.value.length);
-      featuredPainting.value = paintings.value[randomIndex];
-
-      // 3-6 uitgelichte schilderijen kiezen (zonder duplicaten)
-      const shuffled = [...paintings.value].sort(() => 0.5 - Math.random());
-      featuredPaintings.value = shuffled.slice(0, 6);
-
       // Categorieën verwerken en aantal schilderijen per categorie bepalen
       const categoryCounts = {};
       const categoryImages = {};
@@ -257,13 +248,11 @@ async function fetchData() {
       });
 
       // Categorieën voorbereiden voor weergave
-      categoryList.value = Object.keys(categoryCounts)
-        .filter((name) => name) // Filter lege categorienamen
-        .map((name) => ({
-          name,
-          count: categoryCounts[name],
-          image: categoryImages[name],
-        }));
+      categoryList.value = catergories.map((name) => ({
+        name,
+        count: categoryCounts[name],
+        image: categoryImages[name],
+      }));
     }
   } catch (error) {
     console.error('Fout bij het ophalen van data:', error);

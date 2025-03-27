@@ -80,7 +80,7 @@ const showSearchSuggestions = ref(false);
 
 // Zoeksuggesties genereren op basis van de zoekterm
 const suggestions = computed(() => {
-  if (!searchTerm.value || searchTerm.value.length < 2) return [];
+  if (!searchTerm.value || searchTerm.value.length < 1) return [];
 
   const term = searchTerm.value.toLowerCase();
   return props.paintings

@@ -124,19 +124,32 @@ export class DatabaseService {
       sql += ' WHERE published = 1';
     }
 
+    sql +=
+      " ORDER BY \
+      CASE \
+      WHEN labelNumber GLOB '[0-9]*' AND labelNumber NOT GLOB '*[^0-9]*' THEN CAST(labelNumber AS INTEGER) \
+      WHEN labelNumber GLOB '[^0-9]*[0-9]*' AND substr(labelNumber, 2) NOT GLOB '*[^0-9]*' THEN CAST(substr(labelNumber, 2) AS INTEGER) \
+      ELSE labelNumber \
+      END;";
+
     const paintings = await this.query(sql);
 
+    console.log('Include include unpublished:', includeUnpublished);
+    console.log('Collected paintings:', paintings.length);
+
     // Transform the data to match the expected format from the API
-    return paintings.map((p) => ({
-      id: p.publicId,
-      title: `Nummer ${p.labelNumber}`,
-      imageUrl: `${p.destPath}`,
-      destPath: p.destPath,
-      category: this.getCategoryFromPath(p.destPath),
-      created: p.createdAt,
-      labelNumber: p.labelNumber,
-      published: p.published === 1,
-    }));
+    return paintings.map((p) => {
+      return {
+        id: p.publicId,
+        title: `Nummer ${p.labelNumber}`,
+        imageUrl: `${p.destPath}`,
+        destPath: p.destPath,
+        category: this.getCategoryFromPath(p.destPath),
+        created: p.createdAt,
+        labelNumber: p.labelNumber,
+        published: p.published === 1,
+      };
+    });
   }
 
   /**
@@ -164,23 +177,6 @@ export class DatabaseService {
       labelNumber: painting.labelNumber,
       published: painting.published === 1,
     };
-  }
-
-  /**
-   * Get all categories from the painting paths in the database
-   */
-  async getAllCategories() {
-    const paintings = await this.getAllPaintings();
-
-    // Extract unique categories
-    const categories = new Set();
-    paintings.forEach((painting) => {
-      if (painting.category) {
-        categories.add(painting.category);
-      }
-    });
-
-    return Array.from(categories);
   }
 
   /**

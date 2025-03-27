@@ -47,8 +47,6 @@
                 v-model="sortOption"
                 class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               >
-                <option value="newest">Nieuwste eerst</option>
-                <option value="oldest">Oudste eerst</option>
                 <option value="az">A-Z</option>
                 <option value="za">Z-A</option>
               </select>
@@ -186,7 +184,7 @@ const filters = ref({
   search: '',
   categories: [],
 });
-const sortOption = ref('newest');
+const sortOption = ref('az');
 const perPage = ref(12);
 const currentPage = ref(1);
 
@@ -226,18 +224,21 @@ const hasMorePaintings = computed(() => {
   return paginatedPaintings.value.length < filteredPaintings.value.length;
 });
 
-// Sorteerfunctie
 function sortPaintings(paintings) {
   return [...paintings].sort((a, b) => {
+    let numA, numB;
+
     switch (sortOption.value) {
-      case 'newest':
-        return new Date(b.created || 0) - new Date(a.created || 0);
-      case 'oldest':
-        return new Date(a.created || 0) - new Date(b.created || 0);
       case 'az':
-        return (a.title || '').localeCompare(b.title || '');
+        // Extract numbers from title strings
+        numA = parseInt(((a.title || '').match(/\d+/) || ['0'])[0], 10);
+        numB = parseInt(((b.title || '').match(/\d+/) || ['0'])[0], 10);
+        return numA - numB;
       case 'za':
-        return (b.title || '').localeCompare(a.title || '');
+        // Extract numbers from title strings
+        numA = parseInt(((a.title || '').match(/\d+/) || ['0'])[0], 10);
+        numB = parseInt(((b.title || '').match(/\d+/) || ['0'])[0], 10);
+        return numB - numA;
       default:
         return 0;
     }
