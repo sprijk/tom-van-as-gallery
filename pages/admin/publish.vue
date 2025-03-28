@@ -22,13 +22,59 @@
           </div>
         </div>
 
+        <!-- Pagination Controls (Top) -->
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <label for="pageSize" class="mr-2">Items per pagina:</label>
+            <select
+              id="pageSize"
+              v-model="pageSize"
+              class="border rounded px-2 py-1"
+              @change="updatePageSize"
+            >
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="flex items-center">
+            <button class="btn btn-secondary mr-2" :disabled="currentPage === 1" @click="prevPage">
+              Vorige
+            </button>
+            <span>Pagina {{ currentPage }} van {{ totalPages }}</span>
+            <button
+              class="btn btn-secondary ml-2"
+              :disabled="currentPage === totalPages"
+              @click="nextPage"
+            >
+              Volgende
+            </button>
+          </div>
+        </div>
+
         <!-- Publication Management Tab -->
         <AdminPublishManagement
-          :paintings="paintings"
+          :paintings="paginatedPaintings"
           :is-loading="isLoading"
           @refresh="fetchPaintings"
           @update="handlePublishUpdate"
         />
+
+        <!-- Pagination Controls (Bottom) -->
+        <div class="flex justify-center mt-4">
+          <button class="btn btn-secondary mr-2" :disabled="currentPage === 1" @click="prevPage">
+            Vorige
+          </button>
+          <span>Pagina {{ currentPage }} van {{ totalPages }}</span>
+          <button
+            class="btn btn-secondary ml-2"
+            :disabled="currentPage === totalPages"
+            @click="nextPage"
+          >
+            Volgende
+          </button>
+        </div>
 
         <!-- Debug information -->
         <div v-if="debugMode" class="mt-8 p-4 bg-gray-100 rounded-lg">
@@ -82,6 +128,13 @@ const { getAllPaintings } = useImageService();
 const { showSuccess, showError, showInfo } = useToast();
 const paintings = ref([]);
 const isLoading = ref(true);
+
+// Pagination
+const currentPage = ref(1);
+const pageSize = ref(20); // Adjust as needed
+const totalPaintings = ref(0);
+const totalPages = ref(1);
+const paginatedPaintings = ref(ref([]));
 
 // Toggle debug mode
 function toggleDebugMode() {
@@ -197,6 +250,10 @@ async function fetchPaintings() {
       };
     });
 
+    totalPaintings.value = paintings.value.length;
+    totalPages.value = Math.ceil(totalPaintings.value / pageSize.value);
+    updatePaginatedPaintings();
+
     showSuccess('Schilderijen succesvol geladen.', 'Data geladen');
 
     // Debug information
@@ -210,6 +267,32 @@ async function fetchPaintings() {
   } finally {
     isLoading.value = false;
   }
+}
+
+function updatePaginatedPaintings() {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  paginatedPaintings.value = paintings.value.slice(start, end);
+}
+
+function nextPage() {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+    updatePaginatedPaintings();
+  }
+}
+
+function prevPage() {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    updatePaginatedPaintings();
+  }
+}
+
+function updatePageSize() {
+  currentPage.value = 1; // Reset to the first page when page size changes
+  totalPages.value = Math.ceil(totalPaintings.value / pageSize.value);
+  updatePaginatedPaintings();
 }
 
 // Handle publication status update
