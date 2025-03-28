@@ -12,26 +12,15 @@ export default defineEventHandler(async (event) => {
     const painting = await db.getPaintingById(id, isAdmin);
 
     if (!painting) {
+      console.error(`Painting with ID ${id} not found`);
       throw createError({
         statusCode: 404,
         statusMessage: `Painting with ID ${id} not found`,
       });
     }
 
-    // Get config for image URL construction
-    const config = useRuntimeConfig();
-    const imageStorageUrl = config.public.imageStorageUrl;
-    const imagorBaseUrl = config.public.imagorBaseUrl;
-
-    // Generate an optimized image URL using Imagor
-    const originalUrl = `${imagorBaseUrl}/unsafe/fit-in/${painting.destPath}`;
-
     // Add the complete URLs to the painting object
-    return {
-      ...painting,
-      imageUrl: `${imageStorageUrl}/${painting.destPath}`,
-      originalImageUrl: originalUrl,
-    };
+    return painting;
   } catch (error) {
     console.error(`Error fetching painting with ID ${id}:`, error);
     throw createError({

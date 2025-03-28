@@ -48,11 +48,15 @@ export const getImage = (src, { modifiers = {}, baseURL, imageBaseURL } = {}) =>
   // Format filter
   if (modifiers.format) {
     filters.push(`format(${modifiers.format})`);
+  } else {
+    filters.push(`format(${defaultFormat})`);
   }
 
   // Quality filter
   if (modifiers.quality) {
     filters.push(`quality(${modifiers.quality})`);
+  } else {
+    filters.push(`quality(${defaultQuality})`);
   }
 
   // Other filters
@@ -78,7 +82,6 @@ export const getImage = (src, { modifiers = {}, baseURL, imageBaseURL } = {}) =>
     sourceUrl = src;
   } else {
     // This is just the path, assume it's relative to imageBaseURL if provided
-
     sourceUrl = imageBaseURL ? `${imageBaseURL}${src.startsWith('/') ? '' : '/'}${src}` : src;
   }
 
