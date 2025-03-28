@@ -272,8 +272,5 @@ watch(apiError, (error) => {
   }
 });
 
-// Data ophalen bij page load
-onMounted(() => {
-  fetchData();
-});
+fetchData();
 </script>

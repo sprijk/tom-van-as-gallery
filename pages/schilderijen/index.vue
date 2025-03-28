@@ -421,7 +421,7 @@ function initializeFiltersFromUrl() {
 initializeFiltersFromUrl();
 
 // Data ophalen bij page load
-onMounted(() => {
-  fetchData();
-});
+// onMounted(() => {
+fetchData();
+// });
 </script>

@@ -72,35 +72,28 @@ async function handleLogin(password) {
   loginError.value = '';
 
   try {
-    // Make an API call to verify the password
-    const response = await fetch('/api/admin/verify-password', {
+    const { data, error } = await useFetch('/api/admin/verify-password', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ password }),
+      body: { password },
     });
 
-    if (response.ok) {
-      const result = await response.json();
+    if (error.value) {
+      throw error.value;
+    }
 
-      if (result.success) {
-        isAuthenticated.value = true;
+    if (data.value?.success) {
+      isAuthenticated.value = true;
 
-        // Store authentication state in localStorage or cookie
-        if (import.meta.client) {
-          localStorage.setItem('adminAuthenticated', 'true');
-        }
-
-        // Show success toast
-        showSuccess('Je bent succesvol ingelogd als administrator.', 'Ingelogd');
-      } else {
-        loginError.value = 'Incorrect wachtwoord';
-        showError('Het ingevoerde wachtwoord is incorrect.', 'Aanmelding mislukt');
+      // Store authentication state in localStorage or cookie
+      if (import.meta.client) {
+        localStorage.setItem('adminAuthenticated', 'true');
       }
+
+      // Show success toast
+      showSuccess('Je bent succesvol ingelogd als administrator.', 'Ingelogd');
     } else {
-      loginError.value = 'Er ging iets mis bij het verifiëren van het wachtwoord';
-      showError('Er ging iets mis bij het verifiëren van het wachtwoord.', 'Server fout');
+      loginError.value = 'Incorrect wachtwoord';
+      showError('Het ingevoerde wachtwoord is incorrect.', 'Aanmelding mislukt');
     }
   } catch (error) {
     console.error('Login error:', error);
