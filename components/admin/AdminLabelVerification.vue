@@ -25,13 +25,13 @@
       <LoadingSpinner show-message message="Schilderijen laden..." />
     </div>
 
-    <!-- Paintings Grid -->
+    <!-- Incremental Rendering -->
     <div
       v-else-if="filteredPaintings.length > 0"
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
     >
       <div
-        v-for="painting in filteredPaintings"
+        v-for="(painting, index) in renderedPaintings"
         :key="painting.id"
         class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
         @click="openDetailView(painting)"
@@ -51,7 +51,6 @@
           </span>
         </div>
 
-        <!-- Image container for original aspect ratio -->
         <div class="relative bg-gray-100">
           <NuxtImg
             provider="imagor"
@@ -83,8 +82,15 @@
       </div>
     </div>
 
+    <!-- Render More Button -->
+    <div v-if="hasMoreToRender" class="text-center mt-6">
+      <button class="btn btn-primary" @click="renderMorePaintings">
+        Meer schilderijen laden ({{ remainingPaintingsCount }})
+      </button>
+    </div>
+
     <!-- Empty state -->
-    <div v-else class="text-center py-12 bg-gray-50 rounded-lg">
+    <div v-else-if="filteredPaintings.length === 0" class="text-center py-12 bg-gray-50 rounded-lg">
       <p class="text-gray-600 mb-4">Geen schilderijen gevonden met de huidige filter.</p>
       <button class="btn btn-secondary" @click="labelFilter = 'all'">Toon alle schilderijen</button>
     </div>
@@ -105,7 +111,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
   paintings: {
@@ -129,26 +135,55 @@ const isUpdating = ref(false);
 const showDetailView = ref(false);
 const selectedPainting = ref(null);
 const selectedIndex = ref(-1);
+const renderedCount = ref(15); // Initial number of paintings to render
 
 // Computed properties for filtering
 const filteredPaintings = computed(() => {
+  const result = [...props.paintings];
+
   if (labelFilter.value === 'all') {
-    return props.paintings;
+    return result;
   }
 
   if (labelFilter.value === 'withLabel') {
-    return props.paintings.filter((p) => p.currentLabel);
+    return result.filter((p) => p.currentLabel);
   }
 
   if (labelFilter.value === 'withoutLabel') {
-    return props.paintings.filter((p) => !p.currentLabel);
+    return result.filter((p) => !p.currentLabel);
   }
 
   if (labelFilter.value === 'needsReview') {
-    return props.paintings.filter((p) => p.labelStatus === 'needs_review');
+    return result.filter((p) => p.labelStatus === 'needs_review');
   }
 
-  return props.paintings;
+  return result;
+});
+
+// Render only a subset of paintings
+const renderedPaintings = computed(() => {
+  return filteredPaintings.value.slice(0, renderedCount.value);
+});
+
+// Check if there are more paintings to render
+const hasMoreToRender = computed(() => {
+  return renderedCount.value < filteredPaintings.value.length;
+});
+
+// Count of remaining paintings
+const remainingPaintingsCount = computed(() => {
+  return filteredPaintings.value.length - renderedCount.value;
+});
+
+// Render more paintings
+function renderMorePaintings() {
+  // Render 15 more or the rest of the paintings, whichever is smaller
+  renderedCount.value = Math.min(renderedCount.value + 15, filteredPaintings.value.length);
+}
+
+// Reset rendered count when filter changes
+watch(labelFilter, () => {
+  renderedCount.value = 15;
 });
 
 // Navigation properties
@@ -225,9 +260,6 @@ async function verifyLabel(painting) {
     // Update local state
     painting.labelStatus = 'verified';
 
-    // Update the selected painting reference (to ensure reactivity)
-    selectedPainting.value = { ...painting };
-
     // Show success notification
     showSuccess(`Label voor "${painting.title}" is geverifieerd.`, 'Label geverifieerd');
 
@@ -275,20 +307,18 @@ async function updateLabel(data) {
     updatedPainting.labelStatus = 'verified';
     updatedPainting.title = `Nummer ${data.correctedLabel}`;
 
-    // Find and update the painting in the paintings array
-    const index = props.paintings.findIndex((p) => p.id === painting.id);
-    if (index !== -1) {
-      props.paintings[index] = updatedPainting;
-    }
-
-    // Update the selected painting reference
-    selectedPainting.value = updatedPainting;
-
     // Show success notification
     showSuccess(
       `Label voor "${updatedPainting.title}" is bijgewerkt naar ${data.correctedLabel}.`,
       'Label bijgewerkt'
     );
+
+    // Navigate to next painting if available
+    if (hasNext.value) {
+      navigatePainting('next');
+    } else {
+      closeDetailView();
+    }
   } catch (error) {
     console.error('Error updating label:', error);
     // Show error notification

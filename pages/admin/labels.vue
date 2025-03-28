@@ -126,33 +126,30 @@ async function fetchPaintings() {
     const headers = new Headers();
     headers.append('x-is-admin', 'true');
 
-    const paintingsData = await getAllPaintings(true, headers); // Force refresh with admin headers
+    const paintingsData = await getAllPaintings(true, headers);
+
+    // Validate paintingsData
+    if (!paintingsData) {
+      console.error('getAllPaintings returned null');
+      showError('Geen schilderijen kunnen ophalen. Er is een technisch probleem.', 'Ophaalfout');
+      paintings.value = [];
+      return;
+    }
+
+    // Ensure paintingsData is an array
+    const paintingsArray = Array.isArray(paintingsData) ? paintingsData : [];
 
     // Enhance painting data with label information
-    paintings.value = paintingsData.map((painting) => {
-      // Extract label_number from context if available
-      const labelNumber = extractLabelNumber(painting);
-
-      // Determine label status
-      let labelStatus = 'missing';
-      if (labelNumber) {
-        labelStatus = 'needs_review'; // Default to needs review for any label
-
-        // In a real implementation, you'd check if it's been verified before
-        // Here we're checking the verified property from the API
-        if (painting.verified) {
-          labelStatus = 'verified';
-        }
-      }
-
+    paintings.value = paintingsArray.map((painting) => {
       return {
         ...painting,
-        currentLabel: labelNumber || '',
-        correctedLabel: labelNumber || '',
-        labelStatus,
+        currentLabel: painting.labelNumber || '',
+        correctedLabel: painting.labelNumber || '',
+        labelStatus: determineLabelStatus(painting),
         published: painting.published !== undefined ? painting.published : true, // Default to published if not specified
       };
     });
+    // .slice(0, 40); // Limit to 10 paintings for now
 
     showSuccess('Schilderijen succesvol geladen.', 'Data geladen');
 
@@ -164,16 +161,21 @@ async function fetchPaintings() {
   } catch (error) {
     console.error('Error fetching paintings:', error);
     showError('Kon de schilderijen niet laden. Probeer het later nog eens.', 'Laad fout');
+    paintings.value = [];
   } finally {
     isLoading.value = false;
   }
 }
 
-// Extract label number from painting metadata
-function extractLabelNumber(painting) {
-  // In a real implementation, this would come from the Cloudinary metadata
-  // Here we're accessing the labelNumber property returned from the API
-  return painting.labelNumber || null;
+// Determine label status
+function determineLabelStatus(painting) {
+  if (!painting.labelNumber) {
+    return 'missing';
+  }
+
+  // In a real implementation, this would come from server-side verification
+  // Here we default to 'needs_review' for any label
+  return painting.verified ? 'verified' : 'needs_review';
 }
 
 // Check authentication status on page load
@@ -182,10 +184,11 @@ onMounted(() => {
     const authenticated = localStorage.getItem('adminAuthenticated') === 'true';
     if (authenticated) {
       isAuthenticated.value = true;
-      fetchPaintings();
     }
   }
 });
+
+fetchPaintings();
 
 // SEO meta tags
 useHead({
