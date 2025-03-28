@@ -134,7 +134,7 @@ export class DatabaseService {
 
     const paintings = await this.query(sql);
 
-    console.log('Include include unpublished:', includeUnpublished);
+    console.log('Include unpublished:', includeUnpublished);
     console.log('Collected paintings:', paintings.length);
 
     // Transform the data to match the expected format from the API

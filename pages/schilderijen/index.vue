@@ -14,7 +14,7 @@
       @select="handleSelectPainting"
     />
 
-    <div v-if="isInitialLoading" class="py-12">
+    <div v-if="isLoading" class="py-12">
       <LoadingSpinner show-message message="Schilderijen laden..." />
     </div>
 
@@ -172,15 +172,13 @@
 
 <script setup>
 // Composable voor data
-const { getAllPaintings, getAllCategories } = useImageService();
-const config = useRuntimeConfig();
+const { getAllPaintings, getAllCategories, isLoading, apiError } = useImageService();
 const route = useRoute();
 const router = useRouter();
 
 // State
 const allPaintings = ref([]);
 const allCategories = ref([]);
-const isInitialLoading = ref(true);
 const isFilterLoading = ref(false);
 
 // Filtering en sortering
@@ -306,17 +304,15 @@ function updateRouteParams() {
 
 // Data ophalen
 async function fetchData() {
-  isInitialLoading.value = true;
-
   try {
     // Alle schilderijen en categorieën
-    const [paintings, categories] = await Promise.all([getAllPaintings(), getAllCategories()]);
+    const paintings = await getAllPaintings();
+    const categories = await getAllCategories();
 
     allPaintings.value = paintings;
     allCategories.value = categories;
 
     // URL parameters verwerken om filters toe te passen
-    // const { category, search, sort } = route.query;
     const { search, sort } = route.query;
     const categoryParam = route.query.category;
     const categoriesParam = route.query.categories;
@@ -336,10 +332,15 @@ async function fetchData() {
     }
   } catch (error) {
     console.error('Fout bij het ophalen van data:', error);
-  } finally {
-    isInitialLoading.value = false;
   }
 }
+
+// Watch for API errors
+watch(apiError, (error) => {
+  if (error) {
+    console.error('API Error:', error);
+  }
+});
 
 // Watch sort option om de URL te updaten
 watch(sortOption, () => {
@@ -347,9 +348,6 @@ watch(sortOption, () => {
 });
 
 // SEO meta tags
-// Add this to your pages/schilderijen/index.vue file, replacing your current useHead call
-
-// Inside the script setup section of the paintings overview page
 useHead(() => {
   // Extract category from route query if available
   const category = route.query.category ? String(route.query.category) : null;
@@ -364,13 +362,7 @@ useHead(() => {
   }
 
   // Try to find an appropriate image for the category
-  let imageUrl = 'https://tomvanas-kunst.nl/images/og-image.jpg'; // Default fallback
-
-  // If we have filtered paintings and they've been loaded, use the first one as OG image
-  if (!isInitialLoading.value && filteredPaintings.value.length > 0) {
-    const firstPainting = filteredPaintings.value[0];
-    imageUrl = `https://res.cloudinary.com/${config.public.cloudinaryCloudName}/image/upload/w_1200,h_630,c_fill,q_auto:good/${firstPainting.id}`;
-  }
+  const imageUrl = 'https://tomvanas-kunst.nl/images/og-image.jpg'; // Default fallback
 
   // Calculate canonical URL with filters
   let canonicalUrl = 'https://tomvanas-kunst.nl/schilderijen';

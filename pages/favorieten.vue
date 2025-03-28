@@ -1,4 +1,3 @@
-<!-- File: pages/favorieten.vue -->
 <template>
   <div>
     <div class="mb-8">
@@ -258,7 +257,7 @@ async function submitInquiry() {
     });
 
     // Optionally clear favorites after successful submission
-    // clearFavorites();
+    clearFavorites();
 
     formSubmitted.value = true;
   } catch (error) {

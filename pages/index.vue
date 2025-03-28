@@ -1,4 +1,3 @@
-// pages/index.vue
 <template>
   <div>
     <!-- Hero Sectie -->
@@ -212,24 +211,19 @@
 </template>
 
 <script setup>
-import { useImageService } from '../composables/useImageService';
-
 // Composable voor data
-const { getAllPaintings, getAllCategories } = useImageService();
+const { getAllPaintings, getAllCategories, isLoading, apiError } = useImageService();
 
 // State voor homepage data
 const paintings = ref([]);
 const categoryList = ref([]);
-const isLoading = ref(true);
 
 // Data ophalen
 async function fetchData() {
-  isLoading.value = true;
-
   try {
     // Alle schilderijen ophalen
     paintings.value = await getAllPaintings();
-    const catergories = await getAllCategories();
+    const categories = await getAllCategories();
 
     if (paintings.value.length > 0) {
       // Categorieën verwerken en aantal schilderijen per categorie bepalen
@@ -248,16 +242,14 @@ async function fetchData() {
       });
 
       // Categorieën voorbereiden voor weergave
-      categoryList.value = catergories.map((name) => ({
+      categoryList.value = categories.map((name) => ({
         name,
-        count: categoryCounts[name],
-        image: categoryImages[name],
+        count: categoryCounts[name] || 0,
+        image: categoryImages[name] || '',
       }));
     }
   } catch (error) {
     console.error('Fout bij het ophalen van data:', error);
-  } finally {
-    isLoading.value = false;
   }
 }
 
@@ -271,6 +263,13 @@ useHead({
         'Ontdek de unieke schilderijen van kunstenaar Tom van As. Bekijk zijn collectie en vind uw favoriete kunstwerk.',
     },
   ],
+});
+
+// Watch for API errors
+watch(apiError, (error) => {
+  if (error) {
+    console.error('API Error:', error);
+  }
 });
 
 // Data ophalen bij page load

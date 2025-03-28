@@ -184,7 +184,7 @@
 
 <script setup>
 // Composable voor data
-const { getAllPaintings } = useImageService();
+const { getAllPaintings, apiError } = useImageService();
 
 // State
 const recentPaintings = ref([]);
@@ -203,6 +203,13 @@ async function fetchData() {
     console.error('Fout bij het ophalen van recente schilderijen:', error);
   }
 }
+
+// Watch for API errors
+watch(apiError, (error) => {
+  if (error) {
+    console.error('API Error:', error);
+  }
+});
 
 // SEO meta tags
 useHead({

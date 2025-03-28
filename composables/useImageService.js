@@ -4,55 +4,56 @@ export const useImageService = () => {
   const imageStorageUrl = config.public.imageStorageUrl;
   const imagorBaseUrl = config.public.imagorBaseUrl;
 
-  // Cache voor data om herhaalde netwerkaanvragen te verminderen
+  // State for loading and errors
+  const isLoading = useState('imageApiIsLoading', () => false);
+  const apiError = useState('imageApiError', () => null);
+
+  // Cache states
   const paintingsCache = useState('paintingsCache', () => null);
   const categoriesCache = useState('categoriesCache', () => null);
 
-  // Error status
-  const apiError = useState('imageApiError', () => null);
-  const isLoading = useState('imageApiIsLoading', () => false);
-
-  // Alle schilderijen ophalen via een server API route
+  // Get all paintings with proper fetch handling
   const getAllPaintings = async (forceRefresh = false, headers = null) => {
     try {
-      isLoading.value = true;
-      apiError.value = null;
-
-      // Gebruik cache indien beschikbaar en geen forceRefresh
+      // Use cache if available and not forcing refresh
       if (paintingsCache.value && !forceRefresh) {
-        isLoading.value = false;
         return paintingsCache.value;
       }
 
-      // Create request options with optional headers
-      const requestOptions = {};
+      isLoading.value = true;
+      apiError.value = null;
+
+      // Set up fetch options
+      const options = {};
       if (headers) {
-        requestOptions.headers = headers;
+        options.headers = headers;
       }
 
-      const response = await fetch('/api/paintings', requestOptions);
-      if (!response.ok) {
-        throw new Error(`Server gaf foutcode ${response.status}: ${response.statusText}`);
+      // Use Nuxt's useFetch which handles both server and client correctly
+      const { data, error } = await useFetch('/api/paintings', options);
+
+      if (error.value) {
+        throw new Error(`Server error: ${error.value.message}`);
       }
 
-      const data = await response.json();
-      // Update cache
-      paintingsCache.value = data;
-      isLoading.value = false;
-      return data;
+      // Update cache with the new data
+      paintingsCache.value = data.value;
+
+      return data.value;
     } catch (error) {
-      console.error('Fout bij het ophalen van schilderijen:', error);
+      console.error('Error fetching paintings:', error);
       apiError.value = {
         message: error.message,
         context: 'getAllPaintings',
         timestamp: new Date().toISOString(),
       };
-      isLoading.value = false;
       return [];
+    } finally {
+      isLoading.value = false;
     }
   };
 
-  // Eén specifiek schilderij ophalen op basis van ID via een server API route
+  // Get a specific painting by ID
   const getPaintingById = async (id, isAdmin = false) => {
     try {
       if (!id) return null;
@@ -60,7 +61,7 @@ export const useImageService = () => {
       isLoading.value = true;
       apiError.value = null;
 
-      // Controleer eerst of we het al in de cache hebben
+      // Check if we have it in cache first
       if (paintingsCache.value) {
         const cachedPainting = paintingsCache.value.find((p) => p.id === id);
         if (cachedPainting) {
@@ -69,70 +70,74 @@ export const useImageService = () => {
         }
       }
 
-      // Create request options with optional admin header
-      const requestOptions = {};
+      // Set up fetch options for admin requests
+      const options = {};
       if (isAdmin) {
-        requestOptions.headers = {
+        options.headers = {
           'x-is-admin': 'true',
         };
       }
 
-      const response = await fetch(`/api/paintings/${id}`, requestOptions);
-      if (!response.ok) {
-        throw new Error(`Kon schilderij met ID ${id} niet ophalen: ${response.statusText}`);
+      // Use Nuxt's useFetch
+      const { data, error } = await useFetch(`/api/paintings/${id}`, {
+        ...options,
+        key: `painting-${id}-${isAdmin ? 'admin' : 'user'}`,
+      });
+
+      if (error.value) {
+        throw new Error(`Could not fetch painting with ID ${id}: ${error.value.message}`);
       }
 
-      const data = await response.json();
-      isLoading.value = false;
-      return data;
+      return data.value;
     } catch (error) {
-      console.error(`Fout bij het ophalen van schilderij met ID ${id}:`, error);
+      console.error(`Error fetching painting with ID ${id}:`, error);
       apiError.value = {
         message: error.message,
         context: 'getPaintingById',
         id,
         timestamp: new Date().toISOString(),
       };
-      isLoading.value = false;
       return null;
+    } finally {
+      isLoading.value = false;
     }
   };
 
-  // Ophalen van alle beschikbare categorieën
+  // Get all categories
   const getAllCategories = async (forceRefresh = false) => {
     try {
-      isLoading.value = true;
-      apiError.value = null;
-
-      // Gebruik cache indien beschikbaar en geen forceRefresh
+      // Use cache if available and not forcing refresh
       if (categoriesCache.value && !forceRefresh) {
-        isLoading.value = false;
         return categoriesCache.value;
       }
 
-      const response = await fetch('/api/categories');
-      if (!response.ok) {
-        throw new Error('Kon categorieën niet ophalen');
+      isLoading.value = true;
+      apiError.value = null;
+
+      const { data, error } = await useFetch('/api/categories');
+
+      if (error.value) {
+        throw new Error(`Could not fetch categories: ${error.value.message}`);
       }
 
-      const data = await response.json();
       // Update cache
-      categoriesCache.value = data;
-      isLoading.value = false;
-      return data;
+      categoriesCache.value = data.value;
+
+      return data.value;
     } catch (error) {
-      console.error('Fout bij het ophalen van categorieën:', error);
+      console.error('Error fetching categories:', error);
       apiError.value = {
         message: error.message,
         context: 'getAllCategories',
         timestamp: new Date().toISOString(),
       };
-      isLoading.value = false;
       return [];
+    } finally {
+      isLoading.value = false;
     }
   };
 
-  // Ophalen van schilderijen per categorie
+  // Get paintings by category
   const getPaintingsByCategory = async (category, isAdmin = false) => {
     try {
       if (!category) return [];
@@ -140,32 +145,27 @@ export const useImageService = () => {
       isLoading.value = true;
       apiError.value = null;
 
-      // Create request options with optional admin header
-      const requestOptions = {};
-      if (isAdmin) {
-        requestOptions.headers = {
-          'x-is-admin': 'true',
-        };
-      }
+      // Get all paintings and filter them
+      const adminHeaders = isAdmin ? { 'x-is-admin': 'true' } : null;
+      const allPaintings = await getAllPaintings(false, adminHeaders);
 
-      const allPaintings = await getAllPaintings(false, isAdmin ? { 'x-is-admin': 'true' } : null);
-      isLoading.value = false;
-
+      // Filter by category
       return allPaintings.filter((painting) => painting.category === category);
     } catch (error) {
-      console.error(`Fout bij het ophalen van schilderijen voor categorie ${category}:`, error);
+      console.error(`Error fetching paintings for category ${category}:`, error);
       apiError.value = {
         message: error.message,
         context: 'getPaintingsByCategory',
         category,
         timestamp: new Date().toISOString(),
       };
-      isLoading.value = false;
       return [];
+    } finally {
+      isLoading.value = false;
     }
   };
 
-  // Helper functie om image URL te genereren met Imagor
+  // Helper function to generate image URL with Imagor
   const getImageUrl = (destPath, options = {}) => {
     try {
       if (!destPath) return '';
@@ -199,12 +199,12 @@ export const useImageService = () => {
 
       return finalUrl;
     } catch (error) {
-      console.error('Fout bij het genereren van de afbeelding URL:', error);
+      console.error('Error generating image URL:', error);
       return '';
     }
   };
 
-  // Cache wissen (bijvoorbeeld bij verandering van route)
+  // Clear cache
   const clearCache = () => {
     paintingsCache.value = null;
     categoriesCache.value = null;

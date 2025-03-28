@@ -4,7 +4,7 @@
       <LoadingSpinner show-message message="Schilderij laden..." />
     </div>
 
-    <template v-else>
+    <template v-else-if="painting">
       <!-- Breadcrumbs -->
       <div class="mb-8">
         <nav class="flex flex-wrap" aria-label="Breadcrumb">
@@ -86,7 +86,7 @@
                   />
                 </svg>
                 <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 truncate max-w-xs">
-                  {{ painting?.title || 'Schilderij details' }}
+                  {{ painting.title || 'Schilderij details' }}
                 </span>
               </div>
             </li>
@@ -137,65 +137,89 @@
         </NuxtLink>
       </div>
     </template>
+
+    <div v-else class="py-12 text-center">
+      <h2 class="text-2xl font-medium text-gray-700 mb-4">Schilderij niet gevonden</h2>
+      <p class="text-gray-600 mb-6">Het gezochte schilderij is niet beschikbaar of bestaat niet.</p>
+      <NuxtLink to="/schilderijen" class="btn btn-primary"> Terug naar de galerij </NuxtLink>
+    </div>
   </div>
 </template>
 
 <script setup>
 const route = useRoute();
-const config = useRuntimeConfig();
-const { getPaintingById, getAllPaintings } = useImageService();
+const { getPaintingById, getAllPaintings, isLoading, apiError } = useImageService();
 
-// State
-const painting = ref(null);
-const allPaintings = ref([]);
-const isLoading = ref(true);
-const previousPainting = ref(null);
-const nextPainting = ref(null);
+// Data fetching
+async function fetchData() {
+  // Fetch current painting
+  const paintingId = route.params.id;
+  const paintingData = await getPaintingById(paintingId);
 
-// Gerelateerde schilderijen op basis van categorie
+  // Fetch all paintings for navigation and related paintings
+  const allPaintingsData = await getAllPaintings();
+
+  return {
+    painting: paintingData,
+    allPaintings: allPaintingsData,
+  };
+}
+
+// Use async/await with data loading
+const { painting, allPaintings } = await fetchData();
+
+// Determine previous and next paintings
+const previousPainting = computed(() => {
+  if (!allPaintings || !painting) return null;
+
+  const currentIndex = allPaintings.findIndex((p) => p.id === painting.id);
+  if (currentIndex > 0) {
+    return allPaintings[currentIndex - 1];
+  }
+  return null;
+});
+
+const nextPainting = computed(() => {
+  if (!allPaintings || !painting) return null;
+
+  const currentIndex = allPaintings.findIndex((p) => p.id === painting.id);
+  if (currentIndex < allPaintings.length - 1) {
+    return allPaintings[currentIndex + 1];
+  }
+  return null;
+});
+
+// Related paintings based on category
 const relatedPaintings = computed(() => {
-  if (!painting.value || allPaintings.value.length === 0) return [];
+  if (!allPaintings || !painting) return [];
 
-  const paintingId = painting.value.id;
-  const category = painting.value.category;
-
-  // Zoek schilderijen in dezelfde categorie
-  return allPaintings.value
+  const category = painting.category;
+  return allPaintings
     .filter((p) => {
-      // Negeer het huidige schilderij
-      if (p.id === paintingId) return false;
-
-      // Controleer op dezelfde categorie
-      const hasSameCategory = p.category === category;
-
-      return hasSameCategory;
+      // Filter by same category but not the current painting
+      return p.id !== painting.id && p.category === category;
     })
-    .slice(0, 4); // Limiteer tot 4 gerelateerde schilderijen
+    .slice(0, 4); // Limit to 4 related paintings
 });
 
 // SEO meta tags
-// Add this to your pages/schilderijen/[id].vue file, replacing your current useHead call
-
-// Inside the script setup section
 useHead(() => {
-  const title = painting.value
-    ? `${painting.value.title} | Tom van As Schilderijen`
+  const title = painting
+    ? `${painting.title} | Tom van As Schilderijen`
     : 'Schilderij details | Tom van As';
 
-  const description = painting.value
-    ? `Bekijk "${painting.value.title}" door kunstenaar Tom van As. ${
-        painting.value.category ? `Categorie: ${painting.value.category}.` : ''
+  const description = painting
+    ? `Bekijk "${painting.title}" door kunstenaar Tom van As. ${
+        painting.category ? `Categorie: ${painting.category}.` : ''
       }`
     : 'Ontdek de schilderijen van kunstenaar Tom van As.';
 
   // Generate image URL for the painting if available
-  const imageUrl = painting.value
-    ? `https://res.cloudinary.com/${config.public.cloudinaryCloudName}/image/upload/w_1200,h_630,c_fill,q_auto:good/${painting.value.id}`
-    : 'https://tomvanas-kunst.nl/images/og-image.jpg';
+  const imageUrl = 'https://tomvanas-kunst.nl/images/og-image.jpg';
 
   // Calculate canonical URL
-  const canonicalUrl = painting.value
-    ? `https://tomvanas-kunst.nl/schilderijen/${painting.value.id}`
+  const canonicalUrl = painting
+    ? `https://tomvanas-kunst.nl/schilderijen/${painting.id}`
     : 'https://tomvanas-kunst.nl/schilderijen';
 
   return {
@@ -226,54 +250,10 @@ useHead(() => {
   };
 });
 
-// Data ophalen
-async function fetchData() {
-  isLoading.value = true;
-
-  try {
-    // Haal schilderij op basis van ID
-    const id = route.params.id;
-    painting.value = await getPaintingById(id);
-
-    // Haal alle schilderijen op voor gerelateerde werken
-    allPaintings.value = await getAllPaintings();
-
-    // Bepaal vorige en volgende schilderijen
-    if (allPaintings.value.length > 0 && painting.value) {
-      const currentIndex = allPaintings.value.findIndex((p) => p.id === painting.value.id);
-
-      if (currentIndex > 0) {
-        previousPainting.value = allPaintings.value[currentIndex - 1];
-      } else {
-        previousPainting.value = null;
-      }
-
-      if (currentIndex < allPaintings.value.length - 1) {
-        nextPainting.value = allPaintings.value[currentIndex + 1];
-      } else {
-        nextPainting.value = null;
-      }
-    }
-  } catch (error) {
-    console.error('Fout bij het ophalen van schilderij:', error);
-  } finally {
-    isLoading.value = false;
+// Handle errors
+watch(apiError, (error) => {
+  if (error) {
+    console.error('API Error:', error);
   }
-}
-
-// Reset navigatie bij nieuwe pagina
-function resetNavigation() {
-  previousPainting.value = null;
-  nextPainting.value = null;
-}
-
-// Data ophalen bij page load of wanneer de route ID verandert
-watch(
-  () => route.params.id,
-  () => {
-    resetNavigation();
-    fetchData();
-  },
-  { immediate: true }
-);
+});
 </script>
