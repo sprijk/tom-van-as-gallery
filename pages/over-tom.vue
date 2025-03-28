@@ -186,8 +186,17 @@
 // Composable voor data
 const { getAllPaintings, apiError } = useImageService();
 
-// State
-const recentPaintings = ref([]);
+const paintingsData = ref([]);
+
+// Computed property for recent paintings
+const recentPaintings = computed(() => {
+  if (!paintingsData.value || !Array.isArray(paintingsData.value)) return [];
+
+  // Return sorted and limited list
+  return [...paintingsData.value]
+    .sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0))
+    .slice(0, 3);
+});
 
 // Data ophalen
 async function fetchData() {
@@ -195,12 +204,11 @@ async function fetchData() {
     // Alle schilderijen ophalen
     const paintings = await getAllPaintings();
 
-    // Sorteer op datum (nieuwste eerst) en pak de eerste 3
-    recentPaintings.value = paintings
-      .sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0))
-      .slice(0, 3);
+    // Just store the raw data, let the computed property handle the sorting
+    paintingsData.value = paintings || [];
   } catch (error) {
     console.error('Fout bij het ophalen van recente schilderijen:', error);
+    paintingsData.value = []; // Ensure we set a default value even on error
   }
 }
 
@@ -223,8 +231,5 @@ useHead({
   ],
 });
 
-// Data ophalen bij page load
-onMounted(() => {
-  fetchData();
-});
+fetchData();
 </script>
